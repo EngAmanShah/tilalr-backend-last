@@ -86,14 +86,6 @@ class IslandDestination extends Model
             // Always generate a unique slug from title_en when creating
             if (!empty($model->title_en)) {
                 $model->slug = self::generateUniqueSlug($model->title_en);
-<<<<<<< HEAD
-=======
-            }
-
-            // Ensure rating is set to a sensible default when not provided by the form/API
-            if (!isset($model->rating) || $model->rating === null) {
-                $model->rating = 4.5;
->>>>>>> ebc915083601547a69a34b4487a324c402786641
             }
         });
 
