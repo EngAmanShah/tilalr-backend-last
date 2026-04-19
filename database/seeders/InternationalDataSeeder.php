@@ -1,0 +1,630 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Models\InternationalFlight;
+use App\Models\InternationalHotel;
+use App\Models\InternationalPackage;
+use App\Models\InternationalDestination;
+
+class InternationalDataSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        // Flights Data
+        InternationalFlight::create([
+            'airline_en' => 'Saudia Airlines',
+            'airline_ar' => 'الخطوط السعودية',
+            'airline_zh' => '沙特阿拉伯航空',
+            'route_en' => 'Jeddah → Dubai',
+            'route_ar' => 'جدة → دبي',
+            'route_zh' => '吉达 → 迪拜',
+            'departure_time' => '12:00 PM',
+            'arrival_time' => '04:00 PM',
+            'duration' => '2h 30m',
+            'stops_en' => 'Non-stop',
+            'stops_ar' => 'بدون توقف',
+            'stops_zh' => '直飞',
+            'active' => true,
+        ]);
+
+        InternationalFlight::create([
+            'airline_en' => 'Egypt Air',
+            'airline_ar' => 'مصر للطيران',
+            'airline_zh' => '埃及航空',
+            'route_en' => 'Jeddah → Cairo',
+            'route_ar' => 'جدة → القاهرة',
+            'route_zh' => '吉达 → 开罗',
+            'departure_time' => '06:00 AM',
+            'arrival_time' => '08:30 AM',
+            'duration' => '2h 30m',
+            'stops_en' => 'Non-stop',
+            'stops_ar' => 'بدون توقف',
+            'stops_zh' => '直飞',
+            'active' => true,
+        ]);
+
+        InternationalFlight::create([
+            'airline_en' => 'Turkish Airlines',
+            'airline_ar' => 'الخطوط التركية',
+            'airline_zh' => '土耳其航空',
+            'route_en' => 'Riyadh → Istanbul',
+            'route_ar' => 'الرياض → إسطنبول',
+            'route_zh' => '利雅得 → 伊斯坦布尔',
+            'departure_time' => '10:00 AM',
+            'arrival_time' => '02:15 PM',
+            'duration' => '4h 15m',
+            'stops_en' => 'Non-stop',
+            'stops_ar' => 'بدون توقف',
+            'stops_zh' => '直飞',
+            'active' => true,
+        ]);
+
+        InternationalFlight::create([
+            'airline_en' => 'British Airways',
+            'airline_ar' => 'بريتيش إيرويز',
+            'airline_zh' => '英国航空',
+            'route_en' => 'Dammam → London',
+            'route_ar' => 'الدمام → لندن',
+            'route_zh' => '达曼 → 伦敦',
+            'departure_time' => '08:00 PM',
+            'arrival_time' => '02:45 AM',
+            'duration' => '6h 45m',
+            'stops_en' => 'Non-stop',
+            'stops_ar' => 'بدون توقف',
+            'stops_zh' => '直飞',
+            'active' => true,
+        ]);
+
+        InternationalFlight::create([
+            'airline_en' => 'Qatar Airways',
+            'airline_ar' => 'الخطوط القطرية',
+            'airline_zh' => '卡塔尔航空',
+            'route_en' => 'Medina → Bangkok',
+            'route_ar' => 'المدينة → بانكوك',
+            'route_zh' => '麦地那 → 曼谷',
+            'departure_time' => '02:00 PM',
+            'arrival_time' => '09:30 PM',
+            'duration' => '7h 30m',
+            'stops_en' => '1 stop (Doha)',
+            'stops_ar' => 'توقف واحد (الدوحة)',
+            'stops_zh' => '1次中转（多哈）',
+            'active' => true,
+        ]);
+
+        InternationalFlight::create([
+            'airline_en' => 'Etihad Airways',
+            'airline_ar' => 'الاتحاد للطيران',
+            'airline_zh' => '阿提哈德航空',
+            'route_en' => 'Jeddah → Abu Dhabi',
+            'route_ar' => 'جدة → أبو ظبي',
+            'route_zh' => '吉达 → 阿布扎比',
+            'departure_time' => '07:20 PM',
+            'arrival_time' => '11:00 PM',
+            'duration' => '2h 25m',
+            'stops_en' => 'Non-stop',
+            'stops_ar' => 'بدون توقف',
+            'stops_zh' => '直飞',
+            'active' => true,
+        ]);
+
+        // Hotels Data
+        InternationalHotel::create([
+            'name_en' => 'The St. Regis New York',
+            'name_ar' => 'ذا سانت ريجس نيويورك',
+            'name_zh' => '纽约瑞吉酒店',
+            'location_en' => 'New York, USA',
+            'location_ar' => 'نيويورك، الولايات المتحدة',
+            'location_zh' => '美国纽约',
+            'description_en' => 'Iconic luxury hotel in the heart of Manhattan',
+            'description_ar' => 'فندق فاخر أيقوني في قلب مانهاتن',
+            'description_zh' => '曼哈顿中心的标志性豪华酒店',
+            'rating' => 5,
+            'image' => '1.webp',
+            'amenities_en' => json_encode(['Luxury Rooms', 'Fine Dining', 'Spa', 'City View']),
+            'amenities_ar' => json_encode(['غرف فاخرة', 'مطعم فاخر', 'سبا', 'إطلالة على المدينة']),
+            'amenities_zh' => json_encode(['豪华客房', '高级餐饮', '水疗中心', '城市景观']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Sheraton Manila Bay',
+            'name_ar' => 'شيراتون خليج مانيلا',
+            'name_zh' => '马尼拉湾喜来登酒店',
+            'location_en' => 'Manila, Philippines',
+            'location_ar' => 'مانيلا، الفلبين',
+            'location_zh' => '菲律宾马尼拉',
+            'description_en' => 'Beachfront resort with modern amenities',
+            'description_ar' => 'منتجع على الشاطئ مع مرافق حديثة',
+            'description_zh' => '现代化设施的海滨度假村',
+            'rating' => 4,
+            'image' => '2.webp',
+            'amenities_en' => json_encode(['Beach Access', 'Pool', 'Restaurant', 'Gym']),
+            'amenities_ar' => json_encode(['وصول الشاطئ', 'مسبح', 'مطعم', 'نادي رياضي']),
+            'amenities_zh' => json_encode(['海滩通道', '游泳池', '餐厅', '健身房']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Sina Bernini Bristol',
+            'name_ar' => 'سينا برنيني بريستول',
+            'name_zh' => '贝尼尼布里斯托酒店',
+            'location_en' => 'Rome, Italy',
+            'location_ar' => 'روما، إيطاليا',
+            'location_zh' => '意大利罗马',
+            'description_en' => 'Historic luxury hotel in ancient Rome',
+            'description_ar' => 'فندق فاخر تاريخي في روما القديمة',
+            'description_zh' => '古罗马历史悠久的豪华酒店',
+            'rating' => 5,
+            'image' => '3.webp',
+            'amenities_en' => json_encode(['Historic', 'Rooftop Terrace', 'Restaurant', 'Spa']),
+            'amenities_ar' => json_encode(['تاريخي', 'شرفة السطح', 'مطعم', 'سبا']),
+            'amenities_zh' => json_encode(['历史建筑', '屋顶露台', '餐厅', '水疗中心']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Sofitel Munich Bayerpost',
+            'name_ar' => 'سوفيتيل ميونخ بايرفوست',
+            'name_zh' => '慕尼黑索菲特酒店',
+            'location_en' => 'Munich, Germany',
+            'location_ar' => 'ميونخ، ألمانيا',
+            'location_zh' => '德国慕尼黑',
+            'description_en' => 'Modern luxury hotel in Bavaria',
+            'description_ar' => 'فندق فاخر حديث في بافاريا',
+            'description_zh' => '巴伐利亚现代豪华酒店',
+            'rating' => 4,
+            'image' => '4.webp',
+            'amenities_en' => json_encode(['Modern Design', 'Pool', 'Spa', 'Restaurant']),
+            'amenities_ar' => json_encode(['تصميم حديث', 'مسبح', 'سبا', 'مطعم']),
+            'amenities_zh' => json_encode(['现代设计', '游泳池', '水疗中心', '餐厅']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'InterContinental Paris le Grand',
+            'name_ar' => 'إنتركونتينينتال باريس لو جراند',
+            'name_zh' => '巴黎洲际大酒店',
+            'location_en' => 'Paris, France',
+            'location_ar' => 'باريس، فرنسا',
+            'location_zh' => '法国巴黎',
+            'description_en' => 'Legendary Parisian luxury hotel',
+            'description_ar' => 'فندق فاخر باريسي أسطوري',
+            'description_zh' => '传奇的巴黎豪华酒店',
+            'rating' => 5,
+            'image' => '5.webp',
+            'amenities_en' => json_encode(['City View', 'Fine Dining', 'Spa', 'Concierge']),
+            'amenities_ar' => json_encode(['إطلالة على المدينة', 'مطعم فاخر', 'سبا', 'خدمة الكونسيرج']),
+            'amenities_zh' => json_encode(['城市景观', '高级餐饮', '水疗中心', '礼宾服务']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Crowne Plaza Quanzhou Riverview',
+            'name_ar' => 'كراون بلازا كوانتشو ريفرفيو',
+            'name_zh' => '泉州皇冠假日酒店',
+            'location_en' => 'Quanzhou, China',
+            'location_ar' => 'كوانتشو، الصين',
+            'location_zh' => '中国泉州',
+            'description_en' => 'Riverside luxury resort in China',
+            'description_ar' => 'منتجع فاخر على النهر في الصين',
+            'description_zh' => '中国河畔豪华度假村',
+            'rating' => 4,
+            'image' => '6.webp',
+            'amenities_en' => json_encode(['River View', 'Pool', 'Restaurant', 'Gym']),
+            'amenities_ar' => json_encode(['إطلالة على النهر', 'مسبح', 'مطعم', 'نادي رياضي']),
+            'amenities_zh' => json_encode(['河景', '游泳池', '餐厅', '健身房']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Hilton Ramses',
+            'name_ar' => 'هيلتون رمسيس',
+            'name_zh' => '希尔顿拉美西斯酒店',
+            'location_en' => 'Cairo, Egypt',
+            'location_ar' => 'القاهرة، مصر',
+            'location_zh' => '埃及开罗',
+            'description_en' => 'Historic luxury hotel on the Nile',
+            'description_ar' => 'فندق فاخر تاريخي على النيل',
+            'description_zh' => '尼罗河畔历史悠久的豪华酒店',
+            'rating' => 4,
+            'image' => '7.webp',
+            'amenities_en' => json_encode(['Nile View', 'Pool', 'Restaurant', 'Spa']),
+            'amenities_ar' => json_encode(['إطلالة على النيل', 'مسبح', 'مطعم', 'سبا']),
+            'amenities_zh' => json_encode(['尼罗河景观', '游泳池', '餐厅', '水疗中心']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Pullman Singapore Orchard',
+            'name_ar' => 'بولمان سنغافورة أوركارد',
+            'name_zh' => '新加坡乌节路铂尔曼酒店',
+            'location_en' => 'Singapore',
+            'location_ar' => 'سنغافورة',
+            'location_zh' => '新加坡',
+            'description_en' => 'Modern luxury hotel in Singapore',
+            'description_ar' => 'فندق فاخر حديث في سنغافورة',
+            'description_zh' => '新加坡现代豪华酒店',
+            'rating' => 4,
+            'image' => '8.webp',
+            'amenities_en' => json_encode(['Rooftop Pool', 'Restaurant', 'Business Center', 'Spa']),
+            'amenities_ar' => json_encode(['مسبح السطح', 'مطعم', 'مركز أعمال', 'سبا']),
+            'amenities_zh' => json_encode(['屋顶泳池', '餐厅', '商务中心', '水疗中心']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'The Biltmore Hotel Tbilisi',
+            'name_ar' => 'ذا بيلتمور هوتيل تبليسي',
+            'name_zh' => '第比利斯比尔特莫尔酒店',
+            'location_en' => 'Tbilisi, Georgia',
+            'location_ar' => 'تبليسي، جورجيا',
+            'location_zh' => '格鲁吉亚第比利斯',
+            'description_en' => 'Luxury hotel in the heart of Tbilisi',
+            'description_ar' => 'فندق فاخر في قلب تبليسي',
+            'description_zh' => '第比利斯市中心豪华酒店',
+            'rating' => 4,
+            'image' => '9.webp',
+            'amenities_en' => json_encode(['City View', 'Restaurant', 'Spa', 'Gym']),
+            'amenities_ar' => json_encode(['إطلالة على المدينة', 'مطعم', 'سبا', 'نادي رياضي']),
+            'amenities_zh' => json_encode(['城市景观', '餐厅', '水疗中心', '健身房']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Taj Coral Reef Resort & Spa Maldives',
+            'name_ar' => 'تاج كورال ريف ريسورت وسبا المالديف',
+            'name_zh' => '马尔代夫泰姬珊瑚礁度假村',
+            'location_en' => 'Maldives',
+            'location_ar' => 'جزر المالديف',
+            'location_zh' => '马尔代夫',
+            'description_en' => 'Tropical paradise resort with water bungalows',
+            'description_ar' => 'منتجع جنة استوائية مع أكواخ مائية',
+            'description_zh' => '热带天堂度假村，配有水上别墅',
+            'rating' => 5,
+            'image' => '10.webp',
+            'amenities_en' => json_encode(['Water Bungalows', 'Diving', 'Spa', 'Beach']),
+            'amenities_ar' => json_encode(['أكواخ مائية', 'الغوص', 'سبا', 'شاطئ']),
+            'amenities_zh' => json_encode(['水上别墅', '潜水', '水疗中心', '海滩']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Jumeirah Bali Resort Indonesia',
+            'name_ar' => 'جميرة بالي ريسورت إندونيسيا',
+            'name_zh' => '印度尼西亚巴厘岛卓美亚度假村',
+            'location_en' => 'Bali, Indonesia',
+            'location_ar' => 'بالي، إندونيسيا',
+            'location_zh' => '印度尼西亚巴厘岛',
+            'description_en' => 'Beachfront luxury resort in Bali',
+            'description_ar' => 'منتجع فاخر على الشاطئ في بالي',
+            'description_zh' => '巴厘岛海滨豪华度假村',
+            'rating' => 5,
+            'image' => '11.webp',
+            'amenities_en' => json_encode(['Beach Access', 'Pool', 'Spa', 'Restaurant']),
+            'amenities_ar' => json_encode(['وصول الشاطئ', 'مسبح', 'سبا', 'مطعم']),
+            'amenities_zh' => json_encode(['海滩通道', '游泳池', '水疗中心', '餐厅']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Anantara The Palm Dubai',
+            'name_ar' => 'أنانتارا ذا بالم دبي',
+            'name_zh' => '迪拜棕榈岛安纳塔拉度假村',
+            'location_en' => 'Dubai, UAE',
+            'location_ar' => 'دبي، الإمارات',
+            'location_zh' => '阿联酋迪拜',
+            'description_en' => 'Ultra-luxury resort on Palm Jumeirah',
+            'description_ar' => 'منتجع فاخر جداً على نخلة جميرة',
+            'description_zh' => '朱美拉棕榈岛超豪华度假村',
+            'rating' => 5,
+            'image' => '12.webp',
+            'amenities_en' => json_encode(['Private Beach', 'Infinity Pool', 'Spa', 'Fine Dining']),
+            'amenities_ar' => json_encode(['شاطئ خاص', 'مسبح لا متناهي', 'سبا', 'تناول طعام فاخر']),
+            'amenities_zh' => json_encode(['私人海滩', '无边泳池', '水疗中心', '高级餐饮']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Amari Phuket',
+            'name_ar' => 'أماري فوكيت',
+            'name_zh' => '普吉岛阿玛瑞酒店',
+            'location_en' => 'Phuket, Thailand',
+            'location_ar' => 'فوكيت، تايلاند',
+            'location_zh' => '泰国普吉岛',
+            'description_en' => 'Beachfront resort with Thai hospitality',
+            'description_ar' => 'منتجع على الشاطئ مع الضيافة التايلاندية',
+            'description_zh' => '泰式待客之道的海滨度假村',
+            'rating' => 4,
+            'image' => '13.webp',
+            'amenities_en' => json_encode(['Beach Access', 'Pool', 'Spa', 'Restaurant']),
+            'amenities_ar' => json_encode(['وصول الشاطئ', 'مسبح', 'سبا', 'مطعم']),
+            'amenities_zh' => json_encode(['海滩通道', '游泳池', '水疗中心', '餐厅']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Royal Park Resort Penang',
+            'name_ar' => 'رويال بارك ريسورت بينانج',
+            'name_zh' => '槟城皇家公园度假村',
+            'location_en' => 'Penang Island, Malaysia',
+            'location_ar' => 'جزيرة بينانج، ماليزيا',
+            'location_zh' => '马来西亚槟城岛',
+            'description_en' => 'Luxury resort on Penang Island',
+            'description_ar' => 'منتجع فاخر على جزيرة بينانج',
+            'description_zh' => '槟城岛豪华度假村',
+            'rating' => 4,
+            'image' => '14.webp',
+            'amenities_en' => json_encode(['Beach Access', 'Pool', 'Spa', 'Restaurant']),
+            'amenities_ar' => json_encode(['وصول الشاطئ', 'مسبح', 'سبا', 'مطعم']),
+            'amenities_zh' => json_encode(['海滩通道', '游泳池', '水疗中心', '餐厅']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Sunway Hotel Malaysia',
+            'name_ar' => 'صن واي هوتيل ماليزيا',
+            'name_zh' => '马来西亚双威酒店',
+            'location_en' => 'Petaling Jaya, Malaysia',
+            'location_ar' => 'بتالينج جايا، ماليزيا',
+            'location_zh' => '马来西亚八打灵再也',
+            'description_en' => 'Modern hotel near Kuala Lumpur',
+            'description_ar' => 'فندق حديث بالقرب من كوالالمبور',
+            'description_zh' => '吉隆坡附近的现代酒店',
+            'rating' => 4,
+            'image' => '15.webp',
+            'amenities_en' => json_encode(['Business Center', 'Pool', 'Restaurant', 'Gym']),
+            'amenities_ar' => json_encode(['مركز أعمال', 'مسبح', 'مطعم', 'نادي رياضي']),
+            'amenities_zh' => json_encode(['商务中心', '游泳池', '餐厅', '健身房']),
+            'active' => true,
+        ]);
+
+        InternationalHotel::create([
+            'name_en' => 'Hilton Jumeirah Dubai',
+            'name_ar' => 'هيلتون جميرة دبي',
+            'name_zh' => '迪拜朱美拉希尔顿酒店',
+            'location_en' => 'Dubai, UAE',
+            'location_ar' => 'دبي، الإمارات',
+            'location_zh' => '阿联酋迪拜',
+            'description_en' => 'Luxury beachfront hotel in Dubai',
+            'description_ar' => 'فندق فاخر على الشاطئ في دبي',
+            'description_zh' => '迪拜豪华海滨酒店',
+            'rating' => 5,
+            'image' => '16.webp',
+            'amenities_en' => json_encode(['Beach Front', 'Spa', 'Pool', 'Fine Dining']),
+            'amenities_ar' => json_encode(['شاطئ خاص', 'سبا', 'مسبح', 'تناول طعام فاخر']),
+            'amenities_zh' => json_encode(['海滨', '水疗中心', '游泳池', '高级餐饮']),
+            'active' => true,
+        ]);
+
+        // Packages Data
+        InternationalPackage::create([
+            'type_en' => 'Cultural Heritage',
+            'type_ar' => 'التراث الثقافي',
+            'type_zh' => '文化遗产',
+            'title_en' => 'Yerevan, Armenia',
+            'title_ar' => 'يريفان، أرمينيا',
+            'title_zh' => '亚美尼亚埃里温',
+            'description_en' => 'A collection of history and modern life',
+            'description_ar' => 'مجموعة من التاريخ والحياة الحديثة',
+            'description_zh' => '历史与现代生活的完美结合',
+            'image' => '1.webp',
+            'duration_en' => '5 Days 4 Nights',
+            'duration_ar' => '٥ أيام ٤ ليالي',
+            'duration_zh' => '5天4晚',
+            'discount' => '15% OFF',
+            'features_en' => json_encode(['Historic Sites', 'Modern City', 'Local Culture', 'Guided Tours']),
+            'features_ar' => json_encode(['المواقع التاريخية', 'مدينة حديثة', 'الثقافة المحلية', 'جولات موجهة']),
+            'features_zh' => json_encode(['历史遗迹', '现代城市', '当地文化', '导游服务']),
+            'highlight_en' => 'Best Value',
+            'highlight_ar' => 'أفضل قيمة',
+            'highlight_zh' => '超值优选',
+            'active' => true,
+        ]);
+
+        InternationalPackage::create([
+            'type_en' => 'Asia Explorer',
+            'type_ar' => 'مستكشف آسيا',
+            'type_zh' => '亚洲探索',
+            'title_en' => 'Vietnam & Thailand',
+            'title_ar' => 'فيتنام وتايلاند',
+            'title_zh' => '越南与泰国',
+            'description_en' => 'All the magic of Asia in one trip',
+            'description_ar' => 'كل سحر آسيا في رحلة واحدة',
+            'description_zh' => '一次旅行尽享亚洲魅力',
+            'image' => '2.webp',
+            'duration_en' => '9 Days 8 Nights',
+            'duration_ar' => '٩ أيام ٨ ليالي',
+            'duration_zh' => '9天8晚',
+            'discount' => '20% OFF',
+            'features_en' => json_encode(['Beach Resorts', 'Cultural Tours', 'Local Cuisine', 'Island Hopping']),
+            'features_ar' => json_encode(['منتجعات شاطئية', 'جولات ثقافية', 'المطبخ المحلي', 'القفز بين الجزر']),
+            'features_zh' => json_encode(['海滨度假村', '文化之旅', '当地美食', '跳岛游']),
+            'highlight_en' => 'Popular',
+            'highlight_ar' => 'مشهور',
+            'highlight_zh' => '热门推荐',
+            'active' => true,
+        ]);
+
+        InternationalPackage::create([
+            'type_en' => 'Heritage Discovery',
+            'type_ar' => 'اكتشاف التراث',
+            'type_zh' => '遗产探索',
+            'title_en' => 'Tbilisi, Georgia',
+            'title_ar' => 'تبليسي، جورجيا',
+            'title_zh' => '格鲁吉亚第比利斯',
+            'description_en' => 'The magic of history and modernity in the heart of the Caucasus Mountains',
+            'description_ar' => 'سحر التاريخ والحداثة في قلب جبال القوقاز',
+            'description_zh' => '在高加索山脉中心感受历史与现代的完美融合',
+            'image' => '3.webp',
+            'duration_en' => '4 Days 3 Nights',
+            'duration_ar' => '٤ أيام ٣ ليالي',
+            'duration_zh' => '4天3晚',
+            'discount' => '10% OFF',
+            'features_en' => json_encode(['Historic Sites', 'Wine Tasting', 'Local Cuisine', 'Mountain Views']),
+            'features_ar' => json_encode(['المواقع التاريخية', 'تذوق النبيذ', 'المطبخ المحلي', 'إطلالات جبلية']),
+            'features_zh' => json_encode(['历史遗迹', '品酒体验', '当地美食', '山景观赏']),
+            'highlight_en' => 'Unique',
+            'highlight_ar' => 'فريد',
+            'highlight_zh' => '独特体验',
+            'active' => true,
+        ]);
+
+        InternationalPackage::create([
+            'type_en' => 'Early Bird',
+            'type_ar' => 'الحجز المبكر',
+            'type_zh' => '早鸟优惠',
+            'title_en' => 'Malaysia - Special Honeymoon',
+            'title_ar' => 'ماليزيا - شهر عسل خاص',
+            'title_zh' => '马来西亚 - 特别蜜月之旅',
+            'description_en' => 'Perfect for couples seeking romance and adventure',
+            'description_ar' => 'مثالي للأزواج الباحثين عن الرومانسية والمغامرة',
+            'description_zh' => '寻求浪漫与冒险的情侣的完美选择',
+            'image' => '4.webp',
+            'duration_en' => '9 Days 8 Nights',
+            'duration_ar' => '٩ أيام ٨ ليالي',
+            'duration_zh' => '9天8晚',
+            'discount' => '25% OFF',
+            'features_en' => json_encode(['Romantic Dinner', 'Spa Treatments', 'Island Tours', 'Sunset Cruise']),
+            'features_ar' => json_encode(['عشاء رومانسي', 'علاجات السبا', 'جولات الجزر', 'رحلة الغروب']),
+            'features_zh' => json_encode(['浪漫晚餐', '水疗护理', '海岛游览', '日落巡航']),
+            'highlight_en' => 'Honeymoon Special',
+            'highlight_ar' => 'عرض شهر العسل',
+            'highlight_zh' => '蜜月特惠',
+            'active' => true,
+        ]);
+
+        InternationalPackage::create([
+            'type_en' => 'Family',
+            'type_ar' => 'عائلة',
+            'type_zh' => '家庭游',
+            'title_en' => 'Indonesia - Unique Honeymoon',
+            'title_ar' => 'إندونيسيا - شهر عسل فريد',
+            'title_zh' => '印度尼西亚 - 独特蜜月之旅',
+            'description_en' => 'Exotic islands with pristine beaches',
+            'description_ar' => 'جزر غريبة مع شواطئ نقية',
+            'description_zh' => '异国情调的岛屿与原始海滩',
+            'image' => '5.webp',
+            'duration_en' => '8 Days 7 Nights',
+            'duration_ar' => '٨ أيام ٧ ليالي',
+            'duration_zh' => '8天7晚',
+            'discount' => '18% OFF',
+            'features_en' => json_encode(['Beach Resorts', 'Water Sports', 'Cultural Tours', 'Spa Treatments']),
+            'features_ar' => json_encode(['منتجعات شاطئية', 'رياضات مائية', 'جولات ثقافية', 'علاجات السبا']),
+            'features_zh' => json_encode(['海滨度假村', '水上运动', '文化之旅', '水疗护理']),
+            'highlight_en' => 'Exotic',
+            'highlight_ar' => 'غريب',
+            'highlight_zh' => '异国风情',
+            'active' => true,
+        ]);
+
+        InternationalPackage::create([
+            'type_en' => 'Honeymoon',
+            'type_ar' => 'شهر العسل',
+            'type_zh' => '蜜月游',
+            'title_en' => 'Thailand & Malaysia',
+            'title_ar' => 'تايلاند وماليزيا',
+            'title_zh' => '泰国与马来西亚',
+            'description_en' => 'A fun family trip for everyone',
+            'description_ar' => 'رحلة عائلية ممتعة للجميع',
+            'description_zh' => '适合全家的欢乐之旅',
+            'image' => '6.webp',
+            'duration_en' => '9 Days 8 Nights',
+            'duration_ar' => '٩ أيام ٨ ليالي',
+            'duration_zh' => '9天8晚',
+            'discount' => '22% OFF',
+            'features_en' => json_encode(['Beach Resorts', 'Temple Tours', 'Water Sports', 'Local Markets']),
+            'features_ar' => json_encode(['منتجعات شاطئية', 'جولات المعابد', 'رياضات مائية', 'الأسواق المحلية']),
+            'features_zh' => json_encode(['海滨度假村', '寺庙之旅', '水上运动', '当地市场']),
+            'highlight_en' => 'Family Friendly',
+            'highlight_ar' => 'صديقة للعائلة',
+            'highlight_zh' => '适合家庭',
+            'active' => true,
+        ]);
+
+        InternationalPackage::create([
+            'type_en' => 'Last Minute',
+            'type_ar' => 'آخر لحظة',
+            'type_zh' => '限时特惠',
+            'title_en' => 'Singapore Romantic',
+            'title_ar' => 'سنغافورة الرومانسية',
+            'title_zh' => '新加坡浪漫之旅',
+            'description_en' => 'A romantic city, perfect for a honeymoon',
+            'description_ar' => 'مدينة رومانسية، مثالية لشهر العسل',
+            'description_zh' => '浪漫城市，蜜月的完美选择',
+            'image' => '7.webp',
+            'duration_en' => '6 Days 5 Nights',
+            'duration_ar' => '٦ أيام ٥ ليالي',
+            'duration_zh' => '6天5晚',
+            'discount' => '30% OFF',
+            'features_en' => json_encode(['Urban Exploration', 'Fine Dining', 'Shopping', 'Night Life']),
+            'features_ar' => json_encode(['استكشاف حضري', 'تناول طعام فاخر', 'التسوق', 'الحياة الليلية']),
+            'features_zh' => json_encode(['城市探索', '高级餐饮', '购物', '夜生活']),
+            'highlight_en' => 'Hot Deal',
+            'highlight_ar' => 'صفقة ساخنة',
+            'highlight_zh' => '超值热卖',
+            'active' => true,
+        ]);
+
+        // Destinations Data
+        InternationalDestination::create([
+            'name_en' => 'Armenia',
+            'name_ar' => 'أرمينيا',
+            'name_zh' => '亚美尼亚',
+            'description_en' => 'A collection of history and modern life',
+            'description_ar' => 'مجموعة من التاريخ والحياة الحديثة',
+            'description_zh' => '历史与现代生活的完美结合',
+            'image' => '1.webp',
+            'active' => true,
+        ]);
+
+        InternationalDestination::create([
+            'name_en' => 'Tbilisi, Georgia',
+            'name_ar' => 'تبليسي، جورجيا',
+            'name_zh' => '格鲁吉亚第比利斯',
+            'description_en' => 'The magic of history and the spirit of modernity in the heart of the Caucasus Mountains',
+            'description_ar' => 'سحر التاريخ وروح الحداثة في قلب جبال القوقاز',
+            'description_zh' => '在高加索山脉中心感受历史与现代的完美融合',
+            'image' => '2.webp',
+            'active' => true,
+        ]);
+
+        InternationalDestination::create([
+            'name_en' => 'Malaysia',
+            'name_ar' => 'ماليزيا',
+            'name_zh' => '马来西亚',
+            'description_en' => 'Special honeymoon destination with exotic beaches and culture',
+            'description_ar' => 'وجهة شهر عسل خاصة مع شواطئ ثقافة غريبة',
+            'description_zh' => '拥有异国海滩和文化的特别蜜月目的地',
+            'image' => '3.webp',
+            'active' => true,
+        ]);
+
+        InternationalDestination::create([
+            'name_en' => 'Indonesia',
+            'name_ar' => 'إندونيسيا',
+            'name_zh' => '印度尼西亚',
+            'description_en' => 'Unique honeymoon destination with pristine beaches and culture',
+            'description_ar' => 'وجهة شهر عسل فريدة مع شواطئ نقية وثقافة',
+            'description_zh' => '拥有原始海滩和文化的独特蜜月目的地',
+            'image' => '4.webp',
+            'active' => true,
+        ]);
+
+        InternationalDestination::create([
+            'name_en' => 'Singapore',
+            'name_ar' => 'سنغافورة',
+            'name_zh' => '新加坡',
+            'description_en' => 'A romantic city, perfect for a honeymoon',
+            'description_ar' => 'مدينة رومانسية، مثالية لشهر العسل',
+            'description_zh' => '浪漫城市，蜜月的完美选择',
+            'image' => '5.webp',
+            'active' => true,
+        ]);
+    }
+}
