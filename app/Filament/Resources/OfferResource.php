@@ -124,7 +124,12 @@ class OfferResource extends Resource
 
             Forms\Components\Section::make(__('admin.form.media_status'))
                 ->schema([
-                    Forms\Components\FileUpload::make('image')->image()->directory('offers')->label(__('admin.form.image')),
+                    Forms\Components\FileUpload::make('image')
+                        ->image()
+                        ->disk('public')
+                        ->directory('offers')
+                        ->preserveFilenames()
+                        ->label(__('admin.form.image')),
                     Forms\Components\Toggle::make('is_active')->label(__('admin.form.is_active'))->default(true),
                 ])->columns(2),
         ]);
