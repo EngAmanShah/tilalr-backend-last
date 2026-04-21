@@ -21,6 +21,7 @@ class PermissionSeeder extends Seeder
             // Content
             'trips' => 'Trips',
             'offers' => 'Offers',
+            'special_offers' => 'Special Offers',
             'services' => 'Services',
             
             // Destinations

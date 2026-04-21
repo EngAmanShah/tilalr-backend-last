@@ -12,7 +12,7 @@ class Offer extends Model
     protected $fillable = [
         'slug','image','title_en','title_ar','title_zh','description_en','description_ar','description_zh','duration',
         'duration_en','duration_ar','duration_zh','location_en','location_ar','location_zh','group_size','group_size_en','group_size_ar','group_size_zh',
-        'discount','price','price_en','price_ar','price_zh','badge','badge_en','badge_ar','badge_zh','features','features_en','features_ar','features_zh','highlights','highlights_en','highlights_ar','highlights_zh','is_active'
+        'discount','price','price_en','price_ar','price_zh','badge','badge_en','badge_ar','badge_zh','features','features_en','features_ar','features_zh','highlights','highlights_en','highlights_ar','highlights_zh','is_active','is_special_offer'
     ];
 
     protected $casts = [
@@ -25,6 +25,7 @@ class Offer extends Model
         'highlights_ar' => 'array',
         'highlights_zh' => 'array',
         'is_active' => 'boolean',
+        'is_special_offer' => 'boolean',
         'price' => 'decimal:2',
         'price_en' => 'decimal:2',
         'price_ar' => 'decimal:2',
