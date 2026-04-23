@@ -61,7 +61,6 @@ class SpecialOfferResource extends Resource
                         ->image()
                         ->disk('public')
                         ->directory('offers')
-                        ->preserveFilenames()
                         ->required()
                         ->label(__('admin.form.image'))
                         ->helperText('Any image size is allowed. Frontend displays images in an 840 x 1160 layout.'),

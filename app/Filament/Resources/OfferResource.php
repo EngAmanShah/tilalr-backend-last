@@ -128,7 +128,6 @@ class OfferResource extends Resource
                         ->image()
                         ->disk('public')
                         ->directory('offers')
-                        ->preserveFilenames()
                         ->label(__('admin.form.image')),
                     Forms\Components\Toggle::make('is_active')->label(__('admin.form.is_active'))->default(true),
                 ])->columns(2),
