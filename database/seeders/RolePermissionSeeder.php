@@ -53,6 +53,21 @@ class RolePermissionSeeder extends Seeder
                 ]
             ],
             [
+                'name' => 'content_manager',
+                'title_en' => 'Content Manager',
+                'title_ar' => 'مدير المحتوى',
+                'display_name' => 'Content Manager',
+                'description' => 'Access to content, offers, special offers, trips, services and settings',
+                'permissions' => [
+                    'offers.view_any', 'offers.create', 'offers.update', 'offers.delete',
+                    'special_offers.view_any', 'special_offers.create', 'special_offers.update', 'special_offers.delete',
+                    'services.view_any', 'services.create', 'services.update', 'services.delete',
+                    'trips.view_any', 'trips.create', 'trips.update', 'trips.delete',
+                    'settings.view_any', 'settings.create', 'settings.update', 'settings.delete',
+                    'cities.view_any', 'cities.create', 'cities.update', 'cities.delete',
+                ]
+            ],
+            [
                 'name' => 'administration',
                 'title_en' => 'Administration',
                 'title_ar' => 'إدارة',
