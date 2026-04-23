@@ -41,8 +41,12 @@ class SpecialOfferResource extends Resource
     }
 
     /**
-     * Only show offers marked as special offers
+     * Override permission key to match seeder
      */
+    public static function getPermissionKey(): string
+    {
+        return 'special_offers';
+    }
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('is_special_offer', true);

@@ -25,14 +25,14 @@ class RolePermissionSeeder extends Seeder
                 'allowed_modules' => ["all"],
                 'description' => 'Full access to all international and island destinations, flights, hotels, packages, contacts, reservations and bookings',
                 'permissions' => [
-                    'view_international_destinations', 'create_international_destinations', 'edit_international_destinations', 'delete_international_destinations',
-                    'view_international_flights', 'create_international_flights', 'edit_international_flights', 'delete_international_flights',
-                    'view_international_hotels', 'create_international_hotels', 'edit_international_hotels', 'delete_international_hotels',
-                    'view_international_packages', 'create_international_packages', 'edit_international_packages', 'delete_international_packages',
-                    'view_island_destinations', 'create_island_destinations', 'edit_island_destinations', 'delete_island_destinations',
-                    'view_contacts', 'manage_contacts',
-                    'view_reservations', 'manage_reservations',
-                    'view_bookings', 'manage_bookings',
+                    'international_destinations.view_any', 'international_destinations.create', 'international_destinations.update', 'international_destinations.delete',
+                    'international_flights.view_any', 'international_flights.create', 'international_flights.update', 'international_flights.delete',
+                    'international_hotels.view_any', 'international_hotels.create', 'international_hotels.update', 'international_hotels.delete',
+                    'international_packages.view_any', 'international_packages.create', 'international_packages.update', 'international_packages.delete',
+                    'island_destinations.view_any', 'island_destinations.create', 'island_destinations.update', 'island_destinations.delete',
+                    'contacts.view_any', 'contacts.create', 'contacts.update', 'contacts.delete',
+                    'reservations.view_any', 'reservations.create', 'reservations.update', 'reservations.delete',
+                    'bookings.view_any', 'bookings.create', 'bookings.update', 'bookings.delete',
                 ]
             ],
             [
@@ -42,14 +42,14 @@ class RolePermissionSeeder extends Seeder
                 'display_name' => 'Consultant',
                 'description' => 'Access to island destinations, offers, services, trips, contacts, reservations and bookings',
                 'permissions' => [
-                    'view_island_destinations', 'create_island_destinations', 'edit_island_destinations', 'delete_island_destinations',
-                    'view_offers', 'create_offers', 'edit_offers', 'delete_offers',
-                    'view_special_offers', 'create_special_offers', 'edit_special_offers', 'delete_special_offers',
-                    'view_services', 'create_services', 'edit_services', 'delete_services',
-                    'view_trips', 'create_trips', 'edit_trips', 'delete_trips',
-                    'view_contacts', 'manage_contacts',
-                    'view_reservations', 'manage_reservations',
-                    'view_bookings', 'manage_bookings',
+                    'island_destinations.view_any', 'island_destinations.create', 'island_destinations.update', 'island_destinations.delete',
+                    'offers.view_any', 'offers.create', 'offers.update', 'offers.delete',
+                    'special_offers.view_any', 'special_offers.create', 'special_offers.update', 'special_offers.delete',
+                    'services.view_any', 'services.create', 'services.update', 'services.delete',
+                    'trips.view_any', 'trips.create', 'trips.update', 'trips.delete',
+                    'contacts.view_any', 'contacts.create', 'contacts.update', 'contacts.delete',
+                    'reservations.view_any', 'reservations.create', 'reservations.update', 'reservations.delete',
+                    'bookings.view_any', 'bookings.create', 'bookings.update', 'bookings.delete',
                 ]
             ],
             [
@@ -59,7 +59,7 @@ class RolePermissionSeeder extends Seeder
                 'display_name' => 'Administration',
                 'description' => 'Access only to communications management',
                 'permissions' => [
-                    'view_contacts', 'manage_contacts',
+                    'contacts.view_any', 'contacts.create', 'contacts.update', 'contacts.delete',
                 ]
             ],
             [
