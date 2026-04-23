@@ -12,21 +12,11 @@ class OfferController extends Controller
     {
         try {
             $offers = Offer::where('is_active', true)->orderBy('created_at', 'desc')->get()->map(function ($o) {
-                $image = $o->image ? ltrim($o->image, '/') : null;
-                if ($image) {
-                    if (preg_match('/^https?:\/\//', $image)) {
-                        $o->image = $image;
-                    } elseif (str_starts_with($image, 'storage/') || str_starts_with($image, '/storage/')) {
-                        $o->image = asset($image) . '?v=' . strtotime($o->updated_at);
-                    } elseif (str_starts_with($image, 'offers/')) {
-                        $o->image = asset('storage/' . $image) . '?v=' . strtotime($o->updated_at);
-                    } elseif (str_starts_with($image, '/offers')) {
-                        $o->image = $image;
-                    } else {
-                        $o->image = asset('storage/offers/' . $image) . '?v=' . strtotime($o->updated_at);
-                    }
-                } else {
-                    $o->image = null;
+                // Image is now always a relative path (stored by setImageAttribute mutator)
+                // getImageAttribute accessor will generate the full URL
+                // Just add cache buster to ensure fresh images
+                if ($o->image && !preg_match('/^https?:\/\//', $o->image)) {
+                    $o->image = $o->image . '?v=' . strtotime($o->updated_at);
                 }
 
                 // provide safe fallbacks so API consumers can use localized keys
@@ -53,19 +43,12 @@ class OfferController extends Controller
     public function show($id)
     {
         $offer = Offer::findOrFail($id);
-        $image = $offer->image ? ltrim($offer->image, '/') : null;
-        if ($image) {
-            if (preg_match('/^https?:\/\//', $image)) {
-                $offer->image = $image;
-            } elseif (str_starts_with($image, 'storage/') || str_starts_with($image, '/storage/')) {
-                $offer->image = asset($image) . '?v=' . strtotime($offer->updated_at);
-            } elseif (str_starts_with($image, 'offers/')) {
-                $offer->image = asset('storage/' . $image) . '?v=' . strtotime($offer->updated_at);
-            } else {
-                $offer->image = asset('storage/offers/' . $image) . '?v=' . strtotime($offer->updated_at);
-            }
-        } else {
-            $offer->image = null;
+        
+        // Image is now always a relative path (stored by setImageAttribute mutator)
+        // getImageAttribute accessor will generate the full URL
+        // Just add cache buster to ensure fresh images
+        if ($offer->image && !preg_match('/^https?:\/\//', $offer->image)) {
+            $offer->image = $offer->image . '?v=' . strtotime($offer->updated_at);
         }
 
         // add localized fallbacks for API consumers

@@ -33,6 +33,34 @@ class Offer extends Model
     ];
 
     /**
+     * Set the image - extract path from full URL if needed
+     */
+    public function setImageAttribute($value)
+    {
+        if (!$value) {
+            $this->attributes['image'] = null;
+            return;
+        }
+
+        // If it's a full URL, extract the path
+        if (preg_match('/^https?:\/\//', $value)) {
+            // Extract path from URL: https://admin.tilalr.com/storage/offers/filename.jpg -> offers/filename.jpg
+            $parsed = parse_url($value);
+            $path = ltrim($parsed['path'] ?? $value, '/');
+            
+            // Remove 'storage/' prefix if present to get relative path
+            if (str_starts_with($path, 'storage/')) {
+                $path = substr($path, 8); // Remove 'storage/' prefix
+            }
+            
+            $this->attributes['image'] = $path;
+        } else {
+            // Store as-is if it's already a relative path
+            $this->attributes['image'] = ltrim($value, '/');
+        }
+    }
+
+    /**
      * Get the full image URL for the offer
      */
     public function getImageAttribute($value)
@@ -54,12 +82,7 @@ class Offer extends Model
             return asset($imagePath);
         }
 
-        // Check if it's islands/ path
-        if (str_starts_with($imagePath, 'islands/')) {
-            return asset('storage/' . $imagePath);
-        }
-
-        // Otherwise treat as storage path
+        // Otherwise treat as storage path relative to storage/app/public
         return asset('storage/' . $imagePath);
     }
 }
