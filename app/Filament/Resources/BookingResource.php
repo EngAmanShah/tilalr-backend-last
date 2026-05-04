@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BookingResource\Pages;
 use App\Filament\Resources\BookingResource\RelationManagers;
 use App\Models\Booking;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -18,7 +19,7 @@ class BookingResource extends Resource
     protected static ?string $model = Booking::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
-    
+
     protected static ?int $navigationSort = 2;
 
     // Display booking ID in admin UI
@@ -66,11 +67,13 @@ class BookingResource extends Resource
             ->schema([
                 Forms\Components\Section::make(__('admin.form.customer_information'))
                     ->schema([
-                        Forms\Components\TextInput::make('user_id')
-                            ->label(__('admin.form.user_id'))
-                            ->numeric()
-                            ->default(null)
-                            ->helperText(__('admin.form.guest_bookings_helper')),
+                        Forms\Components\BelongsToSelect::make('user_id')
+                            ->relationship('user', 'name')
+                            ->label(__('admin.form.user'))
+                            ->searchable()
+                            ->preload()
+                            ->helperText(__('admin.form.link_booking_user'))
+                            ->placeholder(__('admin.form.select_user')),
                         Forms\Components\TextInput::make('details.name')
                             ->label(__('admin.form.customer_name'))
                             ->maxLength(255),
@@ -151,6 +154,11 @@ class BookingResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->label(__('admin.form.id'))
                     ->sortable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label(__('admin.table.user'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('details.name')
                     ->label(__('admin.table.customer'))
                     ->searchable('details')

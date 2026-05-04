@@ -20,6 +20,10 @@ use App\Http\Controllers\Api\HealthController;
 use App\Http\Controllers\Api\TestDataController;
 use App\Http\Controllers\Api\IslandDestinationController;
 use App\Http\Controllers\Api\CustomPaymentOfferController;
+use App\Http\Controllers\Api\EvisaController;
+use App\Http\Controllers\Api\VisaCountryController;
+use App\Http\Controllers\Api\SchengenController;
+use App\Http\Controllers\Api\SpecialOfferController;
 
 Route::get('/test', function () {
     return response()->json(['status' => 'ok', 'message' => 'API routing works!']);
@@ -91,12 +95,15 @@ Route::get('/international/destinations/filter', [InternationalDestinationContro
 // Public Offers API
 Route::get('/offers', [\App\Http\Controllers\Api\OfferController::class, 'index']);
 Route::get('/offers/{id}', [\App\Http\Controllers\Api\OfferController::class, 'show']);
+Route::get('/offers/special', [\App\Http\Controllers\Api\OfferController::class, 'specialOffers']);
+
 
 // Admin CRUD endpoints (optional)
 Route::post('/admin/offers', [\App\Http\Controllers\Api\OfferController::class, 'store']);
 Route::put('/admin/offers/{id}', [\App\Http\Controllers\Api\OfferController::class, 'update']);
 Route::delete('/admin/offers/{id}', [\App\Http\Controllers\Api\OfferController::class, 'destroy']);
 Route::get('/international/destinations/{id}', [InternationalDestinationController::class, 'show']);
+
 
 // Island Destinations
 Route::get('/island-destinations', [IslandDestinationController::class, 'index']);
@@ -109,6 +116,20 @@ Route::get('/island-destinations/{id}', [IslandDestinationController::class, 'sh
 Route::post('/island-destinations', [IslandDestinationController::class, 'store']);
 
 
+// Visa Applications Routes
+Route::post('/visa-applications', [App\Http\Controllers\Api\SaudiVisaController::class, 'store']);
+Route::get('/visa-applications', [App\Http\Controllers\Api\SaudiVisaController::class, 'index']);
+Route::get('/visa-applications/{id}', [App\Http\Controllers\Api\SaudiVisaController::class, 'show']);
+
+
+// Schengen Visa Routes
+Route::post('/schengen-applications', [SchengenController::class, 'store']);
+Route::get('/schengen-applications', [SchengenController::class, 'index']);
+Route::get('/schengen-applications/{id}', [SchengenController::class, 'show']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('/admin/schengen-applications/{id}/status', [SchengenController::class, 'updateStatus']);
+});
 
 // Protected routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {
@@ -116,35 +137,35 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
     Route::put('/user/profile', [AuthController::class, 'updateProfile']);
-    
+
     // User bookings
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::get('/bookings/{id}', [BookingController::class, 'show']);
     Route::put('/bookings/{id}', [BookingController::class, 'update']);
     Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
-    
+
     // User reservations (get their pending reservations by email)
     Route::get('/my-reservations', [ReservationController::class, 'myReservations']);
-    
+
     // User payments
     Route::post('/payments/initiate', [PaymentController::class, 'initiate']);
     Route::get('/payments', [PaymentController::class, 'index']);
     Route::get('/payments/{id}', [PaymentController::class, 'show']);
-    
+
     // Admin routes for International Travel (CRUD operations)
     Route::post('/international/flights', [InternationalFlightController::class, 'store']);
     Route::put('/international/flights/{id}', [InternationalFlightController::class, 'update']);
     Route::delete('/international/flights/{id}', [InternationalFlightController::class, 'destroy']);
-    
+
     Route::post('/international/hotels', [InternationalHotelController::class, 'store']);
     Route::put('/international/hotels/{id}', [InternationalHotelController::class, 'update']);
     Route::delete('/international/hotels/{id}', [InternationalHotelController::class, 'destroy']);
-    
+
     Route::post('/international/packages', [InternationalPackageController::class, 'store']);
     Route::put('/international/packages/{id}', [InternationalPackageController::class, 'update']);
     Route::delete('/international/packages/{id}', [InternationalPackageController::class, 'destroy']);
-    
+
     Route::post('/international/destinations', [InternationalDestinationController::class, 'store']);
     Route::put('/international/destinations/{id}', [InternationalDestinationController::class, 'update']);
     Route::delete('/international/destinations/{id}', [InternationalDestinationController::class, 'destroy']);
@@ -173,34 +194,34 @@ Route::prefix('admin')->group(function () {
     Route::post('/pages', [PageController::class, 'store']);
     Route::put('/pages/{id}', [PageController::class, 'update']);
     Route::delete('/pages/{id}', [PageController::class, 'destroy']);
-    
+
     Route::post('/services', [ServiceController::class, 'store']);
     Route::put('/services/{id}', [ServiceController::class, 'update']);
     Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
-    
+
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
-    
+
     Route::post('/trips', [TripController::class, 'store']);
     Route::put('/trips/{id}', [TripController::class, 'update']);
     Route::delete('/trips/{id}', [TripController::class, 'destroy']);
     Route::put('/trips/{slug}/blocked-dates', [TripController::class, 'updateBlockedDates']);
-    
+
     Route::post('/cities', [CityController::class, 'store']);
     Route::put('/cities/{id}', [CityController::class, 'update']);
     Route::delete('/cities/{id}', [CityController::class, 'destroy']);
-    
+
     Route::post('/testimonials', [TestimonialController::class, 'store']);
     Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
     Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
-    
 
-    
+
+
     Route::post('/settings', [SettingController::class, 'store']);
     Route::put('/settings/{key}', [SettingController::class, 'update']);
     Route::delete('/settings/{key}', [SettingController::class, 'destroy']);
-    
+
     // Admin Reservation Management
     Route::get('/reservations', [ReservationController::class, 'index']);
     Route::get('/reservations/statistics', [ReservationController::class, 'statistics']);
@@ -209,11 +230,29 @@ Route::prefix('admin')->group(function () {
     Route::post('/reservations/{id}/mark-contacted', [ReservationController::class, 'markContacted']);
     Route::post('/reservations/{id}/convert-to-booking', [ReservationController::class, 'convertToBooking']);
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
-    
+
     // Custom Payment Offers (Super Admin only)
     Route::post('/custom-payment-offers', [CustomPaymentOfferController::class, 'create']);
     Route::get('/custom-payment-offers', [CustomPaymentOfferController::class, 'list']);
     Route::delete('/custom-payment-offers/{id}', [CustomPaymentOfferController::class, 'delete']);
+});
+
+// Special Offers Routes
+Route::get('/special-offers', [SpecialOfferController::class, 'index']);
+Route::get('/special-offers/simple', [SpecialOfferController::class, 'simple']);
+
+// Visa country data for frontend listing
+Route::get('/visa-countries', [VisaCountryController::class, 'index']);
+Route::get('/visa-countries/{slug}', [VisaCountryController::class, 'show']);
+
+// E-Visa Routes
+Route::get('/evisa-applications', [EvisaController::class, 'index']);
+Route::get('/evisa-applications/{id}', [EvisaController::class, 'show']);
+Route::post('/evisa-applications', [EvisaController::class, 'store']);
+
+// Protected admin routes for status update
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('/admin/evisa-applications/{id}/status', [EvisaController::class, 'updateStatus']);
 });
 
 Route::get('/custom-payment-offers/{uniqueLink}', [CustomPaymentOfferController::class, 'show']);

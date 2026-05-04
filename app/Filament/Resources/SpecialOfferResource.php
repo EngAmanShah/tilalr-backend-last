@@ -3,54 +3,27 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SpecialOfferResource\Pages;
-use App\Filament\Resources\Concerns\HasResourcePermissions;
-use App\Models\Offer;
+use App\Models\SpecialOffer;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 
 class SpecialOfferResource extends Resource
 {
-    use HasResourcePermissions;
+    protected static ?string $model = SpecialOffer::class;
 
-    protected static ?string $model = Offer::class;
+    protected static ?string $navigationIcon = 'heroicon-o-photo';
 
-    protected static ?string $navigationIcon = 'heroicon-o-star';
+    protected static ?string $navigationGroup = 'Content';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return __('admin.nav.content');
-    }
+    protected static ?string $navigationLabel = 'Special Offers';
 
-    public static function getModelLabel(): string
-    {
-        return 'Special Offer';
-    }
+    protected static ?string $modelLabel = 'Special Offer';
 
-    public static function getPluralModelLabel(): string
-    {
-        return 'Special Offers';
-    }
-
-    public static function getNavigationLabel(): string
-    {
-        return 'Special Offers';
-    }
-
-    /**
-     * Override permission key to match seeder
-     */
-    public static function getPermissionKey(): string
-    {
-        return 'special_offers';
-    }
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()->where('is_special_offer', true);
-    }
+    protected static ?string $pluralModelLabel = 'Special Offers';
 
     public static function form(Form $form): Form
     {
@@ -59,35 +32,79 @@ class SpecialOfferResource extends Resource
                 ->schema([
                     Forms\Components\FileUpload::make('image')
                         ->image()
+                        ->imageEditor()
+                        ->imageResizeMode('cover')
+                        ->imageCropAspectRatio('840:1160')
+                        ->directory('special-offers')
                         ->disk('public')
-                        ->directory('offers')
                         ->required()
-                        ->label(__('admin.form.image'))
-                        ->helperText('Any image size is allowed. Frontend displays images in an 840 x 1160 layout.'),
+                        ->label('Offer Image')
+                        ->helperText('Upload an image for the special offer. Recommended size: 840 x 1160 pixels'),
 
-                    // Keep required DB fields hidden and auto-filled.
-                    Forms\Components\Hidden::make('title_en')->default('Special Offer'),
-                    Forms\Components\Hidden::make('title_ar')->default('عرض خاص'),
-                    Forms\Components\Hidden::make('is_special_offer')->default(true),
-                    Forms\Components\Hidden::make('is_active')->default(true),
-                ])->columns(1),
+                    Forms\Components\Toggle::make('is_active')
+                        ->label('Active')
+                        ->default(true)
+                        ->required(),
+
+                    Forms\Components\TextInput::make('order_position')
+                        ->label('Display Order')
+                        ->numeric()
+                        ->default(0)
+                        ->helperText('Lower numbers appear first'),
+                ])->columns(2),
         ]);
     }
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
-            Tables\Columns\ImageColumn::make('image')->label(__('admin.form.image')),
-            Tables\Columns\IconColumn::make('is_active')->boolean()->label(__('admin.table.active')),
-            Tables\Columns\TextColumn::make('created_at')->dateTime()->label(__('admin.table.created_at'))->sortable(),
-        ])->actions([
-            Tables\Actions\EditAction::make()->label(__('admin.actions.edit')),
-            Tables\Actions\DeleteAction::make()->label(__('admin.actions.delete')),
-        ])->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make()->label(__('admin.actions.bulk_delete')),
-            ]),
-        ]);
+        return $table
+            ->columns([
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Image')
+                    ->width(100)
+                    ->height(138)
+                    ->rounded(),
+
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label('Active')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('success')
+                    ->falseColor('danger'),
+
+                Tables\Columns\TextColumn::make('order_position')
+                    ->label('Order')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created')
+                    ->dateTime('M d, Y')
+                    ->sortable(),
+            ])
+            ->defaultSort('order_position', 'asc')
+            ->reorderable('order_position')
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->before(function ($record) {
+                        if ($record->image) {
+                            Storage::disk('public')->delete($record->image);
+                        }
+                    }),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->before(function ($records) {
+                            foreach ($records as $record) {
+                                if ($record->image) {
+                                    Storage::disk('public')->delete($record->image);
+                                }
+                            }
+                        }),
+                ]),
+            ]);
     }
 
     public static function getPages(): array

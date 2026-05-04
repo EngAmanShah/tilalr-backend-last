@@ -22,7 +22,7 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
-    
+
     protected static ?int $navigationSort = 2;
 
     public static function getNavigationGroup(): ?string
@@ -62,7 +62,7 @@ class UserResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->label(__('admin.form.full_name')),
-                        
+
                         Forms\Components\TextInput::make('email')
                             ->email()
                             ->required()
@@ -74,7 +74,7 @@ class UserResource extends Resource
                             ->tel()
                             ->maxLength(20)
                             ->label(__('admin.form.phone_number')),
-                        
+
                         Forms\Components\TextInput::make('password')
                             ->password()
                             ->dehydrateStateUsing(fn ($state) => Hash::make($state))
@@ -82,7 +82,7 @@ class UserResource extends Resource
                             ->required(fn (string $context): bool => $context === 'create')
                             ->label(__('admin.form.password'))
                             ->helperText(fn (string $context): string => $context === 'edit' ? __('admin.form.leave_blank_password') : ''),
-                        
+
                         Forms\Components\Toggle::make('is_admin')
                             ->label(__('admin.form.admin_access'))
                             ->helperText(__('admin.form.admin_access_helper'))
@@ -114,7 +114,7 @@ class UserResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->label(__('admin.table.name')),
-                
+
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
                     ->sortable()
@@ -131,7 +131,7 @@ class UserResource extends Resource
                         default => 'gray',
                     })
                     ->separator(', '),
-                
+
                 Tables\Columns\IconColumn::make('is_admin')
                     ->boolean()
                     ->label(__('admin.form.admin_access'))
@@ -139,13 +139,13 @@ class UserResource extends Resource
                     ->falseIcon('heroicon-o-user')
                     ->trueColor('success')
                     ->falseColor('gray'),
-                
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->label(__('admin.table.created_at'))
                     ->toggleable(isToggledHiddenByDefault: true),
-                
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -201,12 +201,12 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
-    
+
     public static function getNavigationBadge(): ?string
     {
         return (string) static::getModel()::where('is_admin', false)->count();
     }
-    
+
     public static function getNavigationBadgeColor(): ?string
     {
         return 'primary';

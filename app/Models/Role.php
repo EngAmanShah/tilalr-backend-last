@@ -28,6 +28,7 @@ class Role extends Model
     ];
 
     /**
+<<<<<<< HEAD
      * Relationship: Role has many users
      */
     public function users(): BelongsToMany
@@ -37,7 +38,11 @@ class Role extends Model
     }
 
     /**
+<<<<<<< Updated upstream
+     * Relationship: Role has many permissions
+=======
      * Relationship: Role belongs to many permissions
+>>>>>>> Stashed changes
      */
     public function permissions(): BelongsToMany
     {

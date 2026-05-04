@@ -10,13 +10,77 @@ class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        // IMPORTANT: Run PermissionSeeder first to create all base permissions (113 total)
-        // This ensures super_admin will get all of them
-        $this->call(PermissionSeeder::class);
+        // Define all permissions
+        $permissions = [
+            // International Destinations
+            ['name' => 'view_international_destinations', 'display_name' => 'View International Destinations'],
+            ['name' => 'create_international_destinations', 'display_name' => 'Create International Destinations'],
+            ['name' => 'edit_international_destinations', 'display_name' => 'Edit International Destinations'],
+            ['name' => 'delete_international_destinations', 'display_name' => 'Delete International Destinations'],
 
-        // Define roles and their specific permissions
-        // (These will be assigned in addition to what Filament auto-creates via resource policies)
-        $rolesConfig = [
+            // International Flights
+            ['name' => 'view_international_flights', 'display_name' => 'View International Flights'],
+            ['name' => 'create_international_flights', 'display_name' => 'Create International Flights'],
+            ['name' => 'edit_international_flights', 'display_name' => 'Edit International Flights'],
+            ['name' => 'delete_international_flights', 'display_name' => 'Delete International Flights'],
+
+            // International Hotels
+            ['name' => 'view_international_hotels', 'display_name' => 'View International Hotels'],
+            ['name' => 'create_international_hotels', 'display_name' => 'Create International Hotels'],
+            ['name' => 'edit_international_hotels', 'display_name' => 'Edit International Hotels'],
+            ['name' => 'delete_international_hotels', 'display_name' => 'Delete International Hotels'],
+
+            // International Packages
+            ['name' => 'view_international_packages', 'display_name' => 'View International Packages'],
+            ['name' => 'create_international_packages', 'display_name' => 'Create International Packages'],
+            ['name' => 'edit_international_packages', 'display_name' => 'Edit International Packages'],
+            ['name' => 'delete_international_packages', 'display_name' => 'Delete International Packages'],
+
+            // Island Destinations
+            ['name' => 'view_island_destinations', 'display_name' => 'View Island Destinations'],
+            ['name' => 'create_island_destinations', 'display_name' => 'Create Island Destinations'],
+            ['name' => 'edit_island_destinations', 'display_name' => 'Edit Island Destinations'],
+            ['name' => 'delete_island_destinations', 'display_name' => 'Delete Island Destinations'],
+
+            // Offers
+            ['name' => 'view_offers', 'display_name' => 'View Offers'],
+            ['name' => 'create_offers', 'display_name' => 'Create Offers'],
+            ['name' => 'edit_offers', 'display_name' => 'Edit Offers'],
+            ['name' => 'delete_offers', 'display_name' => 'Delete Offers'],
+
+            // Services
+            ['name' => 'view_services', 'display_name' => 'View Services'],
+            ['name' => 'create_services', 'display_name' => 'Create Services'],
+            ['name' => 'edit_services', 'display_name' => 'Edit Services'],
+            ['name' => 'delete_services', 'display_name' => 'Delete Services'],
+
+            // Trips
+            ['name' => 'view_trips', 'display_name' => 'View Trips'],
+            ['name' => 'create_trips', 'display_name' => 'Create Trips'],
+            ['name' => 'edit_trips', 'display_name' => 'Edit Trips'],
+            ['name' => 'delete_trips', 'display_name' => 'Delete Trips'],
+
+            // Contacts
+            ['name' => 'view_contacts', 'display_name' => 'View Contacts'],
+            ['name' => 'manage_contacts', 'display_name' => 'Manage Contacts'],
+
+            // Reservations & Bookings
+            ['name' => 'view_reservations', 'display_name' => 'View Reservations'],
+            ['name' => 'manage_reservations', 'display_name' => 'Manage Reservations'],
+            ['name' => 'view_bookings', 'display_name' => 'View Bookings'],
+            ['name' => 'manage_bookings', 'display_name' => 'Manage Bookings'],
+        ];
+
+        // Create permissions
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(
+                ['name' => $permission['name']],
+                ['display_name' => $permission['display_name']]
+            );
+        }
+
+        // Define roles
+        $roles = [
             [
                 'name' => 'executive_manager',
                 'title_en' => 'Executive Manager',
@@ -25,14 +89,14 @@ class RolePermissionSeeder extends Seeder
                 'allowed_modules' => ["all"],
                 'description' => 'Full access to all international and island destinations, flights, hotels, packages, contacts, reservations and bookings',
                 'permissions' => [
-                    'international_destinations.view_any', 'international_destinations.create', 'international_destinations.update', 'international_destinations.delete',
-                    'international_flights.view_any', 'international_flights.create', 'international_flights.update', 'international_flights.delete',
-                    'international_hotels.view_any', 'international_hotels.create', 'international_hotels.update', 'international_hotels.delete',
-                    'international_packages.view_any', 'international_packages.create', 'international_packages.update', 'international_packages.delete',
-                    'island_destinations.view_any', 'island_destinations.create', 'island_destinations.update', 'island_destinations.delete',
-                    'contacts.view_any', 'contacts.create', 'contacts.update', 'contacts.delete',
-                    'reservations.view_any', 'reservations.create', 'reservations.update', 'reservations.delete',
-                    'bookings.view_any', 'bookings.create', 'bookings.update', 'bookings.delete',
+                    'view_international_destinations', 'create_international_destinations', 'edit_international_destinations', 'delete_international_destinations',
+                    'view_international_flights', 'create_international_flights', 'edit_international_flights', 'delete_international_flights',
+                    'view_international_hotels', 'create_international_hotels', 'edit_international_hotels', 'delete_international_hotels',
+                    'view_international_packages', 'create_international_packages', 'edit_international_packages', 'delete_international_packages',
+                    'view_island_destinations', 'create_island_destinations', 'edit_island_destinations', 'delete_island_destinations',
+                    'view_contacts', 'manage_contacts',
+                    'view_reservations', 'manage_reservations',
+                    'view_bookings', 'manage_bookings',
                 ]
             ],
             [
@@ -42,29 +106,13 @@ class RolePermissionSeeder extends Seeder
                 'display_name' => 'Consultant',
                 'description' => 'Access to island destinations, offers, services, trips, contacts, reservations and bookings',
                 'permissions' => [
-                    'island_destinations.view_any', 'island_destinations.create', 'island_destinations.update', 'island_destinations.delete',
-                    'offers.view_any', 'offers.create', 'offers.update', 'offers.delete',
-                    'special_offers.view_any', 'special_offers.create', 'special_offers.update', 'special_offers.delete',
-                    'services.view_any', 'services.create', 'services.update', 'services.delete',
-                    'trips.view_any', 'trips.create', 'trips.update', 'trips.delete',
-                    'contacts.view_any', 'contacts.create', 'contacts.update', 'contacts.delete',
-                    'reservations.view_any', 'reservations.create', 'reservations.update', 'reservations.delete',
-                    'bookings.view_any', 'bookings.create', 'bookings.update', 'bookings.delete',
-                ]
-            ],
-            [
-                'name' => 'content_manager',
-                'title_en' => 'Content Manager',
-                'title_ar' => 'مدير المحتوى',
-                'display_name' => 'Content Manager',
-                'description' => 'Access to content, offers, special offers, trips, services and settings',
-                'permissions' => [
-                    'offers.view_any', 'offers.create', 'offers.update', 'offers.delete',
-                    'special_offers.view_any', 'special_offers.create', 'special_offers.update', 'special_offers.delete',
-                    'services.view_any', 'services.create', 'services.update', 'services.delete',
-                    'trips.view_any', 'trips.create', 'trips.update', 'trips.delete',
-                    'settings.view_any', 'settings.create', 'settings.update', 'settings.delete',
-                    'cities.view_any', 'cities.create', 'cities.update', 'cities.delete',
+                    'view_island_destinations', 'create_island_destinations', 'edit_island_destinations', 'delete_island_destinations',
+                    'view_offers', 'create_offers', 'edit_offers', 'delete_offers',
+                    'view_services', 'create_services', 'edit_services', 'delete_services',
+                    'view_trips', 'create_trips', 'edit_trips', 'delete_trips',
+                    'view_contacts', 'manage_contacts',
+                    'view_reservations', 'manage_reservations',
+                    'view_bookings', 'manage_bookings',
                 ]
             ],
             [
@@ -74,7 +122,7 @@ class RolePermissionSeeder extends Seeder
                 'display_name' => 'Administration',
                 'description' => 'Access only to communications management',
                 'permissions' => [
-                    'contacts.view_any', 'contacts.create', 'contacts.update', 'contacts.delete',
+                    'view_contacts', 'manage_contacts',
                 ]
             ],
             [
@@ -83,12 +131,12 @@ class RolePermissionSeeder extends Seeder
                 'title_ar' => 'مسؤول فائق',
                 'display_name' => 'Super Admin',
                 'description' => 'Full access to all resources and settings',
-                'permissions' => 'all' // Special marker - will get ALL permissions
+                'permissions' => 'all' // Special marker for all permissions
             ],
         ];
 
         // Create roles with permissions
-        foreach ($rolesConfig as $roleData) {
+        foreach ($roles as $roleData) {
             $permissions = $roleData['permissions'];
             unset($roleData['permissions']);
 
@@ -97,44 +145,21 @@ class RolePermissionSeeder extends Seeder
                 $roleData
             );
 
-            // Detach all current permissions first
-            $role->permissions()->detach();
-
             // Attach permissions to role
             if ($permissions === 'all') {
-                // Super Admin gets EVERY permission that was created by PermissionSeeder
-                $allPermissions = Permission::all();
-                $role->permissions()->attach($allPermissions);
-                echo "✅ Super Admin: Assigned ALL " . $allPermissions->count() . " permissions\n";
+                // Super Admin gets all permissions
+                $allPermissions = Permission::pluck('id')->toArray();
+                $role->permissions()->sync($allPermissions);
             } else {
-                // Other roles: only attach if the permission names exist in database
-                // (These might be legacy permission names)
-                if (!empty($permissions)) {
-                    $permissionIds = Permission::whereIn('name', $permissions)->pluck('id')->toArray();
-                    if (!empty($permissionIds)) {
-                        $role->permissions()->attach($permissionIds);
-                        echo "✅ {$roleData['display_name']}: Assigned " . count($permissionIds) . " permissions\n";
-                    } else {
-                        echo "⚠️  {$roleData['display_name']}: No matching permissions found (expected - using Filament auto-permissions)\n";
-                    }
-                }
+                // Other roles get specific permissions
+                $permissionIds = Permission::whereIn('name', $permissions)->pluck('id')->toArray();
+                $role->permissions()->sync($permissionIds);
             }
         }
 
-        // Verify super_admin got all permissions
-        $superAdminRole = Role::where('name', 'super_admin')->first();
-        if ($superAdminRole) {
-            $totalPermissions = $superAdminRole->permissions()->count();
-            echo "\n📋 Super Admin Role Summary:\n";
-            echo "   Total permissions: $totalPermissions\n";
-            echo "   Role: Super Admin\n";
-            
-            if ($totalPermissions > 0) {
-                echo "   ✅ SUCCESS: Super Admin has permissions assigned!\n";
-            } else {
-                echo "   ❌ ERROR: Super Admin has no permissions!\n";
-            }
+        echo "✅ Roles and Permissions seeded successfully!\n";
+        foreach ($roles as $role) {
+            echo "   Role: {$role['display_name']}\n";
         }
     }
 }
-

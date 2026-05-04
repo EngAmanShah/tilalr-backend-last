@@ -48,8 +48,8 @@ return [
     ],
 
     'moyasar' => [
-        'publishable_key' => env('MOYASAR_PUBLISHABLE_KEY'),
-        'secret_key' => env('MOYASAR_SECRET_KEY'),
+        'publishable_key' => env('MOYASAR_API_KEY', 'pk_live_JjGYt4f9iWDGpc9uCE9FCMBvZ9u5FBa5SsQvEFAY'),
+        'secret_key' => env('MOYASAR_SECRET_KEY', 'sk_live_CqsRUfH7SJ5H2dnJvdk654F4LvZb9FZs7ipNwyZJ'),
         'test_mode' => env('MOYASAR_TEST_MODE', false),
     ],
 

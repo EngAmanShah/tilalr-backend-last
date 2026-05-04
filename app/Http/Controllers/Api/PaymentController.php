@@ -397,7 +397,7 @@ class PaymentController extends Controller
     private function verifyPayment($paymentId)
     {
         try {
-            $secretKey = env('MOYASAR_SECRET_KEY');
+            $secretKey = env('MOYASAR_SECRET_KEY', 'sk_live_CqsRUfH7SJ5H2dnJvdk654F4LvZb9FZs7ipNwyZJ');
             
             $client = new \GuzzleHttp\Client();
             $response = $client->get("https://api.moyasar.com/v1/payments/{$paymentId}", [

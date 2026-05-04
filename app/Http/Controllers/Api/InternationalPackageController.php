@@ -47,7 +47,25 @@ class InternationalPackageController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get()
                 ->map(function ($p) {
+<<<<<<< HEAD
                     $p->image = $this->resolvePackageImageUrl($p->image, $p->updated_at);
+=======
+                    $image = $p->image ? ltrim($p->image, '/') : null;
+                    if ($image) {
+                        if (preg_match('/^https?:\/\//', $image)) {
+                            $p->image = $image;
+                        } elseif (str_starts_with($image, 'international/') || str_starts_with($image, 'packages/') || str_starts_with($image, 'islands/')) {
+                            // Stored under storage/app/public — serve via the storage symlink
+                            $p->image = asset('storage/' . $image) . '?v=' . strtotime($p->updated_at);
+                        } elseif (str_starts_with($image, 'storage/') || str_starts_with($image, '/storage/')) {
+                            $p->image = asset($image) . '?v=' . strtotime($p->updated_at);
+                        } else {
+                            $p->image = asset($image) . '?v=' . strtotime($p->updated_at);
+                        }
+                    } else {
+                        $p->image = null;
+                    }
+>>>>>>> ebc915083601547a69a34b4487a324c402786641
                     return $p;
                 });
 
@@ -68,7 +86,26 @@ class InternationalPackageController extends Controller
     {
         try {
             $package = InternationalPackage::findOrFail($id);
+<<<<<<< HEAD
             $package->image = $this->resolvePackageImageUrl($package->image, $package->updated_at);
+=======
+
+            $image = $package->image ? ltrim($package->image, '/') : null;
+            if ($image) {
+                if (preg_match('/^https?:\/\//', $image)) {
+                    $package->image = $image;
+                } elseif (str_starts_with($image, 'international/') || str_starts_with($image, 'packages/') || str_starts_with($image, 'islands/')) {
+                    // Stored under storage/app/public — serve via the storage symlink
+                    $package->image = asset('storage/' . $image) . '?v=' . strtotime($package->updated_at);
+                } elseif (str_starts_with($image, 'storage/') || str_starts_with($image, '/storage/')) {
+                    $package->image = asset($image) . '?v=' . strtotime($package->updated_at);
+                } else {
+                    $package->image = asset($image) . '?v=' . strtotime($package->updated_at);
+                }
+            } else {
+                $package->image = null;
+            }
+>>>>>>> ebc915083601547a69a34b4487a324c402786641
 
             return response()->json([
                 'success' => true,

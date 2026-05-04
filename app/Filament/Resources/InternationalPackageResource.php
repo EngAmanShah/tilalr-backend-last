@@ -56,7 +56,11 @@ class InternationalPackageResource extends Resource
                         Forms\Components\TextInput::make('type_ar')->required()->label('Type (AR)'),
                         Forms\Components\TextInput::make('type_zh')->label('Type (ZH)'),
                         Forms\Components\TextInput::make('title_en')->required()->label('Title (EN)'),
+<<<<<<< HEAD
                         Forms\Components\TextInput::make('title_ar')->required()->label('Title (AR)'),
+=======
+                        Forms\Components\TextInput::make('title_ar')->label('Title (AR)'),
+>>>>>>> ebc915083601547a69a34b4487a324c402786641
                         Forms\Components\TextInput::make('title_zh')->label('Title (ZH)'),
                         Forms\Components\TextInput::make('destination_en')->required()->label('Destination (EN)'),
                         Forms\Components\TextInput::make('destination_ar')->label('Destination (AR)'),
