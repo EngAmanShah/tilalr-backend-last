@@ -56,11 +56,7 @@ class InternationalPackageResource extends Resource
                         Forms\Components\TextInput::make('type_ar')->required()->label('Type (AR)'),
                         Forms\Components\TextInput::make('type_zh')->label('Type (ZH)'),
                         Forms\Components\TextInput::make('title_en')->required()->label('Title (EN)'),
-<<<<<<< HEAD
                         Forms\Components\TextInput::make('title_ar')->required()->label('Title (AR)'),
-=======
-                        Forms\Components\TextInput::make('title_ar')->label('Title (AR)'),
->>>>>>> ebc915083601547a69a34b4487a324c402786641
                         Forms\Components\TextInput::make('title_zh')->label('Title (ZH)'),
                         Forms\Components\TextInput::make('destination_en')->required()->label('Destination (EN)'),
                         Forms\Components\TextInput::make('destination_ar')->label('Destination (AR)'),
@@ -83,16 +79,13 @@ class InternationalPackageResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title_en')->label('Title (EN)')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('country_en')->label('Country')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('city_en')->label('City')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('destination_en')->label('Destination')->searchable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('type_en')->label('Type')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('destination_en')->label('Destination')->searchable()->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('price')->label('Price')->money('usd', true),
                 Tables\Columns\IconColumn::make('active')->boolean()->label('Active'),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('country_en')
-                    ->label('Country')
-                    ->options(fn () => InternationalPackage::distinct()->pluck('country_en', 'country_en')->filter()->toArray()),
+                // Add filters that match actual fields if needed
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
