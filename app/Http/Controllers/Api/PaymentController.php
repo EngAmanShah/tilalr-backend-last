@@ -138,7 +138,7 @@ class PaymentController extends Controller
 
         // Use booking amount if not provided (already in SAR)
         $amountInSar = $request->input('amount', $booking->amount ?? 100);
-        
+
         // Convert SAR to halalas (1 SAR = 100 halalas)
         $amountInHalalas = $amountInSar * 100;
 
@@ -271,10 +271,10 @@ class PaymentController extends Controller
         Log::info('Payment callback received', $request->all());
 
         $data = $request->all();
-        
+
         // Verify payment with Moyasar API
         $paymentId = $data['id'] ?? null;
-        
+
         if (!$paymentId) {
             Log::error('Payment callback missing ID', $data);
             return response()->json(['success' => false, 'message' => 'Invalid callback']);
@@ -282,7 +282,7 @@ class PaymentController extends Controller
 
         // Verify payment using Moyasar API
         $payment = $this->verifyPayment($paymentId);
-        
+
         if (!$payment) {
             Log::error('Payment verification failed', ['payment_id' => $paymentId]);
             return response()->json(['success' => false, 'message' => 'Payment verification failed']);
@@ -300,7 +300,7 @@ class PaymentController extends Controller
 
         // Get booking ID from metadata
         $bookingId = $payment['metadata']['booking_id'] ?? null;
-        
+
         if (!$bookingId) {
             Log::error('No booking ID in payment metadata', $payment);
             return response()->json(['success' => false, 'message' => 'No booking associated']);
@@ -308,7 +308,7 @@ class PaymentController extends Controller
 
         // Update booking payment status
         $booking = Booking::find($bookingId);
-        
+
         if (!$booking) {
             Log::error('Booking not found', ['booking_id' => $bookingId]);
             return response()->json(['success' => false, 'message' => 'Booking not found']);
@@ -318,7 +318,7 @@ class PaymentController extends Controller
         $amountInSar = $amountInHalalas / 100;
         $originalAmountSar = $payment['metadata']['amount_sar'] ?? $amountInSar;
         $status = $payment['status'] ?? 'failed';
-        
+
         if ($status === 'paid') {
             $booking->update([
                 'payment_status' => 'paid',
@@ -338,7 +338,7 @@ class PaymentController extends Controller
                 ],
                 'paid_at' => now(),
             ]);
-            
+
             Log::info('Payment completed successfully', [
                 'booking_id' => $bookingId,
                 'payment_id' => $paymentId,
@@ -357,7 +357,7 @@ class PaymentController extends Controller
                     'error' => $payment['message'] ?? 'Payment failed'
                 ]
             ]);
-            
+
             Log::warning('Payment failed', [
                 'booking_id' => $bookingId,
                 'payment_id' => $paymentId,
@@ -397,8 +397,7 @@ class PaymentController extends Controller
     private function verifyPayment($paymentId)
     {
         try {
-            $secretKey = env('MOYASAR_SECRET_KEY', 'sk_live_CqsRUfH7SJ5H2dnJvdk654F4LvZb9FZs7ipNwyZJ');
-            
+
             $client = new \GuzzleHttp\Client();
             $response = $client->get("https://api.moyasar.com/v1/payments/{$paymentId}", [
                 'auth' => [$secretKey, ''],
@@ -408,15 +407,15 @@ class PaymentController extends Controller
             ]);
 
             $paymentData = json_decode($response->getBody(), true);
-            
+
             Log::info('Payment verification response', [
                 'payment_id' => $paymentId,
                 'currency' => $paymentData['currency'] ?? 'unknown',
                 'amount' => $paymentData['amount'] ?? 0
             ]);
-            
+
             return $paymentData;
-            
+
         } catch (\Exception $e) {
             Log::error('Payment verification error', [
                 'payment_id' => $paymentId,
@@ -433,7 +432,7 @@ class PaymentController extends Controller
     {
         try {
             $payment = $this->verifyPayment($paymentId);
-            
+
             if (!$payment) {
                 return response()->json([
                     'success' => false,
@@ -458,13 +457,13 @@ class PaymentController extends Controller
                     'metadata' => $payment['metadata'] ?? [],
                 ]
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error('Payment status check error', [
                 'payment_id' => $paymentId,
                 'error' => $e->getMessage()
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'فشل في التحقق من حالة الدفع'
@@ -478,7 +477,7 @@ class PaymentController extends Controller
     public function test(Request $request)
     {
         $testAmount = $request->input('amount', 100); // Default 100 SAR
-        
+
         $moyasarConfig = [
             'publishable_api_key' => env('MOYASAR_PUBLISHABLE_KEY', 'pk_live_JjGYt4f9iWDGpc9uCE9FCMBvZ9u5FBa5SsQvEFAY'),
             'amount' => $testAmount * 100, // Convert to halalas
