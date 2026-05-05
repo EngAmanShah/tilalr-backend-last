@@ -82,20 +82,17 @@ class IslandDestination extends Model
     protected static function booted()
     {
         // Ensure a unique slug exists on creating/saving to prevent route generation errors
-        static::creating(function ($model) {
-            // Always generate a unique slug from title_en when creating
-            if (!empty($model->title_en)) {
-                $model->slug = self::generateUniqueSlug($model->title_en);
-<<<<<<< HEAD
-=======
-            }
+    static::creating(function ($model) {
+    // Always generate a unique slug from title_en when creating
+    if (!empty($model->title_en)) {
+        $model->slug = self::generateUniqueSlug($model->title_en);
+    }
 
-            // Ensure rating is set to a sensible default when not provided by the form/API
-            if (!isset($model->rating) || $model->rating === null) {
-                $model->rating = 4.5;
->>>>>>> ebc915083601547a69a34b4487a324c402786641
-            }
-        });
+    // Ensure rating is set to a sensible default when not provided
+    if (!isset($model->rating) || $model->rating === null) {
+        $model->rating = 4.5;
+    }
+});
 
         static::updating(function ($model) {
             // If slug somehow emptied before update, regenerate from title_en
@@ -111,20 +108,20 @@ class IslandDestination extends Model
     public static function generateUniqueSlug(string $title, ?int $excludeId = null): string
     {
         $base = Str::slug($title);
-        
+
         // If base is empty (e.g., Arabic-only title), use a fallback
         if (empty($base)) {
             $base = 'destination-' . time();
         }
-        
+
         $slug = $base;
         $i = 1;
-        
+
         $query = self::where('slug', $slug);
         if ($excludeId) {
             $query->where('id', '!=', $excludeId);
         }
-        
+
         while ($query->exists()) {
             $slug = $base . '-' . $i++;
             $query = self::where('slug', $slug);
@@ -132,7 +129,7 @@ class IslandDestination extends Model
                 $query->where('id', '!=', $excludeId);
             }
         }
-        
+
         return $slug;
     }
 }
