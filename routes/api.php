@@ -24,6 +24,8 @@ use App\Http\Controllers\Api\EvisaController;
 use App\Http\Controllers\Api\VisaCountryController;
 use App\Http\Controllers\Api\SchengenController;
 use App\Http\Controllers\Api\SpecialOfferController;
+use App\Http\Controllers\Api\InternetPackageRequestController;
+use App\Http\Controllers\Api\PrivateJetRequestController;
 
 Route::get('/test', function () {
     return response()->json(['status' => 'ok', 'message' => 'API routing works!']);
@@ -104,6 +106,10 @@ Route::put('/admin/offers/{id}', [\App\Http\Controllers\Api\OfferController::cla
 Route::delete('/admin/offers/{id}', [\App\Http\Controllers\Api\OfferController::class, 'destroy']);
 Route::get('/international/destinations/{id}', [InternationalDestinationController::class, 'show']);
 
+
+// International Services Routes (public)
+Route::post('/internet-packages', [InternetPackageRequestController::class, 'store']);
+Route::post('/private-jet-requests', [PrivateJetRequestController::class, 'store']);
 
 // Island Destinations
 Route::get('/island-destinations', [IslandDestinationController::class, 'index']);

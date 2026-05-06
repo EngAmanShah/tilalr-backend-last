@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Offer extends Model
 {
@@ -12,7 +13,8 @@ class Offer extends Model
     protected $fillable = [
         'slug','image','title_en','title_ar','title_zh','description_en','description_ar','description_zh','duration',
         'duration_en','duration_ar','duration_zh','location_en','location_ar','location_zh','group_size','group_size_en','group_size_ar','group_size_zh',
-        'discount','price','price_en','price_ar','price_zh','badge','badge_en','badge_ar','badge_zh','features','features_en','features_ar','features_zh','highlights','highlights_en','highlights_ar','highlights_zh','is_active'
+        'discount','price','price_en','price_ar','price_zh','badge','badge_en','badge_ar','badge_zh','features','features_en','features_ar','features_zh',
+        'highlights','highlights_en','highlights_ar','highlights_zh','is_active','order_position'
     ];
 
     protected $casts = [
@@ -29,36 +31,39 @@ class Offer extends Model
         'price_en' => 'decimal:2',
         'price_ar' => 'decimal:2',
         'price_zh' => 'decimal:2',
+        'discount' => 'decimal:2',
     ];
 
-    /**
-     * Get the full image URL for the offer
-     */
     public function getImageAttribute($value)
     {
+        // If no image, return placeholder
         if (!$value) {
-            return null;
+            return 'https://placehold.co/600x400/f0f0f0/999?text=No+Image+Available';
         }
 
-        // Normalize the image path
-        $imagePath = ltrim($value, '/');
-
-        // Check if already absolute URL
-        if (preg_match('/^https?:\/\//', $imagePath)) {
-            return $imagePath;
+        // If it's already a URL, return it
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
+            return $value;
         }
 
-        // Check if it's already a full storage path
-        if (str_starts_with($imagePath, 'storage/') || str_starts_with($imagePath, '/storage/')) {
-            return asset($imagePath);
+        // If it starts with http, return as is
+        if (str_starts_with($value, 'http')) {
+            return $value;
         }
 
-        // Check if it's islands/ path
-        if (str_starts_with($imagePath, 'islands/')) {
-            return asset('storage/' . $imagePath);
+        // For stored images
+        if (str_starts_with($value, 'offers/')) {
+            if (Storage::disk('public')->exists($value)) {
+                return Storage::url($value);
+            }
         }
 
-        // Otherwise treat as storage path
-        return asset('storage/' . $imagePath);
+        // For islands images
+        if (str_starts_with($value, 'islands/')) {
+            return asset($value);
+        }
+
+        // Fallback placeholder
+        return 'https://placehold.co/600x400/f0f0f0/999?text=No+Image+Available';
     }
 }
