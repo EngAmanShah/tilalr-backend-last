@@ -88,6 +88,7 @@ Route::get('/international/hotels/{id}', [InternationalHotelController::class, '
 
 Route::get('/international/packages', [InternationalPackageController::class, 'index']);
 Route::get('/international/packages/{id}', [InternationalPackageController::class, 'show']);
+Route::post('/international/packages/activate', [InternationalPackageController::class, 'activate']);
 
 Route::get('/international/destinations', [InternationalDestinationController::class, 'index']);
 Route::get('/international/destinations/countries', [InternationalDestinationController::class, 'countries']);

@@ -47,25 +47,7 @@ class InternationalPackageController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get()
                 ->map(function ($p) {
-<<<<<<< HEAD
                     $p->image = $this->resolvePackageImageUrl($p->image, $p->updated_at);
-=======
-                    $image = $p->image ? ltrim($p->image, '/') : null;
-                    if ($image) {
-                        if (preg_match('/^https?:\/\//', $image)) {
-                            $p->image = $image;
-                        } elseif (str_starts_with($image, 'international/') || str_starts_with($image, 'packages/') || str_starts_with($image, 'islands/')) {
-                            // Stored under storage/app/public — serve via the storage symlink
-                            $p->image = asset('storage/' . $image) . '?v=' . strtotime($p->updated_at);
-                        } elseif (str_starts_with($image, 'storage/') || str_starts_with($image, '/storage/')) {
-                            $p->image = asset($image) . '?v=' . strtotime($p->updated_at);
-                        } else {
-                            $p->image = asset($image) . '?v=' . strtotime($p->updated_at);
-                        }
-                    } else {
-                        $p->image = null;
-                    }
->>>>>>> ebc915083601547a69a34b4487a324c402786641
                     return $p;
                 });
 
@@ -86,26 +68,7 @@ class InternationalPackageController extends Controller
     {
         try {
             $package = InternationalPackage::findOrFail($id);
-<<<<<<< HEAD
             $package->image = $this->resolvePackageImageUrl($package->image, $package->updated_at);
-=======
-
-            $image = $package->image ? ltrim($package->image, '/') : null;
-            if ($image) {
-                if (preg_match('/^https?:\/\//', $image)) {
-                    $package->image = $image;
-                } elseif (str_starts_with($image, 'international/') || str_starts_with($image, 'packages/') || str_starts_with($image, 'islands/')) {
-                    // Stored under storage/app/public — serve via the storage symlink
-                    $package->image = asset('storage/' . $image) . '?v=' . strtotime($package->updated_at);
-                } elseif (str_starts_with($image, 'storage/') || str_starts_with($image, '/storage/')) {
-                    $package->image = asset($image) . '?v=' . strtotime($package->updated_at);
-                } else {
-                    $package->image = asset($image) . '?v=' . strtotime($package->updated_at);
-                }
-            } else {
-                $package->image = null;
-            }
->>>>>>> ebc915083601547a69a34b4487a324c402786641
 
             return response()->json([
                 'success' => true,
@@ -130,6 +93,9 @@ class InternationalPackageController extends Controller
                 'title_en' => 'required|string|max:255',
                 'title_ar' => 'required|string|max:255',
                 'title_zh' => 'nullable|string|max:255',
+                'region_en' => 'nullable|string|max:255',
+                'region_ar' => 'nullable|string|max:255',
+                'region_zh' => 'nullable|string|max:255',
                 'description_en' => 'required|string',
                 'description_ar' => 'required|string',
                 'description_zh' => 'nullable|string',
@@ -137,7 +103,10 @@ class InternationalPackageController extends Controller
                 'duration_en' => 'nullable|string',
                 'duration_ar' => 'nullable|string',
                 'duration_zh' => 'nullable|string',
+                'data_amount' => 'nullable|string|max:255',
+                'plan_type' => 'nullable|string|max:255',
                 'price' => 'nullable|numeric|min:0',
+                'starting_price' => 'nullable|string|max:255',
                 'discount' => 'nullable|string',
                 'features_en' => 'nullable|array',
                 'features_ar' => 'nullable|array',
@@ -145,6 +114,12 @@ class InternationalPackageController extends Controller
                 'highlight_en' => 'nullable|string',
                 'highlight_ar' => 'nullable|string',
                 'highlight_zh' => 'nullable|string',
+                'networks' => 'nullable|array',
+                'supported_countries' => 'nullable|array',
+                'supported_countries_count' => 'nullable|integer|min:0',
+                'hotspot_tethering' => 'nullable|boolean',
+                'rechargeability' => 'nullable|boolean',
+                'package_code' => 'nullable|string|max:255|unique:international_packages,package_code',
                 'active' => 'boolean',
             ]);
 
@@ -175,6 +150,9 @@ class InternationalPackageController extends Controller
                 'title_en' => 'string|max:255',
                 'title_ar' => 'string|max:255',
                 'title_zh' => 'nullable|string|max:255',
+                'region_en' => 'nullable|string|max:255',
+                'region_ar' => 'nullable|string|max:255',
+                'region_zh' => 'nullable|string|max:255',
                 'description_en' => 'string',
                 'description_ar' => 'string',
                 'description_zh' => 'nullable|string',
@@ -182,7 +160,10 @@ class InternationalPackageController extends Controller
                 'duration_en' => 'nullable|string',
                 'duration_ar' => 'nullable|string',
                 'duration_zh' => 'nullable|string',
+                'data_amount' => 'nullable|string|max:255',
+                'plan_type' => 'nullable|string|max:255',
                 'price' => 'nullable|numeric|min:0',
+                'starting_price' => 'nullable|string|max:255',
                 'discount' => 'nullable|string',
                 'features_en' => 'nullable|array',
                 'features_ar' => 'nullable|array',
@@ -190,6 +171,12 @@ class InternationalPackageController extends Controller
                 'highlight_en' => 'nullable|string',
                 'highlight_ar' => 'nullable|string',
                 'highlight_zh' => 'nullable|string',
+                'networks' => 'nullable|array',
+                'supported_countries' => 'nullable|array',
+                'supported_countries_count' => 'nullable|integer|min:0',
+                'hotspot_tethering' => 'nullable|boolean',
+                'rechargeability' => 'nullable|boolean',
+                'package_code' => 'nullable|string|max:255|unique:international_packages,package_code,' . $id,
                 'active' => 'boolean',
             ]);
 
@@ -222,6 +209,42 @@ class InternationalPackageController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting package: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function activate(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'package_id' => 'required|exists:international_packages,id',
+                'mobile_number' => 'required|string|regex:/^\+?[0-9\-\s\(\)]+$/',
+            ]);
+
+            $package = InternationalPackage::findOrFail($validated['package_id']);
+
+            // Log activation (you can enhance this with a separate Activations table)
+            \Log::info('eSIM Package Activated', [
+                'package_id' => $package->id,
+                'package_code' => $package->package_code,
+                'mobile_number' => $validated['mobile_number'],
+                'timestamp' => now(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'package' => $package,
+                    'mobile_number' => $validated['mobile_number'],
+                    'activation_status' => 'pending',
+                    'activated_at' => now(),
+                ],
+                'message' => 'Package activated successfully. You will receive QR code via email.'
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error activating package: ' . $e->getMessage()
             ], 500);
         }
     }
