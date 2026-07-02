@@ -812,7 +812,7 @@ GET /api/settings/site_name
   "data": {
     "site_name": "Tilal Rimal",
     "theme_color": "#1e40af",
-    "phone": "+966501234567",
+    "phone":  966"اتصل بنا506073054966+",
     "email": "info@tilalr.com",
     "whatsapp_number": "+966501234567"
   }

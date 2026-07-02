@@ -18,3 +18,4 @@ class ViewInternetPackageRequest extends ViewRecord
         ];
     }
 }
+

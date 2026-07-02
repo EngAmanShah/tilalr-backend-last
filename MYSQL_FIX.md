@@ -29,7 +29,7 @@ Should show:
 In Command Prompt, navigate to the backend and seed:
 ```bash
 cd c:\xampp\htdocs\tilrimal-backend
-php artisan db:seed --class=IslandDestinationsLocalSeeder
+php artisan db:seed --class=TourismOffersSeeder
 ```
 
 Should output:

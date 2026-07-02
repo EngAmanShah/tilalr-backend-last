@@ -24,12 +24,10 @@ class DatabaseSeeder extends Seeder
             \Database\Seeders\CreateCustomPaymentOfferPermissionsSeeder::class,
             \Database\Seeders\TestUsersSeeder::class,
             // Seed offers and international demo data
-            \Database\Seeders\OfferSeeder::class,
-            \Database\Seeders\InternationalDataSeeder::class,
             \Database\Seeders\WinterEventsSeeder::class,
             // Island destinations
-            \Database\Seeders\IslandDestinationSeeder::class,
-            \Database\Seeders\IslandDestinationsLocalSeeder::class,
+            \Database\Seeders\TourismDestinationsSeeder::class,
+            \Database\Seeders\TourismOffer::class,
         ]);
     }
 }

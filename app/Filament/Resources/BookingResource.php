@@ -1,149 +1,92 @@
 <?php
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BookingResource\Pages;
-use App\Filament\Resources\BookingResource\RelationManagers;
 use App\Models\Booking;
-use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BookingResource extends Resource
 {
     protected static ?string $model = Booking::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-ticket';
+    protected static ?string $navigationIcon = 'heroicon-o-receipt-refund';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Bookings';
 
-    // Display booking ID in admin UI
-    protected static ?string $recordTitleAttribute = 'id';
-    public static function getNavigationGroup(): ?string
-    {
-        return __('admin.nav.reservations_bookings');
-    }
-
-    public static function getModelLabel(): string
-    {
-        return __('admin.resources.booking');
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return __('admin.resources.bookings');
-    }
-
-    public static function getNavigationLabel(): string
-    {
-        return __('admin.resources.bookings');
-    }
-
-    // Executive Manager, Consultant, and Super Admin can access
-    public static function canAccess(): bool
-    {
-        $user = auth()->user();
-        return $user && ($user->hasRole('executive_manager') || $user->hasRole('consultant') || $user->hasRole('super_admin'));
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::where('status', 'pending')->count() ?: null;
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'primary';
-    }
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make(__('admin.form.customer_information'))
+                Forms\Components\Section::make('Booking Information')
                     ->schema([
-                        Forms\Components\BelongsToSelect::make('user_id')
-                            ->relationship('user', 'name')
-                            ->label(__('admin.form.user'))
-                            ->searchable()
-                            ->preload()
-                            ->helperText(__('admin.form.link_booking_user'))
-                            ->placeholder(__('admin.form.select_user')),
-                        Forms\Components\TextInput::make('details.name')
-                            ->label(__('admin.form.customer_name'))
+                        Forms\Components\TextInput::make('booking_number')
+                            ->label('Booking Number')
+                            ->disabled()
+                            ->dehydrated(false),
+                        Forms\Components\Select::make('booking_type')
+                            ->options([
+                                'destination' => 'Destination',
+                                'tourism_offer' => 'Tourism Offer',
+                            ])
+                            ->required()
+                            ->default('destination'),
+                        Forms\Components\TextInput::make('first_name')
+                            ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('details.email')
-                            ->label(__('admin.form.customer_email'))
+                        Forms\Components\TextInput::make('last_name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('email')
+                            ->required()
                             ->email()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('details.phone')
-                            ->label(__('admin.form.customer_phone'))
-                            ->tel()
-                            ->maxLength(20),
-                    ])
-                    ->columns(2),
-
-                Forms\Components\Section::make(__('admin.form.booking_details'))
-                    ->schema([
-                        Forms\Components\TextInput::make('service_id')
-                            ->label(__('admin.form.service_trip_id'))
-                            ->numeric()
-                            ->default(null),
-                        Forms\Components\TextInput::make('details.trip_title')
-                            ->label(__('admin.form.trip_title'))
-                            ->maxLength(255),
-                        Forms\Components\DatePicker::make('date')
-                            ->label(__('admin.form.booking_date')),
-                        Forms\Components\TextInput::make('guests')
-                            ->label(__('admin.form.number_of_guests'))
+                        Forms\Components\TextInput::make('mobile')
                             ->required()
+                            ->maxLength(20),
+                        Forms\Components\DatePicker::make('travel_date')
+                            ->required(),
+                        Forms\Components\Select::make('room_type')
+                            ->options([
+                                'DoubleRoom' => 'Double Room',
+                                'SingleRoom' => 'Single Room',
+                            ])
+                            ->required(),
+                        Forms\Components\TextInput::make('guests')
+                            ->label('Number of Guests')
                             ->numeric()
                             ->default(1)
-                            ->minValue(1),
-                        Forms\Components\TextInput::make('details.amount')
-                            ->label(__('admin.form.amount') . ' (' . __('admin.currency.sar') . ')')
+                            ->minValue(1)
+                            ->maxValue(20),
+                        Forms\Components\TextInput::make('price')
+                            ->label('Price (SAR)')
                             ->numeric()
-                            ->prefix(__('admin.currency.sar')),
-                    ])
-                    ->columns(2),
-
-                Forms\Components\Section::make(__('admin.form.status'))
-                    ->schema([
-                        Forms\Components\Select::make('status')
-                            ->label(__('admin.form.status'))
-                            ->options([
-                                'pending' => __('admin.status.pending'),
-                                'confirmed' => __('admin.status.confirmed'),
-                                'cancelled' => __('admin.status.cancelled'),
-                            ])
-                            ->required()
-                            ->native(false)
-                            ->default('pending'),
-                        Forms\Components\Select::make('payment_status')
-                            ->label(__('admin.form.payment_status'))
-                            ->options([
-                                'pending' => __('admin.status.pending'),
-                                'paid' => __('admin.status.paid'),
-                                'failed' => __('admin.status.failed'),
-                            ])
-                            ->required()
-                            ->native(false)
-                            ->default('pending'),
-                    ])
-                    ->columns(2),
-
-                Forms\Components\Section::make(__('admin.form.additional_details'))
-                    ->schema([
-                        Forms\Components\KeyValue::make('details')
-                            ->label(__('admin.form.all_details'))
+                            ->prefix('SAR')
+                            ->disabled()
+                            ->dehydrated(false),
+                        Forms\Components\Textarea::make('special_requests')
+                            ->label('Special Requests')
+                            ->rows(2)
+                            ->maxLength(65535)
                             ->columnSpanFull(),
-                    ])
-                    ->collapsible(),
+                        Forms\Components\Select::make('status')
+                            ->options([
+                                'pending' => 'Pending',
+                                'confirmed' => 'Confirmed',
+                                'cancelled' => 'Cancelled',
+                                'completed' => 'Completed',
+                            ])
+                            ->required(),
+                        Forms\Components\Textarea::make('notes')
+                            ->maxLength(65535)
+                            ->columnSpanFull(),
+                    ])->columns(2),
             ]);
     }
 
@@ -151,162 +94,106 @@ class BookingResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label(__('admin.form.id'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('user.name')
-                    ->label(__('admin.table.user'))
+                Tables\Columns\TextColumn::make('booking_number')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('details.name')
-                    ->label(__('admin.table.customer'))
-                    ->searchable('details')
+                    ->copyable(),
+                Tables\Columns\TextColumn::make('booking_type')
+                    ->label('Type')
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => ucfirst(str_replace('_', ' ', $state)))
+                    ->color(fn ($state) => $state === 'tourism_offer' ? 'info' : 'success'),
+                Tables\Columns\TextColumn::make('full_name')
+                    ->label('Name')
+                    ->searchable(['first_name', 'last_name'])
                     ->sortable(),
-                Tables\Columns\TextColumn::make('details.email')
-                    ->label(__('admin.table.email'))
-                    ->searchable('details')
-                    ->copyable()
-                    ->icon('heroicon-m-envelope')
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('details.trip_title')
-                    ->label(__('admin.table.trip'))
-                    ->limit(30)
-                    ->searchable('details'),
-                Tables\Columns\TextColumn::make('date')
-                    ->label(__('admin.table.date'))
+                Tables\Columns\TextColumn::make('mobile')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('package_title')
+                    ->label('Package')
+                    ->searchable()
+                    ->limit(30),
+                Tables\Columns\TextColumn::make('travel_date')
                     ->date()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('room_type')
+                    ->formatStateUsing(fn ($state) => $state === 'DoubleRoom' ? 'Double' : 'Single')
+                    ->badge()
+                    ->color(fn ($state) => $state === 'DoubleRoom' ? 'info' : 'warning'),
                 Tables\Columns\TextColumn::make('guests')
-                    ->label(__('admin.table.guests'))
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('details.amount')
-                    ->label(__('admin.table.amount'))
-                    ->formatStateUsing(fn ($state) => $state ? number_format($state, 2) . ' ' . __('admin.currency.sar') : '-')
+                    ->label('Guests')
+                    ->sortable()
+                    ->numeric(),
+                Tables\Columns\TextColumn::make('price')
+                    ->label('Price')
+                    ->money('SAR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->label(__('admin.table.status'))
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => __('admin.status.' . $state))
-                    ->color(fn (string $state): string => match($state) {
+                    ->color(fn ($state) => match($state) {
                         'pending' => 'warning',
                         'confirmed' => 'success',
                         'cancelled' => 'danger',
-                        default => 'gray',
-                    }),
-                Tables\Columns\TextColumn::make('payment_status')
-                    ->label(__('admin.table.payment'))
-                    ->badge()
-                    ->formatStateUsing(fn (string $state): string => __('admin.status.' . $state))
-                    ->color(fn (string $state): string => match($state) {
-                        'pending' => 'warning',
-                        'paid' => 'success',
-                        'failed' => 'danger',
+                        'completed' => 'info',
                         default => 'gray',
                     }),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label(__('admin.table.created_at'))
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label(__('admin.table.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('created_at', 'desc')
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
-                    ->label(__('admin.form.status'))
+                Tables\Filters\SelectFilter::make('booking_type')
                     ->options([
-                        'pending' => __('admin.status.pending'),
-                        'confirmed' => __('admin.status.confirmed'),
-                        'cancelled' => __('admin.status.cancelled'),
-                    ]),
-                Tables\Filters\SelectFilter::make('payment_status')
-                    ->label(__('admin.form.payment_status'))
-                    ->options([
-                        'pending' => __('admin.status.pending'),
-                        'paid' => __('admin.status.paid'),
-                        'failed' => __('admin.status.failed'),
-                    ]),
-                Tables\Filters\Filter::make('created_at')
-                    ->form([
-                        Forms\Components\DatePicker::make('from')
-                            ->label(__('admin.form.start_date')),
-                        Forms\Components\DatePicker::make('until')
-                            ->label(__('admin.form.end_date')),
+                        'destination' => 'Destination',
+                        'tourism_offer' => 'Tourism Offer',
                     ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
-                            )
-                            ->when(
-                                $data['until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
-                            );
+                    ->label('Booking Type'),
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'pending' => 'Pending',
+                        'confirmed' => 'Confirmed',
+                        'cancelled' => 'Cancelled',
+                        'completed' => 'Completed',
+                    ]),
+                Tables\Filters\SelectFilter::make('room_type')
+                    ->options([
+                        'DoubleRoom' => 'Double Room',
+                        'SingleRoom' => 'Single Room',
+                    ]),
+                Tables\Filters\Filter::make('travel_date')
+                    ->form([
+                        Forms\Components\DatePicker::make('from'),
+                        Forms\Components\DatePicker::make('to'),
+                    ])
+                    ->query(function ($query, $data) {
+                        if ($data['from']) {
+                            $query->whereDate('travel_date', '>=', $data['from']);
+                        }
+                        if ($data['to']) {
+                            $query->whereDate('travel_date', '<=', $data['to']);
+                        }
                     }),
             ])
             ->actions([
-                Tables\Actions\Action::make('confirmBooking')
-                    ->label(__('admin.actions.confirm'))
-                    ->icon('heroicon-o-check-circle')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->action(function (Booking $record) {
-                        $record->update(['status' => 'confirmed']);
-                        Notification::make()
-                            ->title(__('admin.messages.updated_successfully', ['resource' => __('admin.resources.booking')]))
-                            ->success()
-                            ->send();
-                    })
-                    ->visible(fn (Booking $record) => $record->status === 'pending'),
-                Tables\Actions\Action::make('markPaid')
-                    ->label(__('admin.status.paid'))
-                    ->icon('heroicon-o-currency-dollar')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->action(function (Booking $record) {
-                        $record->update(['payment_status' => 'paid']);
-                        Notification::make()
-                            ->title(__('admin.messages.updated_successfully', ['resource' => __('admin.form.payment_status')]))
-                            ->success()
-                            ->send();
-                    })
-                    ->visible(fn (Booking $record) => $record->payment_status !== 'paid'),
-                Tables\Actions\ViewAction::make()
-                    ->label(__('admin.actions.view')),
-                Tables\Actions\EditAction::make()
-                    ->label(__('admin.actions.edit')),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkAction::make('confirmAll')
-                        ->label(__('admin.actions.confirm'))
-                        ->icon('heroicon-o-check-circle')
-                        ->requiresConfirmation()
-                        ->action(function ($records) {
-                            $records->each(fn ($record) => $record->update(['status' => 'confirmed']));
-                            Notification::make()
-                                ->title(__('admin.messages.updated_successfully', ['resource' => __('admin.resources.bookings')]))
-                                ->success()
-                                ->send();
-                        }),
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->label(__('admin.actions.delete')),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

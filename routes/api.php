@@ -1,6 +1,9 @@
 <?php
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\TourismDestinationController;
+use App\Http\Controllers\Api\TourismOfferController;
 use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\ProductController;
@@ -12,13 +15,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ReservationController;
-use App\Http\Controllers\Api\InternationalFlightController;
-use App\Http\Controllers\Api\InternationalHotelController;
-use App\Http\Controllers\Api\InternationalPackageController;
-use App\Http\Controllers\Api\InternationalDestinationController;
 use App\Http\Controllers\Api\HealthController;
 use App\Http\Controllers\Api\TestDataController;
-use App\Http\Controllers\Api\IslandDestinationController;
 use App\Http\Controllers\Api\CustomPaymentOfferController;
 use App\Http\Controllers\Api\EvisaController;
 use App\Http\Controllers\Api\VisaCountryController;
@@ -40,10 +38,18 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/auth/send-otp', [\App\Http\Controllers\Api\OtpController::class, 'send']);
 Route::post('/auth/verify-otp', [\App\Http\Controllers\Api\OtpController::class, 'verify']);
-// Password reset via OTP
 Route::post('/auth/reset-password', [\App\Http\Controllers\Api\OtpController::class, 'resetPassword']);
 
-// SMS Testing Routes (protect in production!)
+// Tourism Destinations
+Route::prefix('tourism-destinations')->group(function () {
+    Route::get('/', [TourismDestinationController::class, 'index']);
+    Route::get('/navbar', [TourismDestinationController::class, 'getNavbarData']);
+    Route::get('/regions', [TourismDestinationController::class, 'getRegions']);
+    Route::get('/region/{region}', [TourismDestinationController::class, 'getByRegion']);
+    Route::get('/{slug}', [TourismDestinationController::class, 'show']);
+});
+
+// SMS Routes
 Route::prefix('sms')->group(function () {
     Route::get('/status', [\App\Http\Controllers\Api\SmsController::class, 'status']);
     Route::post('/test', [\App\Http\Controllers\Api\SmsController::class, 'sendTest']);
@@ -54,177 +60,100 @@ Route::prefix('sms')->group(function () {
     Route::post('/taqnyat/send', [\App\Http\Controllers\Api\SmsController::class, 'taqnyatSend']);
 });
 
-// Public API routes for frontend
+// Public API routes
 Route::get('/pages', [PageController::class, 'index']);
 Route::get('/pages/{slug}', [PageController::class, 'show']);
-
 Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/services/{slug}', [ServiceController::class, 'show']);
-
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{slug}', [ProductController::class, 'show']);
-
 Route::get('/trips', [TripController::class, 'index']);
 Route::get('/trips/{slug}', [TripController::class, 'show']);
 Route::get('/trips/{slug}/blocked-dates', [TripController::class, 'getBlockedDates']);
-
 Route::get('/cities', [CityController::class, 'index']);
 Route::get('/cities/{slug}', [CityController::class, 'show']);
-
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 Route::get('/testimonials/{id}', [TestimonialController::class, 'show']);
-
-
-
 Route::get('/settings', [SettingController::class, 'index']);
 Route::get('/settings/{key}', [SettingController::class, 'show']);
 
-// International Travel API routes (public)
+// International Travel API routes
 Route::get('/international/flights', [InternationalFlightController::class, 'index']);
 Route::get('/international/flights/{id}', [InternationalFlightController::class, 'show']);
-
 Route::get('/international/hotels', [InternationalHotelController::class, 'index']);
 Route::get('/international/hotels/{id}', [InternationalHotelController::class, 'show']);
-
 Route::get('/international/packages', [InternationalPackageController::class, 'index']);
 Route::get('/international/packages/{id}', [InternationalPackageController::class, 'show']);
 Route::post('/international/packages/activate', [InternationalPackageController::class, 'activate']);
-
 Route::get('/international/destinations', [InternationalDestinationController::class, 'index']);
 Route::get('/international/destinations/countries', [InternationalDestinationController::class, 'countries']);
 Route::get('/international/destinations/cities', [InternationalDestinationController::class, 'cities']);
 Route::get('/international/destinations/filter', [InternationalDestinationController::class, 'filter']);
+Route::get('/international/destinations/{id}', [InternationalDestinationController::class, 'show']);
 
-// Public Offers API
-Route::get('/offers', [\App\Http\Controllers\Api\OfferController::class, 'index']);
-Route::get('/offers/{id}', [\App\Http\Controllers\Api\OfferController::class, 'show']);
-Route::get('/offers/special', [\App\Http\Controllers\Api\OfferController::class, 'specialOffers']);
-
-
-// Admin CRUD endpoints (optional)
+// Admin CRUD endpoints
 Route::post('/admin/offers', [\App\Http\Controllers\Api\OfferController::class, 'store']);
 Route::put('/admin/offers/{id}', [\App\Http\Controllers\Api\OfferController::class, 'update']);
 Route::delete('/admin/offers/{id}', [\App\Http\Controllers\Api\OfferController::class, 'destroy']);
-Route::get('/international/destinations/{id}', [InternationalDestinationController::class, 'show']);
 
-
-// International Services Routes (public)
+// International Services Routes
 Route::post('/internet-packages', [InternetPackageRequestController::class, 'store']);
 Route::post('/private-jet-requests', [PrivateJetRequestController::class, 'store']);
-
-// Island Destinations
-Route::get('/island-destinations', [IslandDestinationController::class, 'index']);
-// Local endpoints must be declared before the dynamic {id} route to avoid being captured as an id
-Route::get('/island-destinations/local', [IslandDestinationController::class, 'indexLocal']);
-Route::get('/island-destinations/local/{id}', [IslandDestinationController::class, 'show']);
-// Dynamic show (by id or slug)
-Route::get('/island-destinations/{id}', [IslandDestinationController::class, 'show']);
-// Allow creating a new island destination (accepts city_id or city_name to link city)
-Route::post('/island-destinations', [IslandDestinationController::class, 'store']);
-
 
 // Visa Applications Routes
 Route::post('/visa-applications', [App\Http\Controllers\Api\SaudiVisaController::class, 'store']);
 Route::get('/visa-applications', [App\Http\Controllers\Api\SaudiVisaController::class, 'index']);
 Route::get('/visa-applications/{id}', [App\Http\Controllers\Api\SaudiVisaController::class, 'show']);
 
-
 // Schengen Visa Routes
 Route::post('/schengen-applications', [SchengenController::class, 'store']);
 Route::get('/schengen-applications', [SchengenController::class, 'index']);
 Route::get('/schengen-applications/{id}', [SchengenController::class, 'show']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::put('/admin/schengen-applications/{id}/status', [SchengenController::class, 'updateStatus']);
-});
-
-// Protected routes (require authentication)
-Route::middleware('auth:sanctum')->group(function () {
-    // User authentication routes
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [AuthController::class, 'user']);
-    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
-
-    // User bookings
-    Route::post('/bookings', [BookingController::class, 'store']);
-    Route::get('/bookings', [BookingController::class, 'index']);
-    Route::get('/bookings/{id}', [BookingController::class, 'show']);
-    Route::put('/bookings/{id}', [BookingController::class, 'update']);
-    Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
-
-    // User reservations (get their pending reservations by email)
-    Route::get('/my-reservations', [ReservationController::class, 'myReservations']);
-
-    // User payments
-    Route::post('/payments/initiate', [PaymentController::class, 'initiate']);
-    Route::get('/payments', [PaymentController::class, 'index']);
-    Route::get('/payments/{id}', [PaymentController::class, 'show']);
-
-    // Admin routes for International Travel (CRUD operations)
-    Route::post('/international/flights', [InternationalFlightController::class, 'store']);
-    Route::put('/international/flights/{id}', [InternationalFlightController::class, 'update']);
-    Route::delete('/international/flights/{id}', [InternationalFlightController::class, 'destroy']);
-
-    Route::post('/international/hotels', [InternationalHotelController::class, 'store']);
-    Route::put('/international/hotels/{id}', [InternationalHotelController::class, 'update']);
-    Route::delete('/international/hotels/{id}', [InternationalHotelController::class, 'destroy']);
-
-    Route::post('/international/packages', [InternationalPackageController::class, 'store']);
-    Route::put('/international/packages/{id}', [InternationalPackageController::class, 'update']);
-    Route::delete('/international/packages/{id}', [InternationalPackageController::class, 'destroy']);
-
-    Route::post('/international/destinations', [InternationalDestinationController::class, 'store']);
-    Route::put('/international/destinations/{id}', [InternationalDestinationController::class, 'update']);
-    Route::delete('/international/destinations/{id}', [InternationalDestinationController::class, 'destroy']);
-
-    // Admin CRUD for Island Destinations (international and local)
-    Route::post('/admin/island-destinations', [IslandDestinationController::class, 'store']);
-    Route::put('/admin/island-destinations/{id}', [IslandDestinationController::class, 'update']);
-    Route::delete('/admin/island-destinations/{id}', [IslandDestinationController::class, 'destroy']);
-    // Local-specific create (admin)
-    Route::post('/admin/island-destinations/local', [IslandDestinationController::class, 'storeLocal']);
-});
-
-Route::post('/payments/webhook/telr', [PaymentController::class, 'telrWebhook']);
-Route::post('/payments/webhook/moyasar', [PaymentController::class, 'moyasarWebhook']);
-Route::get('/payments/callback', [PaymentController::class, 'callback']);
-
+// Guest Booking Routes (NO authentication required)
 Route::post('/bookings/guest', [BookingController::class, 'guestStore']);
 Route::get('/bookings/{id}/status', [BookingController::class, 'checkStatus']);
 
-Route::post('/reservations', [ReservationController::class, 'store']); // Submit reservation
-Route::post('/reservations/check-status', [ReservationController::class, 'checkStatus']); // Check status by email + ID
+// ============================================
+// PAYMENT ROUTES
+// ============================================
+Route::post('/payments/webhook/moyasar', [PaymentController::class, 'moyasarWebhook']);
+Route::get('/payments/callback', [PaymentController::class, 'callback']);
+Route::get('/payments/status/{id}', [PaymentController::class, 'getPaymentStatus']);
+Route::post('/payments/moyasar/initiate', [PaymentController::class, 'initiateMoyasarPayment']);
 
+// Tourism Offers Routes
+Route::get('/tourism-offers', [TourismOfferController::class, 'index']);
+Route::get('/tourism-offers/{id}', [TourismOfferController::class, 'show']);
+
+// Reservations
+Route::post('/reservations', [ReservationController::class, 'store']);
+Route::post('/reservations/check-status', [ReservationController::class, 'checkStatus']);
+
+// Contact
 Route::post('/contact', [App\Http\Controllers\Api\ContactController::class, 'store']);
 
+// Admin Routes
 Route::prefix('admin')->group(function () {
     Route::post('/pages', [PageController::class, 'store']);
     Route::put('/pages/{id}', [PageController::class, 'update']);
     Route::delete('/pages/{id}', [PageController::class, 'destroy']);
-
     Route::post('/services', [ServiceController::class, 'store']);
     Route::put('/services/{id}', [ServiceController::class, 'update']);
     Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
-
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
-
     Route::post('/trips', [TripController::class, 'store']);
     Route::put('/trips/{id}', [TripController::class, 'update']);
     Route::delete('/trips/{id}', [TripController::class, 'destroy']);
     Route::put('/trips/{slug}/blocked-dates', [TripController::class, 'updateBlockedDates']);
-
     Route::post('/cities', [CityController::class, 'store']);
     Route::put('/cities/{id}', [CityController::class, 'update']);
     Route::delete('/cities/{id}', [CityController::class, 'destroy']);
-
     Route::post('/testimonials', [TestimonialController::class, 'store']);
     Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
     Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
-
-
-
     Route::post('/settings', [SettingController::class, 'store']);
     Route::put('/settings/{key}', [SettingController::class, 'update']);
     Route::delete('/settings/{key}', [SettingController::class, 'destroy']);
@@ -238,37 +167,74 @@ Route::prefix('admin')->group(function () {
     Route::post('/reservations/{id}/convert-to-booking', [ReservationController::class, 'convertToBooking']);
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
 
-    // Custom Payment Offers (Super Admin only)
+    // Custom Payment Offers
     Route::post('/custom-payment-offers', [CustomPaymentOfferController::class, 'create']);
     Route::get('/custom-payment-offers', [CustomPaymentOfferController::class, 'list']);
     Route::delete('/custom-payment-offers/{id}', [CustomPaymentOfferController::class, 'delete']);
 });
 
-// Special Offers Routes
+// Special Offers
 Route::get('/special-offers', [SpecialOfferController::class, 'index']);
 Route::get('/special-offers/simple', [SpecialOfferController::class, 'simple']);
 
-// Visa country data for frontend listing
+// Visa countries
 Route::get('/visa-countries', [VisaCountryController::class, 'index']);
 Route::get('/visa-countries/{slug}', [VisaCountryController::class, 'show']);
 
-// E-Visa Routes
+// E-Visa
 Route::get('/evisa-applications', [EvisaController::class, 'index']);
 Route::get('/evisa-applications/{id}', [EvisaController::class, 'show']);
 Route::post('/evisa-applications', [EvisaController::class, 'store']);
 
-// Protected admin routes for status update
-Route::middleware('auth:sanctum')->group(function () {
-    Route::put('/admin/evisa-applications/{id}/status', [EvisaController::class, 'updateStatus']);
-});
-
+// Custom Payment Offers
 Route::get('/custom-payment-offers/{uniqueLink}', [CustomPaymentOfferController::class, 'show']);
-
-// Payment callbacks (from Moyasar)
 Route::post('/custom-payment-offers/{uniqueLink}/payment-success', [CustomPaymentOfferController::class, 'paymentSuccess']);
-Route::get('/custom-payment-offers/{uniqueLink}/payment-success', [CustomPaymentOfferController::class, 'paymentSuccess']); // Moyasar redirects via GET
+Route::get('/custom-payment-offers/{uniqueLink}/payment-success', [CustomPaymentOfferController::class, 'paymentSuccess']);
 Route::post('/custom-payment-offers/{uniqueLink}/payment-failed', [CustomPaymentOfferController::class, 'paymentFailed']);
-
-// Moyasar Webhook for custom payment offers
 Route::post('/webhooks/moyasar/custom-payment', [CustomPaymentOfferController::class, 'moyasarWebhook']);
 
+// ============================================
+// PROTECTED ROUTES (Require Authentication)
+// ============================================
+Route::middleware('auth:sanctum')->group(function () {
+    // User authentication
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
+
+    // User bookings (authenticated)
+    Route::get('/bookings', [BookingController::class, 'index']);
+    Route::get('/bookings/{id}', [BookingController::class, 'show']);
+    Route::put('/bookings/{id}', [BookingController::class, 'update']);
+    Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
+    Route::post('/bookings/check-status', [BookingController::class, 'checkStatus']);
+    Route::post('/bookings', [BookingController::class, 'store']);
+
+    // User reservations
+    Route::get('/my-reservations', [ReservationController::class, 'myReservations']);
+
+    // User payments
+    Route::post('/payments/initiate', [PaymentController::class, 'initiate']);
+    Route::get('/payments', [PaymentController::class, 'index']);
+    Route::get('/payments/{id}', [PaymentController::class, 'show']);
+
+    // International Travel Admin
+    Route::post('/international/flights', [InternationalFlightController::class, 'store']);
+    Route::put('/international/flights/{id}', [InternationalFlightController::class, 'update']);
+    Route::delete('/international/flights/{id}', [InternationalFlightController::class, 'destroy']);
+    Route::post('/international/hotels', [InternationalHotelController::class, 'store']);
+    Route::put('/international/hotels/{id}', [InternationalHotelController::class, 'update']);
+    Route::delete('/international/hotels/{id}', [InternationalHotelController::class, 'destroy']);
+    Route::post('/international/packages', [InternationalPackageController::class, 'store']);
+    Route::put('/international/packages/{id}', [InternationalPackageController::class, 'update']);
+    Route::delete('/international/packages/{id}', [InternationalPackageController::class, 'destroy']);
+    Route::post('/international/destinations', [InternationalDestinationController::class, 'store']);
+    Route::put('/international/destinations/{id}', [InternationalDestinationController::class, 'update']);
+    Route::delete('/international/destinations/{id}', [InternationalDestinationController::class, 'destroy']);
+
+    // Schengen Admin
+    Route::put('/admin/schengen-applications/{id}/status', [SchengenController::class, 'updateStatus']);
+
+    // E-Visa Admin
+    Route::put('/admin/evisa-applications/{id}/status', [EvisaController::class, 'updateStatus']);
+});

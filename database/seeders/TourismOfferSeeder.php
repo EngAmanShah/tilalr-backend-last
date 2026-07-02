@@ -1,0 +1,190 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\TourismOffer;
+
+class TourismOfferSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $offers = [
+            [
+                'title_en' => 'Luxury Beach Resort',
+                'title_ar' => 'منتجع شاطئ فاخر',
+                'description_en' => 'Experience luxury like never before with stunning ocean views',
+                'description_ar' => 'اختبر الفخامة كما لم يسبق لك مع إطلالات خلابة على المحيط',
+                'long_description_en' => 'This luxury beach resort offers world-class amenities, private beaches, and breathtaking views.',
+                'long_description_ar' => 'يقدم هذا المنتجع الفاخر مرافق عالمية المستوى وشواطئ خاصة ومناظر خلابة.',
+                'slug' => 'luxury-beach-resort',
+                'image' => 'offers/luxury-beach.jpg',
+                'price' => 2500,
+                'original_price' => 3200,
+                'discount' => 20,
+                'rating' => 4.8,
+                'duration_en' => '5 Days',
+                'duration_ar' => '٥ أيام',
+                'location_en' => 'Maldives',
+                'location_ar' => 'المالديف',
+                'group_size_en' => '2-4 People',
+                'group_size_ar' => '٢-٤ أشخاص',
+                'features_en' => json_encode(['Private Beach', 'Spa & Wellness', 'Fine Dining', 'Water Sports']),
+                'features_ar' => json_encode(['شاطئ خاص', 'سبا وعافية', 'تناول طعام فاخر', 'رياضات مائية']),
+                'includes_en' => json_encode(['Airport Transfer', 'Daily Breakfast', 'Wifi', 'Pool Access']),
+                'includes_ar' => json_encode(['النقل من المطار', 'وجبة إفطار يومية', 'واي فاي', 'الوصول إلى المسبح']),
+                'not_includes_en' => json_encode(['Airline Tickets', 'Travel Insurance', 'Personal Expenses']),
+                'not_includes_ar' => json_encode(['تذاكر الطيران', 'تأمين السفر', 'النفقات الشخصية']),
+                'itinerary_en' => json_encode([
+                    ['day' => 1, 'title' => 'Arrival & Welcome', 'description' => 'Arrive at the resort'],
+                    ['day' => 2, 'title' => 'Beach Day', 'description' => 'Relax on the private beach'],
+                    ['day' => 3, 'title' => 'Spa & Wellness', 'description' => 'Indulge in spa treatments'],
+                ]),
+                'itinerary_ar' => json_encode([
+                    ['day' => 1, 'title' => 'الوصول والترحيب', 'description' => 'الوصول إلى المنتجع'],
+                    ['day' => 2, 'title' => 'يوم الشاطئ', 'description' => 'الاسترخاء على الشاطئ الخاص'],
+                    ['day' => 3, 'title' => 'السبا والعافية', 'description' => 'الاستمتاع بعلاجات السبا'],
+                ]),
+                'basic_info' => json_encode([
+                    'trip_code' => 'T001',
+                    'days_num' => '5',
+                    'destination_name' => 'Maldives',
+                    'available_to' => '2025-12-31',
+                    'double_room' => '2500',
+                    'single_room' => '1800',
+                ]),
+                'contact_info' => json_encode([
+                    'address' => 'Exit 5, Al Murooj, Riyadh',
+                    'phone' => '011 456 2097',
+                    'whatsapp' => '+966 5951 77774',
+                    'email' => 'info@travelerclub.sa.com',
+                ]),
+                'payment_methods' => json_encode([
+                    ['name' => 'Al Rajhi Bank', 'account_no' => '593608010029976', 'iban' => 'SA1080000593608010029976'],
+                ]),
+                'type' => 'international',
+                'active' => true,
+                'popular' => true,
+                'limited' => false,
+            ],
+            [
+                'title_en' => 'Mountain Adventure',
+                'title_ar' => 'مغامرة جبلية',
+                'description_en' => 'Explore the breathtaking mountains with guided tours',
+                'description_ar' => 'استكشف الجبال الخلابة مع جولات إرشادية',
+                'long_description_en' => 'Experience the thrill of mountain adventure with expert guides.',
+                'long_description_ar' => 'جرب متعة المغامرة الجبلية مع مرشدين خبراء.',
+                'slug' => 'mountain-adventure',
+                'image' => 'offers/mountain-adventure.jpg',
+                'price' => 1800,
+                'original_price' => 2200,
+                'discount' => 15,
+                'rating' => 4.6,
+                'duration_en' => '4 Days',
+                'duration_ar' => '٤ أيام',
+                'location_en' => 'Swiss Alps',
+                'location_ar' => 'جبال الألب السويسرية',
+                'group_size_en' => '2-6 People',
+                'group_size_ar' => '٢-٦ أشخاص',
+                'features_en' => json_encode(['Guided Tours', 'Scenic Trails', 'Mountain Views']),
+                'features_ar' => json_encode(['جولات إرشادية', 'مسارات خلابة', 'إطلالات جبلية']),
+                'includes_en' => json_encode(['Guide', 'Equipment', 'Lunch']),
+                'includes_ar' => json_encode(['مرشد', 'معدات', 'وجبة غداء']),
+                'not_includes_en' => json_encode(['Airline Tickets', 'Hotel']),
+                'not_includes_ar' => json_encode(['تذاكر الطيران', 'فندق']),
+                'itinerary_en' => json_encode([
+                    ['day' => 1, 'title' => 'Arrival & Briefing', 'description' => 'Arrive and receive briefing'],
+                    ['day' => 2, 'title' => 'Mountain Trail', 'description' => 'Hike through scenic trails'],
+                    ['day' => 3, 'title' => 'Summit View', 'description' => 'Reach the summit'],
+                ]),
+                'itinerary_ar' => json_encode([
+                    ['day' => 1, 'title' => 'الوصول والإحاطة', 'description' => 'الوصول وتلقي الإحاطة'],
+                    ['day' => 2, 'title' => 'مسار الجبل', 'description' => 'المشي عبر مسارات الجبل'],
+                    ['day' => 3, 'title' => 'إطلالة القمة', 'description' => 'الوصول إلى القمة'],
+                ]),
+                'basic_info' => json_encode([
+                    'trip_code' => 'T002',
+                    'days_num' => '4',
+                    'destination_name' => 'Swiss Alps',
+                    'available_to' => '2025-12-31',
+                    'double_room' => '1800',
+                    'single_room' => '1300',
+                ]),
+                'contact_info' => json_encode([
+                    'address' => 'Exit 5, Al Murooj, Riyadh',
+                    'phone' => '011 456 2097',
+                    'whatsapp' => '+966 5951 77774',
+                    'email' => 'info@travelerclub.sa.com',
+                ]),
+                'payment_methods' => json_encode([
+                    ['name' => 'Al Rajhi Bank', 'account_no' => '593608010029976', 'iban' => 'SA1080000593608010029976'],
+                ]),
+                'type' => 'international',
+                'active' => true,
+                'popular' => true,
+                'limited' => true,
+            ],
+            [
+                'title_en' => 'Cultural City Tour',
+                'title_ar' => 'جولة مدينة ثقافية',
+                'description_en' => 'Immerse yourself in rich history and culture',
+                'description_ar' => 'انغمس في التاريخ والثقافة الغنية',
+                'long_description_en' => 'Discover the rich cultural heritage of historic cities.',
+                'long_description_ar' => 'اكتشف التراث الثقافي الغني للمدن التاريخية.',
+                'slug' => 'cultural-city-tour',
+                'image' => 'offers/cultural-tour.jpg',
+                'price' => 1200,
+                'original_price' => 1500,
+                'discount' => null,
+                'rating' => 4.7,
+                'duration_en' => '3 Days',
+                'duration_ar' => '٣ أيام',
+                'location_en' => 'Istanbul',
+                'location_ar' => 'اسطنبول',
+                'group_size_en' => '2-8 People',
+                'group_size_ar' => '٢-٨ أشخاص',
+                'features_en' => json_encode(['Historical Sites', 'Museums', 'Local Cuisine']),
+                'features_ar' => json_encode(['مواقع تاريخية', 'متاحف', 'مأكولات محلية']),
+                'includes_en' => json_encode(['Tour Guide', 'Entrance Fees', 'Lunch']),
+                'includes_ar' => json_encode(['مرشد سياحي', 'رسوم الدخول', 'وجبة غداء']),
+                'not_includes_en' => json_encode(['Airline Tickets', 'Hotel']),
+                'not_includes_ar' => json_encode(['تذاكر الطيران', 'فندق']),
+                'itinerary_en' => json_encode([
+                    ['day' => 1, 'title' => 'Old City Tour', 'description' => 'Explore historic landmarks'],
+                    ['day' => 2, 'title' => 'Museum Day', 'description' => 'Visit world-class museums'],
+                    ['day' => 3, 'title' => 'Cultural Experience', 'description' => 'Experience local traditions'],
+                ]),
+                'itinerary_ar' => json_encode([
+                    ['day' => 1, 'title' => 'جولة المدينة القديمة', 'description' => 'استكشف المعالم التاريخية'],
+                    ['day' => 2, 'title' => 'يوم المتاحف', 'description' => 'زيارة المتاحف العالمية'],
+                    ['day' => 3, 'title' => 'تجربة ثقافية', 'description' => 'اختبار التقاليد المحلية'],
+                ]),
+                'basic_info' => json_encode([
+                    'trip_code' => 'T003',
+                    'days_num' => '3',
+                    'destination_name' => 'Istanbul',
+                    'available_to' => '2025-12-31',
+                    'double_room' => '1200',
+                    'single_room' => '900',
+                ]),
+                'contact_info' => json_encode([
+                    'address' => 'Exit 5, Al Murooj, Riyadh',
+                    'phone' => '011 456 2097',
+                    'whatsapp' => '+966 5951 77774',
+                    'email' => 'info@travelerclub.sa.com',
+                ]),
+                'payment_methods' => json_encode([
+                    ['name' => 'Al Rajhi Bank', 'account_no' => '593608010029976', 'iban' => 'SA1080000593608010029976'],
+                ]),
+                'type' => 'international',
+                'active' => true,
+                'popular' => false,
+                'limited' => false,
+            ],
+        ];
+
+        foreach ($offers as $offer) {
+            TourismOffer::create($offer);
+        }
+    }
+}

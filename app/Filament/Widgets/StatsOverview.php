@@ -5,7 +5,6 @@ namespace App\Filament\Widgets;
 use App\Models\User;
 use App\Models\Trip;
 use App\Models\Offer;
-use App\Models\IslandDestination;
 use App\Models\InternationalDestination;
 use App\Models\Reservation;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -34,11 +33,7 @@ class StatsOverview extends BaseWidget
                 ->color('warning')
                 ->chart([1, 2, 2, 3, 3, 3, 3]),
 
-            Stat::make(__('admin.stats.island_destinations'), IslandDestination::count())
-                ->description(__('admin.stats.local_island_destinations'))
-                ->descriptionIcon('heroicon-m-sun')
-                ->color('primary')
-                ->chart([2, 3, 4, 5, 5, 6, 6]),
+
 
             Stat::make(__('admin.stats.international_destinations'), InternationalDestination::count())
                 ->description(__('admin.stats.international_travel_packages'))
