@@ -22,7 +22,13 @@ class TourismOfferController extends Controller
 
     public function show($id)
     {
+        // Try to find by numeric ID first
         $offer = TourismOffer::find($id);
+
+        // If not found, try to find by slug
+        if (!$offer) {
+            $offer = TourismOffer::where('slug', $id)->first();
+        }
 
         if (!$offer) {
             return response()->json([

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * SMS Controller - Testing and debugging SMS integration
- * 
+ *
  * Provides endpoints to test SMS configuration and send test messages.
  * These endpoints should be protected in production!
  */
@@ -32,7 +32,7 @@ class SmsController extends Controller
     public function status()
     {
         $taqnyatTest = $this->taqnyatService->test();
-        
+
         return response()->json([
             'success' => true,
             'sms_provider' => $this->smsService->getProvider(),
@@ -80,7 +80,7 @@ class SmsController extends Controller
     /**
      * Send a test SMS
      * POST /api/sms/test
-     * 
+     *
      * Body: { "phone": "966500000000", "message": "Test message" }
      */
     public function sendTest(Request $request)
@@ -112,7 +112,7 @@ class SmsController extends Controller
     /**
      * Send a test SMS directly via Taqnyat (bypasses SMS provider config)
      * POST /api/sms/taqnyat/send
-     * 
+     *
      * Body: { "phone": "966500000000", "message": "Test message" }
      */
     public function taqnyatSend(Request $request)

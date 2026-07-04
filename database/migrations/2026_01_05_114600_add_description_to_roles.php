@@ -3,17 +3,21 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement("ALTER TABLE roles ADD COLUMN description TEXT NULL AFTER display_name");
+        Schema::table('roles', function (Blueprint $table) {
+            // Remove AFTER clause - SQLite doesn't support it
+            $table->text('description')->nullable();
+        });
     }
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE roles DROP COLUMN description");
+        Schema::table('roles', function (Blueprint $table) {
+            $table->dropColumn('description');
+        });
     }
 };

@@ -69,7 +69,7 @@ class CustomPaymentOfferController extends Controller
                 'error' => $e->getMessage(),
                 'user_id' => $user->id,
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create payment offer',
@@ -128,7 +128,7 @@ class CustomPaymentOfferController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to fetch payment offers', ['error' => $e->getMessage()]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch offers',
@@ -183,7 +183,7 @@ class CustomPaymentOfferController extends Controller
                 'unique_link' => $uniqueLink,
                 'error' => $e->getMessage(),
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to load payment offer',
@@ -212,8 +212,8 @@ class CustomPaymentOfferController extends Controller
             }
 
             // Get transaction ID from Moyasar callback
-            $transactionId = $request->input('id') 
-                ?? $request->input('transaction_id') 
+            $transactionId = $request->input('id')
+                ?? $request->input('transaction_id')
                 ?? $request->input('payment_id');
 
             // Validate Moyasar payment status if provided
@@ -223,7 +223,7 @@ class CustomPaymentOfferController extends Controller
                     'unique_link' => $uniqueLink,
                     'status' => $moyasarStatus,
                 ]);
-                
+
                 if (strtolower($moyasarStatus) === 'failed') {
                     $offer->markAsFailed();
                     return response()->json([
@@ -265,7 +265,7 @@ class CustomPaymentOfferController extends Controller
                 'unique_link' => $uniqueLink,
                 'error' => $e->getMessage(),
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to process payment',
@@ -280,7 +280,7 @@ class CustomPaymentOfferController extends Controller
     {
         try {
             $offer = CustomPaymentOffer::where('unique_link', $uniqueLink)->firstOrFail();
-            
+
             // Don't overwrite if already paid
             if ($offer->isPaid()) {
                 return response()->json([
@@ -312,7 +312,7 @@ class CustomPaymentOfferController extends Controller
                 'unique_link' => $uniqueLink,
                 'error' => $e->getMessage(),
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to process payment failure',
@@ -331,10 +331,10 @@ class CustomPaymentOfferController extends Controller
             $paymentId = $request->input('id');
             $status = $request->input('status');
             $metadata = $request->input('metadata', []);
-            
+
             // Find offer by unique_link in metadata or callback_url
             $uniqueLink = $metadata['unique_link'] ?? null;
-            
+
             if (!$uniqueLink) {
                 $callbackUrl = $request->input('callback_url', '');
                 if (preg_match('/pay-custom-offer\/([a-zA-Z0-9-]+)/', $callbackUrl, $matches)) {
@@ -348,7 +348,7 @@ class CustomPaymentOfferController extends Controller
             }
 
             $offer = CustomPaymentOffer::where('unique_link', $uniqueLink)->first();
-            
+
             if (!$offer) {
                 return response()->json(['success' => false, 'message' => 'Offer not found'], 404);
             }
@@ -408,7 +408,7 @@ class CustomPaymentOfferController extends Controller
                 'id' => $id,
                 'error' => $e->getMessage(),
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete offer',
@@ -452,14 +452,14 @@ class CustomPaymentOfferController extends Controller
     {
         $parts = explode('@', $email);
         if (count($parts) !== 2) return $email;
-        
+
         $name = $parts[0];
         $domain = $parts[1];
-        
+
         if (strlen($name) <= 2) {
             return $name . '***@' . $domain;
         }
-        
+
         return substr($name, 0, 2) . str_repeat('*', min(strlen($name) - 2, 5)) . '@' . $domain;
     }
 
@@ -470,7 +470,7 @@ class CustomPaymentOfferController extends Controller
     {
         $digits = preg_replace('/[^0-9]/', '', $phone);
         if (strlen($digits) < 4) return $phone;
-        
+
         return substr($digits, 0, 3) . str_repeat('*', strlen($digits) - 6) . substr($digits, -3);
     }
 }

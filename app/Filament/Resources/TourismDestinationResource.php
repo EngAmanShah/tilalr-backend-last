@@ -63,6 +63,7 @@ class TourismDestinationResource extends Resource
                                 'asia' => 'Asia',
                                 'africa' => 'Africa',
                                 'australia' => 'Australia & New Zealand',
+                                'america' => 'America', // ✅ ADDED AMERICA
                             ])
                             ->required()
                             ->columnSpan(1),
@@ -187,6 +188,7 @@ class TourismDestinationResource extends Resource
                         'asia' => 'warning',
                         'africa' => 'success',
                         'australia' => 'primary',
+                        'america' => 'danger', // ✅ ADDED AMERICA COLOR
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match($state) {
@@ -194,6 +196,7 @@ class TourismDestinationResource extends Resource
                         'asia' => 'Asia',
                         'africa' => 'Africa',
                         'australia' => 'Australia & NZ',
+                        'america' => 'America', // ✅ ADDED AMERICA
                         default => $state,
                     }),
                 Tables\Columns\TextColumn::make('location_en')
@@ -206,7 +209,7 @@ class TourismDestinationResource extends Resource
                 Tables\Columns\TextColumn::make('rating')
                     ->label('Rating')
                     ->sortable()
-                    ->formatStateUsing(fn (string $state): string => '★ ' . $state),
+                    ->formatStateUsing(fn (string $state): string => '' . $state),
                 Tables\Columns\TextColumn::make('duration_en')
                     ->label('Duration')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -225,6 +228,7 @@ class TourismDestinationResource extends Resource
                         'asia' => 'Asia',
                         'africa' => 'Africa',
                         'australia' => 'Australia & New Zealand',
+                        'america' => 'America', // ✅ ADDED AMERICA
                     ])
                     ->label('Region'),
                 Tables\Filters\TernaryFilter::make('active')

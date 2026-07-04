@@ -145,7 +145,7 @@
             <div class="logo">🏜️</div>
             <h1>Tilal Rimal</h1>
         </div>
-        
+
         <div class="content">
             <div style="text-align: center;">
                 <div class="success-icon">
@@ -154,17 +154,17 @@
                     </svg>
                 </div>
             </div>
-            
+
             <div class="greeting">
                 Dear <strong>{{ $customer_name }}</strong>,<br>
                 Your payment has been successfully received!
             </div>
-            
+
             <div class="amount-row">
                 <div class="amount-label">Amount Paid</div>
                 <div class="amount-value">{{ $amount }} SAR</div>
             </div>
-            
+
             <div class="payment-details">
                 <h2>Payment Details</h2>
                 <div class="detail-row">
@@ -186,13 +186,13 @@
                     <span class="detail-value" style="color: #48bb78;">✓ Paid</span>
                 </div>
             </div>
-            
+
             <div class="note">
                 <strong>Thank you for your payment!</strong>
                 Please keep this email as your receipt. If you have any questions, don't hesitate to contact us.
             </div>
         </div>
-        
+
         <div class="footer">
             <p class="company">Tilal Rimal</p>
             <p>Thank you for choosing our services</p>

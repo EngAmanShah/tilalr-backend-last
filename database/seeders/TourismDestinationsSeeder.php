@@ -9,43 +9,14 @@ use Illuminate\Database\Seeder;
 class TourismDestinationsSeeder extends Seeder
 {
     private $commonContactInfo = [
-        'address' => 'Exit 5, Al Murooj, Riyadh',
-        'phone' => '011 456 2097',
-        'whatsapp' => '+966 5951 77774',
-        'email' => 'info@travelerclub.sa.com',
+        'address' => 'al Rabwa Jeddah',
+        'phone' => '0547305060',
+        'whatsapp' => '966547305060',
+        'email' => 'info@tilalr.com',
     ];
 
     private $commonPaymentMethods = [
-        [
-            'name' => 'Bank Transfer',
-            'account_no' => '593608010029976',
-            'iban' => 'SA1080000593608010029976',
-            'logo' => 'rajhi.webp',
-        ],
-        [
-            'name' => 'بنك الرياض',
-            'account_no' => '2451449249940',
-            'iban' => 'SA202000000245144249940',
-            'logo' => 'riyad.webp',
-        ],
-        [
-            'name' => 'SNB الإمارات',
-            'account_no' => '26163780000106',
-            'iban' => 'SA3210000026163780000106',
-            'logo' => 'ahli.webp',
-        ],
-        [
-            'name' => 'Emirates NBD',
-            'account_no' => '1016047862801',
-            'iban' => 'SA9595000001016047862801',
-            'logo' => 'nbd.webp',
-        ],
-        [
-            'name' => 'SABB',
-            'account_no' => '155285513001',
-            'iban' => 'SA3945000000155285513001',
-            'logo' => 'sabb.webp',
-        ],
+
     ];
 
     public function run(): void
@@ -65,7 +36,7 @@ class TourismDestinationsSeeder extends Seeder
                 'duration_ar' => '٩ أيام',
                 'price' => '4100',
                 'rating' => 4.8,
-                'image' => '01KW8E20JEXP5P7280VW66CV64.jpeg', // ← CORRECT FILENAME
+                'image' => '01KW8E20JEXP5P7280VW66CV64.jpeg',
                 'slug' => 'britain-ireland-tour',
                 'region' => 'europe',
                 'active' => true,
@@ -98,7 +69,7 @@ class TourismDestinationsSeeder extends Seeder
                 'duration_ar' => '٩ أيام',
                 'price' => '3200',
                 'rating' => 4.6,
-                'image' => '5.jpg', // ← CORRECT FILENAME
+                'image' => '5.jpg',
                 'slug' => 'poland-discovery',
                 'region' => 'europe',
                 'active' => true,
@@ -129,7 +100,7 @@ class TourismDestinationsSeeder extends Seeder
                 'duration_ar' => '١١ يومًا',
                 'price' => '3800',
                 'rating' => 4.9,
-                'image' => 'norway.jpg', // ← You need to add this file
+                'image' => 'norway.jpg',
                 'slug' => 'norway-fjords',
                 'region' => 'europe',
                 'active' => true,
@@ -160,7 +131,7 @@ class TourismDestinationsSeeder extends Seeder
                 'duration_ar' => '١٢ يومًا',
                 'price' => '3500',
                 'rating' => 4.7,
-                'image' => 'germany.jpg', // ← You need to add this file
+                'image' => 'germany.jpg',
                 'slug' => 'highlights-of-germany',
                 'region' => 'europe',
                 'active' => true,
@@ -191,7 +162,7 @@ class TourismDestinationsSeeder extends Seeder
                 'duration_ar' => '٩ أيام',
                 'price' => '4200',
                 'rating' => 4.9,
-                'image' => 'switzerland.jpg', // ← You need to add this file
+                'image' => 'switzerland.jpg',
                 'slug' => 'switzerland-package',
                 'region' => 'europe',
                 'active' => true,
@@ -222,7 +193,7 @@ class TourismDestinationsSeeder extends Seeder
                 'duration_ar' => '٧ أيام',
                 'price' => '2000',
                 'rating' => 4.8,
-                'image' => 'thailand.jpg', // ← You need to add this file
+                'image' => 'thailand.jpg',
                 'slug' => 'thailand-getaway',
                 'region' => 'asia',
                 'active' => true,
@@ -253,7 +224,7 @@ class TourismDestinationsSeeder extends Seeder
                 'duration_ar' => '١٠ أيام',
                 'price' => '2600',
                 'rating' => 4.8,
-                'image' => 'morocco.jpg', // ← You need to add this file
+                'image' => 'morocco.jpg',
                 'slug' => 'morocco-discovery',
                 'region' => 'africa',
                 'active' => true,
@@ -284,7 +255,7 @@ class TourismDestinationsSeeder extends Seeder
                 'duration_ar' => '١٢ يومًا',
                 'price' => '4500',
                 'rating' => 4.9,
-                'image' => 'datacenter.png', // ← CORRECT FILENAME
+                'image' => 'datacenter.png',
                 'slug' => 'australia-adventure',
                 'region' => 'australia',
                 'active' => true,
@@ -299,6 +270,72 @@ class TourismDestinationsSeeder extends Seeder
                     'available_to' => '10-11-2024',
                     'double_room' => 4500,
                     'single_room' => 9000,
+                ],
+                'contact_info' => $this->commonContactInfo,
+                'payment_methods' => $this->commonPaymentMethods,
+            ],
+
+            // ===== AMERICA =====
+            [
+                'title_en' => 'USA East Coast Explorer',
+                'title_ar' => 'جولة استكشاف الساحل الشرقي للولايات المتحدة',
+                'description_en' => 'Discover the iconic cities and stunning landscapes of America\'s East Coast.',
+                'description_ar' => 'اكتشف المدن الأيقونية والمناظر الطبيعية الخلابة في الساحل الشرقي لأمريكا.',
+                'long_description_en' => 'From the bustling streets of New York City to the historic charm of Boston, this tour takes you through America\'s most iconic East Coast destinations. Visit Washington D.C., Philadelphia, and experience the vibrant culture of the United States.',
+                'long_description_ar' => 'من شوارع نيويورك الصاخبة إلى سحر بوسطن التاريخي، تأخذك هذه الجولة عبر أشهر الوجهات في الساحل الشرقي لأمريكا. قم بزيارة واشنطن العاصمة وفيلادلفيا واختبر الثقافة النابضة بالحياة في الولايات المتحدة.',
+                'location_en' => 'USA East Coast',
+                'location_ar' => 'الساحل الشرقي للولايات المتحدة',
+                'duration_en' => '10 Days',
+                'duration_ar' => '١٠ أيام',
+                'price' => '4800',
+                'rating' => 4.8,
+                'image' => 'usa.jpg',
+                'slug' => 'usa-east-coast',
+                'region' => 'america',
+                'active' => true,
+                'features_en' => ['Hotel', 'Breakfast daily', 'City tours', 'Museum visits', 'Guided tours'],
+                'features_ar' => ['فندق', 'إفطار يومي', 'جولات المدينة', 'زيارات المتاحف', 'جولات مرشدة'],
+                'not_includes_en' => ['International flight', 'Visa', 'Travel insurance'],
+                'not_includes_ar' => ['الرحلات الدولية', 'التأشيرة', 'تأمين السفر'],
+                'basic_info' => [
+                    'trip_code' => 'US1234',
+                    'days_num' => 10,
+                    'destination_name' => 'USA East Coast',
+                    'available_to' => '30-12-2024',
+                    'double_room' => 4800,
+                    'single_room' => 9600,
+                ],
+                'contact_info' => $this->commonContactInfo,
+                'payment_methods' => $this->commonPaymentMethods,
+            ],
+            [
+                'title_en' => 'Canada Rocky Mountains Tour',
+                'title_ar' => 'جولة جبال روكي الكندية',
+                'description_en' => 'Experience the breathtaking beauty of the Canadian Rockies.',
+                'description_ar' => 'اختبر الجمال الخلاب لجبال روكي الكندية.',
+                'long_description_en' => 'Explore the majestic Canadian Rockies with visits to Banff, Lake Louise, and Jasper. Enjoy stunning mountain views, crystal-clear lakes, and abundant wildlife in this nature lover\'s paradise.',
+                'long_description_ar' => 'استكشف جبال روكي الكندية المهيبة مع زيارات إلى بانف وبحيرة لويز وجاسبر. استمتع بإطلالات جبلية خلابة وبحيرات صافية والحياة البرية الوفيرة في هذه الجنة لعشاق الطبيعة.',
+                'location_en' => 'Canadian Rockies',
+                'location_ar' => 'جبال روكي الكندية',
+                'duration_en' => '8 Days',
+                'duration_ar' => '٨ أيام',
+                'price' => '5200',
+                'rating' => 4.9,
+                'image' => 'canada.jpg',
+                'slug' => 'canada-rockies',
+                'region' => 'america',
+                'active' => true,
+                'features_en' => ['Hotel', 'Breakfast daily', 'Mountain tours', 'Lake cruises', 'Wildlife viewing'],
+                'features_ar' => ['فندق', 'إفطار يومي', 'جولات جبلية', 'رحلات بحيرة', 'مشاهدة الحياة البرية'],
+                'not_includes_en' => ['International flight', 'Visa', 'Travel insurance'],
+                'not_includes_ar' => ['الرحلات الدولية', 'التأشيرة', 'تأمين السفر'],
+                'basic_info' => [
+                    'trip_code' => 'CA5678',
+                    'days_num' => 8,
+                    'destination_name' => 'Canadian Rockies',
+                    'available_to' => '15-10-2024',
+                    'double_room' => 5200,
+                    'single_room' => 10400,
                 ],
                 'contact_info' => $this->commonContactInfo,
                 'payment_methods' => $this->commonPaymentMethods,

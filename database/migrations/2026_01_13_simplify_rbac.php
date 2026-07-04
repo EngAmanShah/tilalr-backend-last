@@ -9,46 +9,64 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Disable foreign key constraints temporarily
-        Schema::disableForeignKeyConstraints();
+        // Check if table exists and columns exist before modifying
+        if (Schema::hasTable('roles')) {
+            // SQLite doesn't support MODIFY or COMMENT
+            // Instead, we need to recreate the table or just add columns if they don't exist
 
-        // Add allowed_modules to roles table
-        if (Schema::hasTable('roles') && !Schema::hasColumn('roles', 'allowed_modules')) {
-            Schema::table('roles', function (Blueprint $table) {
-                // Create column as nullable first
-                $table->json('allowed_modules')->nullable()->after('sort_order')->comment('List of modules this role can access');
-            });
+            // Check if allowed_modules column exists
+            if (!Schema::hasColumn('roles', 'allowed_modules')) {
+                Schema::table('roles', function (Blueprint $table) {
+                    $table->json('allowed_modules')->nullable()->default('[]');
+                });
+            }
 
-            // Populate with default empty array
-            DB::table('roles')->whereNull('allowed_modules')->update(['allowed_modules' => '[]']);
-            
-            // Modify to NOT NULL with default
-            DB::statement("ALTER TABLE `roles` MODIFY `allowed_modules` JSON NOT NULL DEFAULT '[]' COMMENT 'List of modules this role can access'");
+            // Check if is_active column exists
+            if (!Schema::hasColumn('roles', 'is_active')) {
+                Schema::table('roles', function (Blueprint $table) {
+                    $table->boolean('is_active')->default(true);
+                });
+            }
+
+            // Check if description column exists (it was added in previous migration)
+            if (!Schema::hasColumn('roles', 'description')) {
+                Schema::table('roles', function (Blueprint $table) {
+                    $table->text('description')->nullable();
+                });
+            }
+
+            // Check if name column exists (it was added in previous migration)
+            if (!Schema::hasColumn('roles', 'name')) {
+                Schema::table('roles', function (Blueprint $table) {
+                    $table->string('name')->nullable();
+                });
+            }
         }
-
-        // Drop permission-related junction tables
-        Schema::dropIfExists('permission_role');
-        Schema::dropIfExists('role_user');
-
-        // Drop permissions and related tables
-        Schema::dropIfExists('permissions');
-
-        // Drop unnecessary models
-        Schema::dropIfExists('testimonials');
-        Schema::dropIfExists('team_members');
-        Schema::dropIfExists('sessions');
-        Schema::dropIfExists('hero_sections');
-        Schema::dropIfExists('contact_infos');
-        Schema::dropIfExists('cities');
-        Schema::dropIfExists('about_sections');
-
-        // Re-enable foreign key constraints
-        Schema::enableForeignKeyConstraints();
     }
 
     public function down(): void
     {
-        // This is a destructive migration - rollback will not recreate tables
-        // You would need to re-run your original migrations if needed
+        if (Schema::hasTable('roles')) {
+            Schema::table('roles', function (Blueprint $table) {
+                $columnsToDrop = [];
+
+                if (Schema::hasColumn('roles', 'allowed_modules')) {
+                    $columnsToDrop[] = 'allowed_modules';
+                }
+                if (Schema::hasColumn('roles', 'is_active')) {
+                    $columnsToDrop[] = 'is_active';
+                }
+                if (Schema::hasColumn('roles', 'description')) {
+                    $columnsToDrop[] = 'description';
+                }
+                if (Schema::hasColumn('roles', 'name')) {
+                    $columnsToDrop[] = 'name';
+                }
+
+                if (!empty($columnsToDrop)) {
+                    $table->dropColumn($columnsToDrop);
+                }
+            });
+        }
     }
 };

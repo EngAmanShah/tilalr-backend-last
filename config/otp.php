@@ -1,7 +1,7 @@
 <?php
 
 return [
- 
+
 
     'mode' => env('OTP_MODE', 'fixed'),
 
@@ -55,7 +55,7 @@ return [
     | will use the configured provider to send OTP codes.
     |
     | Supported providers: "taqnyat", "twilio", "unifonic", "custom"
-    | 
+    |
     | Recommended for Saudi Arabia: taqnyat
     | Set SMS_PROVIDER=taqnyat in .env and configure TAQNYAT_BEARER_TOKEN and TAQNYAT_SENDER
     |

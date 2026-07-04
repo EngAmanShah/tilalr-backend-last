@@ -489,10 +489,10 @@ class TourismOfferResource extends Resource
                                             ->keyLabel('Field')
                                             ->valueLabel('Value')
                                             ->default([
-                                                'address' => 'Exit 5, Al Murooj, Riyadh',
-                                                'phone' => '011 456 2097',
-                                                'whatsapp' => '+966 5951 77774',
-                                                'email' => 'info@travelerclub.sa.com',
+                                                'address' => 'al Rabwa Jeddah',
+                                                'phone' => '966547305060',
+                                                'whatsapp' => '966547305060',
+                                                'email' => 'info@tilalr.com',
                                             ])
                                             ->helperText('Add contact details like address, phone, WhatsApp, email'),
                                     ]),
@@ -515,16 +515,11 @@ class TourismOfferResource extends Resource
                                                 return json_encode([
                                                     [
                                                         'name' => 'Al Rajhi Bank',
-                                                        'account_no' => '593608010029976',
-                                                        'iban' => 'SA1080000593608010029976',
+                                                        'account_no' => '111111',
+                                                        'iban' => '1',
                                                         'logo' => 'rajhi.webp'
-                                                    ],
-                                                    [
-                                                        'name' => 'Riyad Bank',
-                                                        'account_no' => '2451449249940',
-                                                        'iban' => 'SA202000000245144249940',
-                                                        'logo' => 'riyad.webp'
                                                     ]
+
                                                 ], JSON_PRETTY_PRINT);
                                             })
                                             ->dehydrateStateUsing(function ($state) {
