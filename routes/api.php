@@ -117,7 +117,7 @@ Route::get('/bookings/{id}/status', [BookingController::class, 'checkStatus']);
 // ============================================
 // PAYMENT ROUTES
 // ============================================
-Route::post('/payments/webhook/moyasar', [PaymentController::class, 'moyasarWebhook']);
+Route::match(['GET', 'POST'], '/payments/webhook/moyasar', [PaymentController::class, 'moyasarWebhook']);
 Route::get('/payments/callback', [PaymentController::class, 'callback']);
 Route::get('/payments/status/{id}', [PaymentController::class, 'getPaymentStatus']);
 Route::post('/payments/moyasar/initiate', [PaymentController::class, 'initiateMoyasarPayment']);
@@ -192,7 +192,14 @@ Route::post('/custom-payment-offers/{uniqueLink}/payment-success', [CustomPaymen
 Route::get('/custom-payment-offers/{uniqueLink}/payment-success', [CustomPaymentOfferController::class, 'paymentSuccess']);
 Route::post('/custom-payment-offers/{uniqueLink}/payment-failed', [CustomPaymentOfferController::class, 'paymentFailed']);
 Route::post('/webhooks/moyasar/custom-payment', [CustomPaymentOfferController::class, 'moyasarWebhook']);
+// Guest Booking Routes (NO authentication required)
 
+
+Route::post('/bookings/guest', [BookingController::class, 'guestStore']);
+Route::get('/bookings/{id}/payment-details', [BookingController::class, 'paymentDetails']);
+Route::post('/payments/moyasar/initiate', [PaymentController::class, 'initiateMoyasarPayment']);
+Route::post('/payments/webhook/moyasar', [PaymentController::class, 'moyasarWebhook']);
+Route::get('/payments/status/{id}', [PaymentController::class, 'getPaymentStatus']);
 // ============================================
 // PROTECTED ROUTES (Require Authentication)
 // ============================================
@@ -218,8 +225,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/payments', [PaymentController::class, 'index']);
     Route::get('/payments/{id}', [PaymentController::class, 'show']);
 
-    // International Travel Admin
-    Route::post('/international/flights', [InternationalFlightController::class, 'store']);
+Route::post('/international/flights', [InternationalFlightController::class, 'store']);
     Route::put('/international/flights/{id}', [InternationalFlightController::class, 'update']);
     Route::delete('/international/flights/{id}', [InternationalFlightController::class, 'destroy']);
     Route::post('/international/hotels', [InternationalHotelController::class, 'store']);

@@ -1,0 +1,2 @@
+<div class="openapi-schema__list-item"><div><span class="openapi-schema__container"><strong class="openapi-schema__property">currency</strong><span class="openapi-schema
+

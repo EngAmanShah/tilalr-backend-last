@@ -18,11 +18,6 @@ class PaymentController extends Controller
         $validator = Validator::make($request->all(), [
             'booking_id' => 'required|integer|exists:bookings,id',
             'amount' => 'required|numeric|min:1',
-            'payment_method' => 'required|in:credit_card,bank_transfer',
-            'card_number' => 'required_if:payment_method,credit_card',
-            'card_cvv' => 'required_if:payment_method,credit_card',
-            'card_expiry' => 'required_if:payment_method,credit_card',
-            'card_holder' => 'required_if:payment_method,credit_card',
         ]);
 
         if ($validator->fails()) {
@@ -34,7 +29,6 @@ class PaymentController extends Controller
 
         try {
             $booking = Booking::find($request->booking_id);
-
             if (!$booking) {
                 return response()->json([
                     'success' => false,
@@ -42,85 +36,109 @@ class PaymentController extends Controller
                 ], 404);
             }
 
-            $amount = (int) ($request->amount * 100);
-            $callbackUrl = env('FRONTEND_URL', 'http://localhost:3000') . '/payment/callback';
+            $amountInHalalas = (int) round($request->amount * 100);
+            if ($amountInHalalas < 100) $amountInHalalas = 100;
 
-            // Parse expiry date
-            $expiry = explode('/', $request->card_expiry);
-            $expMonth = trim($expiry[0]);
-            $expYear = trim($expiry[1]);
-
-            // Ensure year is 4 digits
-            if (strlen($expYear) === 2) {
-                $expYear = '20' . $expYear;
+            $customerName = trim(($booking->first_name ?? '') . ' ' . ($booking->last_name ?? ''));
+            $customerName = preg_replace('/[^A-Za-z\s\.]/', '', $customerName);
+            if (empty($customerName) || strlen($customerName) < 2) {
+                $customerName = 'Guest User';
             }
 
-            // Prepare payment data for Moyasar
+            $lang = $request->lang ?? 'en';
+            $webhookUrl = env('APP_URL', 'http://localhost:8000') . '/api/payments/webhook/moyasar';
+            $successUrl = env('FRONTEND_URL', 'http://localhost:3000') . '/' . $lang . '/payment-success?booking_id=' . $booking->id;
+            $cancelUrl = env('FRONTEND_URL', 'http://localhost:3000') . '/' . $lang . '/payment-cancel?booking_id=' . $booking->id;
+
             $paymentData = [
-                'amount' => $amount,
+                'amount' => $amountInHalalas,
                 'currency' => 'SAR',
-                'description' => 'Booking #' . $booking->booking_number . ' - ' . $booking->package_title,
-                'callback_url' => $callbackUrl,
-                'source' => [
-                    'type' => 'creditcard',
-                    'number' => str_replace(' ', '', $request->card_number),
-                    'cvc' => $request->card_cvv,
-                    'month' => $expMonth,
-                    'year' => $expYear,
-                    'name' => $request->card_holder,
-                ],
+                'description' => 'Booking #' . ($booking->booking_number ?? $booking->id),
                 'metadata' => [
                     'booking_id' => $booking->id,
-                    'booking_number' => $booking->booking_number,
-                    'customer_email' => $booking->email,
-                    'customer_name' => $booking->first_name . ' ' . $booking->last_name,
+                    'customer_name' => $customerName,
+                    'customer_email' => $booking->email ?? '',
                 ],
+                // Send the minimal required Moyasar source shape without any card details.
+                'source' => [
+                    'type' => 'creditcard',
+                ],
+                'callback_url' => $webhookUrl,
+                'redirect_url' => $successUrl,
+                'cancel_url' => $cancelUrl,
             ];
 
             Log::info('Sending to Moyasar:', $paymentData);
 
-            // Send to Moyasar
             $response = Http::withBasicAuth(env('MOYASAR_SECRET_KEY'), '')
                 ->withOptions([
                     'verify' => false,
-                    'timeout' => 30,
+                    'timeout' => 60,
                 ])
+                ->asJson()
                 ->post('https://api.moyasar.com/v1/payments', $paymentData);
 
-            $result = $response->json();
             $status = $response->status();
+            $result = $response->json();
 
             Log::info('Moyasar response:', ['status' => $status, 'body' => $result]);
 
             if ($status === 200 || $status === 201) {
                 if (isset($result['id'])) {
-                    // Update booking with payment ID
                     $booking->update([
                         'payment_id' => $result['id'],
                         'payment_status' => 'initiated',
+                        'transaction_id' => $result['id'],
                     ]);
 
+                    // Prefer the public hosted URL fields Moyasar returns.
+                    $paymentUrl = data_get($result, 'source.transaction_url')
+                        ?? $result['transaction_url']
+                        ?? $result['url']
+                        ?? null;
+
+                    if ($paymentUrl) {
+                        return response()->json([
+                            'success' => true,
+                            'payment_url' => $paymentUrl,
+                            'payment_id' => $result['id'],
+                        ]);
+                    }
+
                     return response()->json([
-                        'success' => true,
-                        'message' => 'Payment initiated successfully',
-                        'payment_url' => $result['url'] ?? null,
-                        'payment_id' => $result['id'],
-                    ]);
+                        'success' => false,
+                        'message' => 'Payment created but no hosted URL returned by Moyasar.',
+                        'debug' => $result,
+                    ], 500);
                 }
             }
 
-            $errorMsg = $result['message'] ?? 'Payment initiation failed';
+            // If the gateway responds with a validation error that requests
+            // card fields when we intentionally did not send them, return
+            // that validation message back to the frontend so the integrator
+            // can decide how to proceed (do NOT send dummy card details).
+            if ($status === 400 && isset($result['type']) && $result['type'] === 'validation_error') {
+                Log::warning('Moyasar requires card fields for this account:', $result);
+                return response()->json([
+                    'success' => false,
+                    'message' => $result['message'] ?? 'Moyasar validation failed',
+                    'errors' => $result['errors'] ?? null,
+                    'debug' => $result,
+                ], 400);
+            }
+
+            $errorMessage = $result['message'] ?? 'Payment initiation failed';
             if (isset($result['errors'])) {
-                $errors = [];
+                $errorDetails = [];
                 foreach ($result['errors'] as $key => $value) {
-                    $errors[] = $key . ': ' . (is_array($value) ? implode(', ', $value) : $value);
+                    $errorDetails[] = $key . ': ' . (is_array($value) ? implode(', ', $value) : $value);
                 }
-                $errorMsg = implode('; ', $errors);
+                $errorMessage = implode('; ', $errorDetails);
             }
 
             return response()->json([
                 'success' => false,
-                'message' => $errorMsg,
+                'message' => $errorMessage,
                 'debug' => $result
             ], 400);
 
@@ -160,67 +178,30 @@ class PaymentController extends Controller
         }
 
         $paymentStatus = match ($status) {
-            'paid' => 'paid',
+            'paid', 'captured' => 'paid',
             'failed' => 'failed',
             'refunded' => 'refunded',
             default => $status,
         };
 
+        $bookingStatus = match ($status) {
+            'paid', 'captured' => 'confirmed',
+            'failed' => 'cancelled',
+            default => 'pending',
+        };
+
         $booking->update([
             'payment_status' => $paymentStatus,
-            'status' => $status === 'paid' ? 'confirmed' : 'pending',
+            'status' => $bookingStatus,
         ]);
 
         Log::info('Booking payment status updated:', [
             'booking_id' => $booking->id,
             'payment_id' => $paymentId,
-            'status' => $paymentStatus
+            'status' => $paymentStatus,
         ]);
 
         return response()->json(['status' => 'success']);
-    }
-
-    public function callback(Request $request)
-    {
-        $paymentId = $request->query('id');
-        $status = $request->query('status');
-
-        if (!$paymentId) {
-            return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/payment?error=missing_payment_id');
-        }
-
-        $booking = Booking::where('payment_id', $paymentId)->first();
-
-        if (!$booking) {
-            return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/payment?error=booking_not_found');
-        }
-
-        try {
-            $response = Http::withBasicAuth(env('MOYASAR_SECRET_KEY'), '')
-                ->withOptions(['verify' => false])
-                ->get('https://api.moyasar.com/v1/payments/' . $paymentId);
-
-            $paymentData = $response->json();
-            Log::info('Payment verification result:', $paymentData);
-
-            if ($response->successful() && ($paymentData['status'] ?? '') === 'paid') {
-                $booking->update([
-                    'payment_status' => 'paid',
-                    'status' => 'confirmed',
-                ]);
-
-                return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/payment/success?booking=' . $booking->booking_number);
-            } else {
-                $booking->update([
-                    'payment_status' => 'failed',
-                ]);
-
-                return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/payment/failed?booking=' . $booking->booking_number);
-            }
-        } catch (\Exception $e) {
-            Log::error('Payment verification error:', ['message' => $e->getMessage()]);
-            return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/payment/error');
-        }
     }
 
     public function getPaymentStatus($id)
@@ -242,7 +223,8 @@ class PaymentController extends Controller
                 'booking_number' => $booking->booking_number,
                 'payment_status' => $booking->payment_status,
                 'status' => $booking->status,
-                'amount' => $booking->price,
+                'amount' => $booking->total_amount ?? $booking->price,
+                'payment_id' => $booking->payment_id,
             ]
         ]);
     }

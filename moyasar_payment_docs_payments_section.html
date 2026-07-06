@@ -1,0 +1,21 @@
+adcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Create Payment</span><meta itemprop="position" content="2"></li></ul></nav><div class="theme-doc-markdown markdown"><div class="row theme-api-markdown"><div class="col col--7 openapi-left-panel__container"><h1 class="openapi__heading">Create Payment</h1>
+<pre class="openapi__method-endpoint"><span class="badge badge--success">POST</span> <h2 class="openapi__method-endpoint-path">/payments</h2></pre><div class="openapi__divider"></div>
+<p>Start a new Card, Apple Pay, Samsung Pay or STC Pay payment.
+The <code>source</code> object will define what payment is started.</p>
+<p>When a payment is started, the status will be one of:</p>
+<ul>
+<li><code>initiated</code></li>
+<li><code>paid</code></li>
+<li><code>failed</code></li>
+</ul>
+<p>If the payment is <code>initiated</code> then you need to complete the payment transaction by completing the payment
+challenge found in <code>source.transaction_url</code> depending on the payment source type.</p>
+<h2 class="anchor anchorWithStickyNavbar_JmGV openapi-tabs__heading" id="request">Request<a href="#request" class="hash-link" aria-label="Direct link to Request" title="Direct link to Request">​</a></h2>
+<div class="tabs-container"><div class="tabs__container"><div class="openapi-tabs__mime-container"><ul role="tablist" aria-orientation="horizontal" class="openapi-tabs__mime-list-container tabs openapi-tabs__mime"><li role="tab" tabindex="0" aria-selected="true" class="tabs__item openapi-tabs__mime-item active">application/json</li></ul></div></div><div class="margin-top--md"><div role="tabpanel" class="tabItem_wHwb"><details class="details_IpIu alert alert--info details_jERq openapi-markdown__details mime" data-collapsed="false" open=""><summary class="openapi-markdown__details-summary-mime"><h3 class="openapi-markdown__details-summary-header-body"><p>Body</p></h3><strong class="openapi-schema__required"><p>required</p></strong></summary><div><div class="collapsibleContent_Fd2D"><div style="text-align:left;margin-left:1rem"></div><ul style="margin-left:1rem"><div class="openapi-schema__list-item"><div><span class="openapi-schema__container"><strong class="openapi-schema__property">given_id</strong><span class="openapi-schema__name"> <!-- -->string</span></span><div><p>A UUID (v4 is recommended) that you generate from your side and attach it with the payment creation request to support idempotency.</p>
+<p>It is going be the ID of the created payment.</p></div></div></div><div class="openapi-schema__list-item"><div><span class="openapi-schema__container"><strong class="openapi-schema__property">amount</strong><span class="openapi-schema__name"> <!-- -->integer</span><span class="openapi-schema__divider"></span><span class="openapi-schema__required">required</span></span><div><p>A positive integer representing the payment amount in the smallest currency unit.</p>
+<p>Examples:</p>
+<ul>
+<li>1.00 SAR = 100</li>
+<li>1.00 KWD = 1000</li>
+<li>1 JPY = 1</li>
+</ul></div></div></div><div class="openapi-schema__list-item"><div><span class="openapi-schema__container"><strong class="openapi-schema__property">currency</strong><span class="openapi-schema
