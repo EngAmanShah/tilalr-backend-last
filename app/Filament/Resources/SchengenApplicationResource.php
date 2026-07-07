@@ -12,9 +12,11 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
 
+
 class SchengenApplicationResource extends Resource
 {
     protected static ?string $model = SchengenApplication::class;
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 

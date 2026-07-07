@@ -37,89 +37,89 @@ return [
         'booking' => 'Booking',
         'bookings' => 'Bookings',
         'booking_number' => 'Booking #',
-        
+
         // Reservation
         'reservation' => 'Reservation',
         'reservations' => 'Reservations',
-        
+
         // User
         'user' => 'User',
         'users' => 'Users',
-        
+
         // Trip
         'trip' => 'Trip',
         'trips' => 'Trips',
-        
+
         // Offer
         'offer' => 'Offer',
         'offers' => 'Offers',
-        
+
         // Service
         'service' => 'Service',
         'services' => 'Services',
-        
+
         // Payment
         'payment' => 'Payment',
         'payments' => 'Payments',
-        
+
         // City
         'city' => 'City',
         'cities' => 'Cities',
-        
+
         // Contact
         'contact' => 'Contact',
         'contacts' => 'Contacts',
-        
+
         // Product
         'product' => 'Product',
         'products' => 'Products',
-        
+
         // Project
         'project' => 'Project',
         'projects' => 'Projects',
-        
+
         // Role
         'role' => 'Role',
         'roles' => 'Roles',
-        
+
         // Permission
         'permission' => 'Permission',
         'permissions' => 'Permissions',
-        
+
         // Island Destination
         'island_destination' => 'Island Destination',
         'island_destinations' => 'Island Destinations',
-        
+
         // International Destination
         'international_destination' => 'International Destination',
         'international_destinations' => 'International Destinations',
-        
+
         // International Package
         'international_package' => 'International Package',
         'international_packages' => 'International Packages',
-        
+
         // International Hotel
         'international_hotel' => 'International Hotel',
         'international_hotels' => 'International Hotels',
-        
+
         // International Flight
         'international_flight' => 'International Flight',
         'international_flights' => 'International Flights',
-        
+
         // International Island
         'international_island' => 'International Island',
         'international_islands' => 'International Islands',
-        
+
         // Custom Payment Offer
         'custom_payment_offer' => 'Custom Payment Offer',
         'custom_payment_offers' => 'Custom Payment Offers',
-        
+
         // App Setting
         'app_setting' => 'App Setting',
         'app_settings' => 'App Settings',
         'setting' => 'Setting',
         'settings' => 'Settings',
-        
+
         // Destination (generic)
         'destination' => 'Destination',
         'destinations' => 'Destinations',
@@ -171,19 +171,19 @@ return [
         'country' => 'Country',
         'city' => 'City',
         'destination' => 'Destination',
-        
+
         // Permission and Role specific
         'permission_key' => 'Permission Key',
         'role_key' => 'Role Key',
         'display_name' => 'Display Name',
         'role_description' => 'Role Description',
-        
+
         // User specific
         'user_id' => 'User ID',
         'admin_access' => 'Admin Access',
         'admin_access_helper' => 'Grant this user access to the admin panel',
         'leave_blank_password' => 'Leave blank to keep current password',
-        
+
         // Booking specific
         'customer_information' => 'Customer Information',
         'customer_name' => 'Customer Name',
@@ -199,7 +199,7 @@ return [
         'all_details' => 'All Details',
         'payment_status' => 'Payment Status',
         'guest_bookings_helper' => 'Leave empty for guest bookings',
-        
+
         // Trip specific
         'trip_information' => 'Trip Information',
         'trip_type' => 'Trip Type',
@@ -217,7 +217,7 @@ return [
         'destination_choose' => 'Destination (choose existing)',
         'destination_custom' => 'Destination (custom)',
         'destination_custom_helper' => 'If set, this text will be used as the destination name instead of the linked city',
-        
+
         // Hotel specific
         'hotel_booking_details' => 'Hotel Booking Details',
         'room_count' => 'Number of Rooms',
@@ -225,7 +225,7 @@ return [
         'rooms_near_helper' => 'Guest requested adjacent/nearby rooms',
         'adjacent_rooms_count' => 'Adjacent Rooms Count',
         'room_type' => 'Room Type',
-        
+
         // Offer specific
         'copy_en_to_ar' => 'Copy English to Arabic',
         'copy_helper' => 'Click to copy all English content to Arabic fields',
@@ -234,20 +234,20 @@ return [
         'badge' => 'Badge',
         'badge_en' => 'Badge (English)',
         'badge_ar' => 'Badge (Arabic)',
-        
+
         // Payment specific
         'booking_id' => 'Booking ID',
         'method' => 'Method',
         'transaction_id' => 'Transaction ID',
         'meta' => 'Meta Data',
-        
+
         // Role specific
         'role_assignment' => 'Role Assignment',
         'role_assignment_desc' => 'Assign one or more roles to this user. Roles determine what the user can access.',
         'select_roles' => 'Select the roles for this user',
         'display_name' => 'Display Name',
         'permissions' => 'Permissions',
-        
+
         // Content tabs
         'english_tab' => 'English',
         'arabic_tab' => 'العربية',
