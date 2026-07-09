@@ -22,9 +22,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('services', function (Blueprint $table) {
-            $table->string('name')->change();
-            $table->text('description')->change();
-        });
+        if (Schema::hasTable('services')) {
+            Schema::table('services', function (Blueprint $table) {
+                if (Schema::hasColumn('services', 'name')) {
+                    $table->string('name')->change();
+                }
+                if (Schema::hasColumn('services', 'description')) {
+                    $table->text('description')->change();
+                }
+            });
+        }
     }
 };

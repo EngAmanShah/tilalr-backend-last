@@ -95,8 +95,17 @@ class BookingController extends Controller
             }
         }
 
-        // Use total_amount from frontend (preferred), fallback to calculated price
-        $totalAmount = $request->total_amount ?? $price;
+        $guests = max(1, intval($request->guests ?? 1));
+        $totalAmount = $price;
+
+        if ($request->room_type === 'DoubleRoom') {
+            if ($guests > 2) {
+                $extraGuests = $guests - 2;
+                $totalAmount = $price + ($extraGuests * $price * 0.5);
+            }
+        } else {
+            $totalAmount = $price * $guests;
+        }
 
         $booking = Booking::create([
             'booking_number' => Booking::generateBookingNumber(),

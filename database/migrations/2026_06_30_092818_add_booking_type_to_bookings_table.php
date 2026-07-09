@@ -24,7 +24,18 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->dropColumn(['booking_type', 'guests', 'special_requests']);
+            // Drop columns only if they exist to avoid SQL errors during rollback
+            if (Schema::hasColumn('bookings', 'booking_type')) {
+                $table->dropColumn('booking_type');
+            }
+
+            if (Schema::hasColumn('bookings', 'guests')) {
+                $table->dropColumn('guests');
+            }
+
+            if (Schema::hasColumn('bookings', 'special_requests')) {
+                $table->dropColumn('special_requests');
+            }
         });
     }
 };

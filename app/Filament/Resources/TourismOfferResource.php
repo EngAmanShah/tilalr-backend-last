@@ -514,10 +514,6 @@ class TourismOfferResource extends Resource
                                                 }
                                                 return json_encode([
                                                     [
-                                                        'name' => 'Al Rajhi Bank',
-                                                        'account_no' => '111111',
-                                                        'iban' => '1',
-                                                        'logo' => 'rajhi.webp'
                                                     ]
 
                                                 ], JSON_PRETTY_PRINT);

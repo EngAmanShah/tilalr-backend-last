@@ -121,6 +121,18 @@ class TourismDestinationResource extends Resource
                             ->label('Price (SAR)')
                             ->prefix('SAR')
                             ->columnSpan(1),
+                        Forms\Components\TextInput::make('double_room_price')
+                            ->required()
+                            ->numeric()
+                            ->label('Double Room Price (SAR)')
+                            ->prefix('SAR')
+                            ->columnSpan(1),
+                        Forms\Components\TextInput::make('single_room_price')
+                            ->required()
+                            ->numeric()
+                            ->label('Single Room Price (SAR)')
+                            ->prefix('SAR')
+                            ->columnSpan(1),
                         Forms\Components\TextInput::make('rating')
                             ->required()
                             ->default(4.5)
@@ -206,6 +218,16 @@ class TourismDestinationResource extends Resource
                     ->label('Price')
                     ->money('SAR')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('double_room_price')
+                    ->label('Double Room')
+                    ->money('SAR')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('single_room_price')
+                    ->label('Single Room')
+                    ->money('SAR')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('rating')
                     ->label('Rating')
                     ->sortable()

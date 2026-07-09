@@ -28,8 +28,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('team_members', function (Blueprint $table) {
-            $table->string('slug')->nullable()->after('id');
-        });
+        if (Schema::hasTable('team_members') && !Schema::hasColumn('team_members', 'slug')) {
+            Schema::table('team_members', function (Blueprint $table) {
+                $table->string('slug')->nullable()->after('id');
+            });
+        }
     }
 };

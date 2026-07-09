@@ -33,9 +33,17 @@ return new class extends Migration
     public function down(): void
     {
         if (Schema::hasTable('roles')) {
-            Schema::table('roles', function (Blueprint $table) {
-                $table->dropUnique(['name']);
-                $table->dropColumn('name');
+            // Check if unique index exists before attempting to drop it
+            $indexes = DB::select("SHOW INDEX FROM `roles` WHERE Key_name = 'roles_name_unique'");
+
+            Schema::table('roles', function (Blueprint $table) use ($indexes) {
+                if (!empty($indexes)) {
+                    $table->dropUnique('roles_name_unique');
+                }
+
+                if (Schema::hasColumn('roles', 'name')) {
+                    $table->dropColumn('name');
+                }
             });
         }
     }

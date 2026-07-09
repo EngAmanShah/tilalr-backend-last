@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -46,33 +47,34 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Remove indexes from projects table
-        Schema::table('projects', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
-            $table->dropIndex(['project_date']);
-            $table->dropIndex(['slug']);
-        });
+        $this->dropIndexIfExists('projects', 'projects_created_at_index');
+        $this->dropIndexIfExists('projects', 'projects_project_date_index');
+        $this->dropIndexIfExists('projects', 'projects_slug_index');
 
-        // Remove indexes from team_members table
-        Schema::table('team_members', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
-            $table->dropIndex(['slug']);
-        });
+        $this->dropIndexIfExists('team_members', 'team_members_created_at_index');
+        $this->dropIndexIfExists('team_members', 'team_members_slug_index');
 
-        // Remove indexes from services table
-        Schema::table('services', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
-            $table->dropIndex(['slug']);
-        });
+        $this->dropIndexIfExists('services', 'services_created_at_index');
+        $this->dropIndexIfExists('services', 'services_slug_index');
 
-        // Remove indexes from portfolios table
-        Schema::table('portfolios', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
-        });
+        $this->dropIndexIfExists('portfolios', 'portfolios_created_at_index');
 
-        // Remove indexes from contact_messages table
-        Schema::table('contact_messages', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
+        $this->dropIndexIfExists('contact_messages', 'contact_messages_created_at_index');
+    }
+
+    private function dropIndexIfExists(string $tableName, string $indexName): void
+    {
+        if (!Schema::hasTable($tableName)) {
+            return;
+        }
+
+        $indexExists = DB::select("SHOW INDEX FROM `{$tableName}` WHERE Key_name = ?", [$indexName]);
+        if (empty($indexExists)) {
+            return;
+        }
+
+        Schema::table($tableName, function (Blueprint $table) use ($indexName) {
+            $table->dropIndex($indexName);
         });
     }
 };
