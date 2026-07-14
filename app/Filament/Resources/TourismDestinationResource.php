@@ -128,9 +128,10 @@ class TourismDestinationResource extends Resource
                             ->prefix('SAR')
                             ->columnSpan(1),
                         Forms\Components\TextInput::make('single_room_price')
-                            ->required()
+                            ->nullable()
                             ->numeric()
                             ->label('Single Room Price (SAR)')
+                            ->helperText('Optional')
                             ->prefix('SAR')
                             ->columnSpan(1),
                         Forms\Components\TextInput::make('rating')

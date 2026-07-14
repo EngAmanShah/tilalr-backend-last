@@ -38,6 +38,7 @@ class Booking extends Model
     protected $casts = [
         'travel_date' => 'date',
         'price' => 'decimal:2',
+        'total_amount' => 'decimal:2',
     ];
 
     public static function generateBookingNumber()

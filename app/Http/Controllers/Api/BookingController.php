@@ -70,6 +70,14 @@ class BookingController extends Controller
                 // This allows bookings for offers that exist on frontend but not yet in database
                 $packageTitle = $request->package_title ?? 'Tourism Offer';
             }
+
+            if ($request->filled('price') && is_numeric($request->price)) {
+                $price = $request->price;
+            }
+
+            $totalAmount = $request->filled('total_amount') && is_numeric($request->total_amount)
+                ? $request->total_amount
+                : $price;
         } else {
             // For destinations, require the package to exist
             $package = TourismDestination::where('id', $request->package_id)
@@ -83,9 +91,12 @@ class BookingController extends Controller
                 } else {
                     $basicInfo = $package->basic_info ?? [];
                 }
+                $doubleRoomPrice = $basicInfo['double_room'] ?? $basicInfo['doubleRoom'] ?? $package->double_room_price ?? $package->price ?? 0;
+                $singleRoomPrice = $basicInfo['single_room'] ?? $basicInfo['singleRoom'] ?? $package->single_room_price ?? $package->double_room_price ?? $package->price ?? 0;
+
                 $price = $request->room_type === 'DoubleRoom'
-                    ? ($basicInfo['double_room'] ?? $basicInfo['doubleRoom'] ?? 0)
-                    : ($basicInfo['single_room'] ?? $basicInfo['singleRoom'] ?? 0);
+                    ? $doubleRoomPrice
+                    : $singleRoomPrice;
             } else {
                 \Log::warning('Package not found for ID/Slug: ' . $request->package_id);
                 return response()->json([
@@ -105,6 +116,14 @@ class BookingController extends Controller
             }
         } else {
             $totalAmount = $price * $guests;
+        }
+
+        if ($totalAmount <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Booking total amount must be greater than zero.',
+                'errors' => ['total_amount' => ['Invalid total amount.']],
+            ], 422);
         }
 
         $booking = Booking::create([
