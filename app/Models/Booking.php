@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\LogsActivity;
 
     protected $fillable = [
         'booking_number',
@@ -41,6 +41,21 @@ class Booking extends Model
         'total_amount' => 'decimal:2',
     ];
 
+    protected static function booted()
+    {
+        static::creating(function ($booking) {
+            if (empty($booking->booking_number)) {
+                $booking->booking_number = static::generateBookingNumber();
+            }
+            if (empty($booking->first_name)) {
+                $booking->first_name = '';
+            }
+            if (empty($booking->last_name)) {
+                $booking->last_name = '';
+            }
+        });
+    }
+
     public static function generateBookingNumber()
     {
         $prefix = 'BK';
@@ -58,6 +73,11 @@ class Booking extends Model
     public function isTourismOffer()
     {
         return $this->booking_type === 'tourism_offer';
+    }
+
+    public function isJamoulaOffer()
+    {
+        return $this->booking_type === 'jamoula_offer';
     }
 
     public function isDestination()

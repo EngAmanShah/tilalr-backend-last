@@ -12,6 +12,8 @@ use Filament\Tables\Table;
 
 class PermissionResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+
     protected static ?string $model = Permission::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-key';
@@ -36,12 +38,6 @@ class PermissionResource extends Resource
     public static function getNavigationLabel(): string
     {
         return __('admin.resources.permissions');
-    }
-
-    public static function canAccess(): bool
-    {
-        $user = auth()->user();
-        return $user && $user->hasRole('super_admin');
     }
 
     public static function form(Form $form): Form
@@ -103,7 +99,7 @@ class PermissionResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('roles_count')
-                    ->label('Roles')
+                    ->label(fn () => __('admin.resources.roles'))
                     ->counts('roles')
                     ->badge()
                     ->color('success'),
@@ -126,12 +122,33 @@ class PermissionResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('group');
+            ->defaultSort('group')
+            ->defaultGroup('group');
     }
 
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return static::isSuperAdmin(auth()->user());
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::isSuperAdmin(auth()->user());
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return static::isSuperAdmin(auth()->user());
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return static::isSuperAdmin(auth()->user());
     }
 
     public static function getPages(): array

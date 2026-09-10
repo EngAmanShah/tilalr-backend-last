@@ -104,16 +104,10 @@ class TourismOfferSeeder extends Seeder
                 // Payment Methods (add bilingual descriptions)
                 'payment_methods' => json_encode([
                     [
-                        'name_en' => 'Al Rajhi Bank',
-                        'name_ar' => 'مصرف الراجحي',
-                        'account_no' => '1111',
-                        'iban' => '1111111',
-                    ],
-                    [
-                        'name_en' => 'STC Pay',
-                        'name_ar' => 'إس تي سي باي',
-                        'account_no' => '2222',
-                        'iban' => '2222222',
+                        'name_en' => 'Alinma Bank',
+                        'name_ar' => 'بنك الإنماء',
+                        'account_no' => '68205990876000',
+                        'iban' => 'SA3705000068205990876000',
                     ],
                 ]),
 
@@ -124,6 +118,7 @@ class TourismOfferSeeder extends Seeder
                 'active' => true,
                 'popular' => true,
                 'limited' => false,
+                'city' => 'riyadh',
             ],
             [
                 // Second Offer - Mountain Adventure
@@ -190,12 +185,7 @@ class TourismOfferSeeder extends Seeder
                     'email' => 'info@tilalr.com',
                 ]),
                 'payment_methods' => json_encode([
-                    [
-                        'name_en' => 'Al Rajhi Bank',
-                        'name_ar' => 'مصرف الراجحي',
-                        'account_no' => '1111',
-                        'iban' => '111',
-                    ],
+                 
                     [
                         'name_en' => 'Apple Pay',
                         'name_ar' => 'آبل باي',
@@ -207,6 +197,7 @@ class TourismOfferSeeder extends Seeder
                 'active' => true,
                 'popular' => true,
                 'limited' => true,
+                'city' => 'riyadh',
             ],
             [
                 // Third Offer - Cultural City Tour
@@ -271,12 +262,7 @@ class TourismOfferSeeder extends Seeder
                     'email' => 'info@tilalr.com',
                 ]),
                 'payment_methods' => json_encode([
-                    [
-                        'name_en' => 'Al Rajhi Bank',
-                        'name_ar' => 'مصرف الراجحي',
-                        'account_no' => '11111111',
-                        'iban' => '1111111111111',
-                    ],
+                 
                     [
                         'name_en' => 'Mada Card',
                         'name_ar' => 'بطاقة مدى',
@@ -288,6 +274,7 @@ class TourismOfferSeeder extends Seeder
                 'active' => true,
                 'popular' => false,
                 'limited' => false,
+                'city' => 'riyadh',
             ],
             [
                 // Fourth Offer - Domestic Tour (example)
@@ -350,17 +337,13 @@ class TourismOfferSeeder extends Seeder
                     'email' => 'info@tilalr.com',
                 ]),
                 'payment_methods' => json_encode([
-                    [
-                        'name_en' => 'Al Rajhi Bank',
-                        'name_ar' => 'مصرف الراجحي',
-                        'account_no' => '11111111',
-                        'iban' => '1111111111111',
-                    ],
+                  
                 ]),
                 'type' => 'domestic',
                 'active' => true,
                 'popular' => true,
                 'limited' => false,
+                'city' => 'alula',
             ],
         ];
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class InternetPackageRequest extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\LogsActivity;
 
     protected $fillable = [
         'country',

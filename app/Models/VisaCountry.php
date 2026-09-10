@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class VisaCountry extends Model
 {
+    use \App\Traits\LogsActivity;
     protected $table = 'visa_countries';
 
     protected $fillable = [

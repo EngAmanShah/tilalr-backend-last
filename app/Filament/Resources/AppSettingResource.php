@@ -14,7 +14,10 @@ use Filament\Tables\Table;
 
 class AppSettingResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+
     protected static ?string $model = AppSetting::class;
+    protected static ?string $permissionKey = 'settings';
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
 
@@ -36,13 +39,6 @@ class AppSettingResource extends Resource
     public static function getNavigationLabel(): string
     {
         return __('admin.resources.settings');
-    }
-    
-    // Only Super Admin can change app settings
-    public static function canAccess(): bool
-    {
-        $user = auth()->user();
-        return $user && $user->hasRole('super_admin');
     }
 
     public static function form(\Filament\Forms\Form $form): \Filament\Forms\Form

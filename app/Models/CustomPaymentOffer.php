@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 
 class CustomPaymentOffer extends Model
 {
+    use \App\Traits\LogsActivity;
     protected $fillable = [
         'token_number',
         'customer_name',

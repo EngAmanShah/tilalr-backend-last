@@ -14,7 +14,11 @@ use Filament\Notifications\Notification;
 
 class CustomPaymentOfferResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+    use Concerns\HasTranslations;
+
     protected static ?string $model = CustomPaymentOffer::class;
+    protected static ?string $permissionKey = 'custom_payment_offers';
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 

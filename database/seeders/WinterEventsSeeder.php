@@ -15,7 +15,7 @@ class WinterEventsSeeder extends Seeder
         // Ensure Jeddah city reference when available; create minimal record if missing
         $jeddah = \App\Models\City::firstOrCreate(
             ['slug' => 'jeddah'],
-            ['name' => 'Jeddah']
+            ['name' => ['en' => 'Jeddah', 'ar' => 'جدة']]
         );
 
      $events = [

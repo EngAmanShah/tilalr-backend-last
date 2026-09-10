@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SchengenApplication extends Model
 {
+    use \App\Traits\LogsActivity;
     protected $fillable = [
         'full_name',
         'phone',

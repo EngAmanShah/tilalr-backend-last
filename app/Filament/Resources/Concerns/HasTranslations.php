@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Concerns;
 
+use Illuminate\Support\Facades\Lang;
+
 trait HasTranslations
 {
     /**
@@ -9,9 +11,15 @@ trait HasTranslations
      */
     public static function getNavigationGroup(): ?string
     {
-        $group = static::$navigationGroupKey ?? null;
-        if ($group) {
-            return __('admin.nav.' . $group);
+        if (isset(static::$navigationGroupKey) && static::$navigationGroupKey) {
+            return __('admin.nav.' . static::$navigationGroupKey);
+        }
+        if (property_exists(static::class, 'navigationGroup') && static::$navigationGroup) {
+            $key = strtolower(str_replace([' ', '&', '-'], ['_', '_', '_'], static::$navigationGroup));
+            if (Lang::has('admin.nav.' . $key)) {
+                return __('admin.nav.' . $key);
+            }
+            return static::$navigationGroup;
         }
         return null;
     }
@@ -21,8 +29,14 @@ trait HasTranslations
      */
     public static function getModelLabel(): string
     {
+        if (property_exists(static::class, 'label') && static::$label) {
+            $key = strtolower(str_replace([' ', '&', '-'], ['_', '_', '_'], static::$label));
+            if (Lang::has('admin.resources.' . $key)) {
+                return __('admin.resources.' . $key);
+            }
+        }
         $key = static::getResourceKey();
-        return __('admin.resources.' . $key);
+        return Lang::has('admin.resources.' . $key) ? __('admin.resources.' . $key) : (static::$label ?? ucwords(str_replace('_', ' ', $key)));
     }
 
     /**
@@ -30,8 +44,21 @@ trait HasTranslations
      */
     public static function getPluralModelLabel(): string
     {
-        $key = static::getResourceKey();
-        return __('admin.resources.' . $key . 's');
+        if (property_exists(static::class, 'pluralLabel') && static::$pluralLabel) {
+            $key = strtolower(str_replace([' ', '&', '-'], ['_', '_', '_'], static::$pluralLabel));
+            if (Lang::has('admin.resources.' . $key)) {
+                return __('admin.resources.' . $key);
+            }
+        }
+        $resourceKey = static::getResourceKey() . 's';
+        if (Lang::has('admin.resources.' . $resourceKey)) {
+            return __('admin.resources.' . $resourceKey);
+        }
+        $resourceKeySingular = static::getResourceKey();
+        if (Lang::has('admin.resources.' . $resourceKeySingular)) {
+            return __('admin.resources.' . $resourceKeySingular);
+        }
+        return static::$pluralLabel ?? ucwords(str_replace('_', ' ', $resourceKey));
     }
 
     /**

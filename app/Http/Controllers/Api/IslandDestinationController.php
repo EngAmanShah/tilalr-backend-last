@@ -181,8 +181,7 @@ class IslandDestinationController extends Controller
                 $city = City::firstOrCreate([
                     'slug' => $slug
                 ], [
-                    'name' => $validated['city_name'],
-                    'lang' => 'en',
+                    'name' => ['en' => $validated['city_name'], 'ar' => $validated['city_name']],
                     'is_active' => true,
                 ]);
                 $cityId = $city->id;
@@ -284,8 +283,7 @@ class IslandDestinationController extends Controller
                 $city = City::firstOrCreate([
                     'slug' => $slug
                 ], [
-                    'name' => $validated['city_name'],
-                    'lang' => 'en',
+                    'name' => ['en' => $validated['city_name'], 'ar' => $validated['city_name']],
                     'is_active' => true,
                 ]);
                 $cityId = $city->id;

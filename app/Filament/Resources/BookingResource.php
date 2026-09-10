@@ -12,13 +12,17 @@ use Filament\Tables\Table;
 
 class BookingResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+    use Concerns\HasTranslations;
+
     protected static ?string $model = Booking::class;
+    protected static ?string $permissionKey = 'bookings';
 
     protected static ?string $navigationIcon = 'heroicon-o-receipt-refund';
 
     protected static ?string $navigationGroup = 'Bookings';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

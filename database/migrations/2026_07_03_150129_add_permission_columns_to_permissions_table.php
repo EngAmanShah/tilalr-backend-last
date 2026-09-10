@@ -22,14 +22,29 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('permissions', function (Blueprint $table) {
+        if (Schema::hasTable('permissions')) {
             if (Schema::hasColumn('permissions', 'name')) {
-                $table->dropColumn('name');
+                // For SQLite, drop unique constraint before column
+                if (config('database.default') !== 'sqlite') {
+                    Schema::table('permissions', function (Blueprint $table) {
+                        try {
+                            $table->dropUnique('permissions_name_unique');
+                        } catch (\Exception $e) {
+                            // Constraint doesn't exist
+                        }
+                    });
+                }
+
+                Schema::table('permissions', function (Blueprint $table) {
+                    $table->dropColumn('name');
+                });
             }
 
             if (Schema::hasColumn('permissions', 'guard_name')) {
-                $table->dropColumn('guard_name');
+                Schema::table('permissions', function (Blueprint $table) {
+                    $table->dropColumn('guard_name');
+                });
             }
-        });
+        }
     }
 };

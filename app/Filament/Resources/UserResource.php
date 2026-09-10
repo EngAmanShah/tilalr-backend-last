@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
@@ -43,13 +45,6 @@ class UserResource extends Resource
     public static function getNavigationLabel(): string
     {
         return __('admin.resources.users');
-    }
-
-    // Only Super Admin can manage users
-    public static function canAccess(): bool
-    {
-        $user = auth()->user();
-        return $user && $user->hasRole('super_admin');
     }
 
     public static function form(\Filament\Forms\Form $form): \Filament\Forms\Form

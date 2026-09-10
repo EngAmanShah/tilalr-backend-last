@@ -6,23 +6,20 @@
     @if($roleInfo)
         <div class="flex items-center justify-between">
             <div>
-                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Your Role</h3>
+                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ __('admin.your_role') }}</h3>
                 <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mt-2">
                     {{ $roleInfo['role_name'] }}
-                </p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                    📋 {{ $roleInfo['permissions_count'] }} permissions assigned
                 </p>
             </div>
             <div class="text-right">
                 <div class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 text-xs font-semibold rounded-full">
-                    Active
+                    {{ __('admin.status.active') }}
                 </div>
             </div>
         </div>
     @else
         <div class="text-gray-500 dark:text-gray-400">
-            No role information available
+            {{ __('admin.no_role_info') }}
         </div>
     @endif
 </div>

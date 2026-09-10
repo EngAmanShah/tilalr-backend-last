@@ -15,7 +15,7 @@ use Filament\Panel;
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, \App\Traits\LogsActivity;
 
     /**
      * The attributes that are mass assignable.

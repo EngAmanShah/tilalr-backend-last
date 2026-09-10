@@ -18,10 +18,15 @@ class RoleDisplayWidget extends Widget
         }
 
         $role = $user->roles()->first();
+        $roleName = $role?->display_name;
+        if ($role && \Illuminate\Support\Facades\Lang::has("roles.{$role->name}")) {
+            $roleName = __("roles.{$role->name}");
+        }
+
         return [
-            'role_name' => $role?->display_name ?? 'No Role Assigned',
+            'role_name' => $roleName ?? __('admin.no_role_assigned'),
             'user_name' => $user->name,
-            'permissions_count' => $user->roles()->first()?->permissions()->count() ?? 0,
+            'permissions_count' => $role?->permissions()->count() ?? 0,
         ];
     }
 }

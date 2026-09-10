@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PrivateJetRequest extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\LogsActivity;
 
     protected $fillable = [
         'name',

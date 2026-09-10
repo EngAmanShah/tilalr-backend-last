@@ -11,28 +11,50 @@ class CityController extends Controller
     public function index(Request $request)
     {
         $lang = $request->get('lang', 'ar');
-        $cities = City::where('lang', $lang)->where('is_active', true)->orderBy('order', 'asc')->get();
+        if (!in_array($lang, ['en', 'ar'])) {
+            $lang = 'en';
+        }
+        
+        \Illuminate\Support\Facades\App::setLocale($lang);
+
+        $cities = City::where('is_active', true)->orderBy('order', 'asc')->get();
         return response()->json($cities);
     }
 
-    public function show($slug)
+    public function show(Request $request, $slug)
     {
-        $city = City::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $lang = $request->get('lang', 'ar');
+        if (!in_array($lang, ['en', 'ar'])) {
+            $lang = 'en';
+        }
+        
+        \Illuminate\Support\Facades\App::setLocale($lang);
+
+        $city = City::where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        $city->load(['tourismOffers' => function ($query) {
+            $query->where('active', true);
+        }]);
+
         return response()->json($city);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|array',
             'slug' => 'required|string|unique:cities,slug',
-            'description' => 'nullable|string',
+            'description' => 'nullable|array',
             'image' => 'nullable|string',
             'images' => 'nullable|json',
             'country' => 'string',
             'order' => 'integer',
-            'lang' => 'required|string|max:10',
             'is_active' => 'boolean',
+            'best_time' => 'nullable|array',
+            'activities' => 'nullable|array',
+            'landmarks' => 'nullable|array',
         ]);
         $city = City::create($validated);
         return response()->json($city, 201);
@@ -42,15 +64,17 @@ class CityController extends Controller
     {
         $city = City::findOrFail($id);
         $validated = $request->validate([
-            'name' => 'string|max:255',
+            'name' => 'array',
             'slug' => 'string|unique:cities,slug,' . $id,
-            'description' => 'nullable|string',
+            'description' => 'nullable|array',
             'image' => 'nullable|string',
             'images' => 'nullable|json',
             'country' => 'string',
             'order' => 'integer',
-            'lang' => 'string|max:10',
             'is_active' => 'boolean',
+            'best_time' => 'nullable|array',
+            'activities' => 'nullable|array',
+            'landmarks' => 'nullable|array',
         ]);
         $city->update($validated);
         return response()->json($city);

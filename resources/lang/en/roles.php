@@ -25,6 +25,6 @@ return [
     'customer' => 'Customer',
     'customer_desc' => 'Standard customer role with limited access',
     
-    'administration' => 'Administration',
-    'administration_desc' => 'Administrative role with elevated permissions',
+    // 'administration' => 'Administration',
+    // 'administration_desc' => 'Administrative role with elevated permissions',
 ];

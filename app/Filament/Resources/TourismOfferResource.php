@@ -25,17 +25,22 @@ use Filament\Tables\Columns\ToggleColumn;
 
 class TourismOfferResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+    use Concerns\HasTranslations;
+
     protected static ?string $model = TourismOffer::class;
+    protected static ?string $permissionKey = 'tourism_offers';
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $navigationGroup = 'Tourism';
+    protected static ?int $navigationSort = 1;
     protected static ?string $label = 'Tourism Offer';
-    protected static ?string $pluralLabel = 'Tourism Offers';
+    protected static ?string $pluralLabel = 'Saudi Offers';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Tabs::make('Tourism Offer Details')
+                Tabs::make('Saudi Offer Details')
                     ->tabs([
                         // ============ BASIC INFO TAB ============
                         Tabs\Tab::make('Basic Info')
@@ -84,13 +89,9 @@ class TourismOfferResource extends Resource
                                             ->rows(3)
                                             ->maxLength(500),
 
-                                        RichEditor::make('long_description_en')
+                                        Textarea::make('long_description_en')
                                             ->label('Long Description (English)')
-                                            ->toolbarButtons([
-                                                'bold', 'italic', 'underline', 'strike',
-                                                'blockquote', 'bulletList', 'orderedList',
-                                                'link', 'image', 'undo', 'redo',
-                                            ]),
+                                            ->rows(6),
 
                                         TextInput::make('duration_en')
                                             ->label('Duration (English)')
@@ -105,7 +106,7 @@ class TourismOfferResource extends Resource
                                             ->placeholder('e.g., 2-4 People'),
 
                                         Textarea::make('features_en')
-                                            ->label('Features (English)')
+                                            ->label('Package Includes (English)')
                                             ->placeholder('Enter each feature on a new line')
                                             ->rows(4)
                                             ->helperText('Enter one feature per line')
@@ -133,34 +134,6 @@ class TourismOfferResource extends Resource
                                                 return json_encode([]);
                                             }),
 
-                                        Textarea::make('includes_en')
-                                            ->label('Package Includes (English)')
-                                            ->placeholder('Enter each include on a new line')
-                                            ->rows(4)
-                                            ->helperText('Enter one item per line')
-                                            ->formatStateUsing(function ($state) {
-                                                if (is_string($state)) {
-                                                    $decoded = json_decode($state, true);
-                                                    if (is_array($decoded)) {
-                                                        return implode("\n", $decoded);
-                                                    }
-                                                    return $state;
-                                                }
-                                                if (is_array($state)) {
-                                                    return implode("\n", $state);
-                                                }
-                                                return '';
-                                            })
-                                            ->dehydrateStateUsing(function ($state) {
-                                                if (is_string($state)) {
-                                                    $lines = array_filter(array_map('trim', explode("\n", $state)));
-                                                    return json_encode(array_values($lines));
-                                                }
-                                                if (is_array($state)) {
-                                                    return json_encode(array_values($state));
-                                                }
-                                                return json_encode([]);
-                                            }),
 
                                         Textarea::make('not_includes_en')
                                             ->label('Package Not Includes (English)')
@@ -254,13 +227,9 @@ class TourismOfferResource extends Resource
                                             ->rows(3)
                                             ->maxLength(500),
 
-                                        RichEditor::make('long_description_ar')
+                                        Textarea::make('long_description_ar')
                                             ->label('Long Description (Arabic)')
-                                            ->toolbarButtons([
-                                                'bold', 'italic', 'underline', 'strike',
-                                                'blockquote', 'bulletList', 'orderedList',
-                                                'link', 'image', 'undo', 'redo',
-                                            ]),
+                                            ->rows(6),
 
                                         TextInput::make('duration_ar')
                                             ->label('Duration (Arabic)')
@@ -275,7 +244,7 @@ class TourismOfferResource extends Resource
                                             ->placeholder('e.g., ٢-٤ أشخاص'),
 
                                         Textarea::make('features_ar')
-                                            ->label('Features (Arabic)')
+                                            ->label('Package Includes (Arabic)')
                                             ->placeholder('Enter each feature on a new line')
                                             ->rows(4)
                                             ->helperText('Enter one feature per line')
@@ -445,9 +414,31 @@ class TourismOfferResource extends Resource
                             ->schema([
                                 Section::make('Pricing')
                                     ->schema([
+                                        Forms\Components\Repeater::make('person_prices')
+                                            ->label('Person Offers & Pricing (Dynamic)')
+                                            ->schema([
+                                                Forms\Components\TextInput::make('persons')
+                                                    ->numeric()
+                                                    ->required()
+                                                    ->minValue(1)
+                                                    ->label('Number of Persons (e.g., 1, 2, 3, 4...)')
+                                                    ->placeholder('1'),
+                                                Forms\Components\TextInput::make('price')
+                                                    ->numeric()
+                                                    ->required()
+                                                    ->prefix('SAR')
+                                                    ->label('Price for this Offer (SAR)')
+                                                    ->placeholder('2500.00'),
+                                            ])
+                                            ->columns(2)
+                                            ->defaultItems(1)
+                                            ->createItemButtonLabel('Add New Person Offer')
+                                            ->columnSpanFull()
+                                            ->helperText('Add custom price tiers based on number of persons (e.g. 1 Person = 2500 SAR, 2 Persons = 4000 SAR, etc.)'),
+
                                         TextInput::make('price')
-                                            ->label('Price (SAR)')
-                                            ->required()
+                                            ->label('Base Starting Price (SAR)')
+                                            ->nullable()
                                             ->numeric()
                                             ->prefix('SAR')
                                             ->default(0)
@@ -479,56 +470,7 @@ class TourismOfferResource extends Resource
                                     ])->columns(2),
                             ]),
 
-                        // ============ CONTACT INFO TAB ============
-                        Tabs\Tab::make('Contact & Payments')
-                            ->schema([
-                                Section::make('Contact Information')
-                                    ->schema([
-                                        KeyValue::make('contact_info')
-                                            ->label('Contact Details')
-                                            ->keyLabel('Field')
-                                            ->valueLabel('Value')
-                                            ->default([
-                                                'address' => 'al Rabwa Jeddah',
-                                                'phone' => '966547305060',
-                                                'whatsapp' => '966547305060',
-                                                'email' => 'info@tilalr.com',
-                                            ])
-                                            ->helperText('Add contact details like address, phone, WhatsApp, email'),
-                                    ]),
 
-                                Section::make('Payment Methods')
-                                    ->schema([
-                                        // FIX: Use Textarea instead of Repeater for payment_methods
-                                        Textarea::make('payment_methods')
-                                            ->label('Payment Methods (JSON)')
-                                            ->placeholder('Enter payment methods in JSON format')
-                                            ->rows(10)
-                                            ->helperText('Format: [{"name":"Bank Name","account_no":"123","iban":"SA..."}]')
-                                            ->formatStateUsing(function ($state) {
-                                                if (is_string($state)) {
-                                                    return $state;
-                                                }
-                                                if (is_array($state)) {
-                                                    return json_encode($state, JSON_PRETTY_PRINT);
-                                                }
-                                                return json_encode([
-                                                    [
-                                                    ]
-
-                                                ], JSON_PRETTY_PRINT);
-                                            })
-                                            ->dehydrateStateUsing(function ($state) {
-                                                if (is_string($state)) {
-                                                    return $state;
-                                                }
-                                                if (is_array($state)) {
-                                                    return json_encode($state);
-                                                }
-                                                return $state;
-                                            }),
-                                    ]),
-                            ]),
 
                         // ============ STATUS TAB ============
                         Tabs\Tab::make('Status')
@@ -591,27 +533,7 @@ class TourismOfferResource extends Resource
                                     ])->columns(1),
                             ]),
 
-                        // ============ BASIC INFO JSON TAB ============
-                        Tabs\Tab::make('Basic Info (JSON)')
-                            ->schema([
-                                Section::make('Basic Information (JSON)')
-                                    ->schema([
-                                        KeyValue::make('basic_info')
-                                            ->label('Basic Information')
-                                            ->keyLabel('Field')
-                                            ->valueLabel('Value')
-                                            ->default([
-                                                'trip_code' => 'TRIP-001',
-                                                'days_num' => '7',
-                                                'destination_name' => 'Maldives',
-                                                'available_to' => '2025-12-31',
-                                                'double_room' => '2500',
-                                                'single_room' => '1800',
-                                            ])
-                                            ->helperText('Add trip code, days, availability, and pricing details'),
-                                    ]),
-                            ]),
-                    ])->columnSpanFull(),
+                     ])->columnSpanFull(),
             ]);
     }
 

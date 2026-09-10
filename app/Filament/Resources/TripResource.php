@@ -60,7 +60,7 @@ class TripResource extends Resource
                     TextInput::make('title_trans.zh')->label('Title (ZH)')->maxLength(255),
                     TextInput::make('slug')->label(__('admin.form.slug'))->unique(ignoreRecord: true)->maxLength(255),
                     Select::make('lang')->label(__('admin.form.language'))->options(['en' => 'EN', 'ar' => 'AR', 'zh' => 'ZH'])->default('en')->required(),
-                    Select::make('city_id')->label(__('admin.form.destination_choose'))->options(City::pluck('name', 'id'))->searchable()->placeholder(__('admin.placeholders.select_city')),
+                    Select::make('city_id')->label(__('admin.form.destination_choose'))->options(City::all()->pluck('name', 'id'))->searchable()->placeholder(__('admin.placeholders.select_city')),
                     TextInput::make('city_name')->label(__('admin.form.destination_custom'))->helperText(__('admin.form.destination_custom_helper')),
                     TextInput::make('price')->label(__('admin.form.price'))->numeric()->prefix(__('admin.currency.sar')),
                     TextInput::make('duration')->label(__('admin.form.duration'))->numeric()->suffix(__('admin.time.days')),

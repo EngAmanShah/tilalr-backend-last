@@ -10,6 +10,10 @@ return [
     // Panel
     'panel_name' => 'لوحة الإدارة',
     'dashboard' => 'لوحة التحكم',
+    'your_role' => 'دورك الحالي',
+    'no_role_info' => 'لا توجد معلومات عن الدور',
+    'no_role_assigned' => 'لم يتم تعيين دور',
+    'recent_activity' => 'آخر الأنشطة والعمليات التحديثية',
     'logout' => 'تسجيل الخروج',
     'profile' => 'الملف الشخصي',
     'switch_language' => 'تغيير اللغة',
@@ -19,6 +23,12 @@ return [
 
     // Navigation Groups
     'nav' => [
+        'dashboard' => 'لوحة التحكم',
+        'tourism' => 'السياحة',
+        'jamoula' => 'جمولة',
+        'visas' => 'التأشيرات',
+        'international_services' => 'الخدمات الدولية',
+        'bookings' => 'الحجوزات',
         'administration' => 'الإدارة',
         'users' => 'المستخدمين',
         'content' => 'المحتوى',
@@ -28,7 +38,9 @@ return [
         'payments' => 'المدفوعات',
         'communication' => 'التواصل',
         'settings' => 'الإعدادات',
-        'website' => 'الموقع',
+        'website' => 'الموقع الإلكتروني',
+        'cities' => 'داخل السعودية',
+        'destinations' => 'المدن',
     ],
 
     // Resources
@@ -68,7 +80,46 @@ return [
         
         // Contact
         'contact' => 'تواصل',
-        'contacts' => 'الرسائل',
+        'contacts' => 'الرسائل واستفسارات',
+
+        // Media & Banners
+        'banner' => 'بانر',
+        'banners' => 'البانرات',
+        'header_banner' => 'بانر الهيدر',
+        'header_banners' => 'بانرات الهيدر',
+        'partner' => 'شريك',
+        'partners' => 'شعار الشركاء',
+
+        // Offers & Destinations
+        'jamoula_offer' => 'عرض جمولة',
+        'jamoula_offers' => 'عروض جمولة',
+        'saudi_offer' => 'عرض السعودية',
+        'saudi_offers' => 'عروض السعودية',
+
+        // Services & Requests
+        'internet_package_request' => 'طلب باقة إنترنت',
+        'internet_package_requests' => 'طلبات باقات الإنترنت',
+        'private_jet_request' => 'طلب طيران خاص',
+        'private_jet_requests' => 'طلبات الطيران الخاص',
+
+        // Visas
+        'schengen_application' => 'طلب شنغن',
+        'schengen_applications' => 'طلبات الشنغن',
+        'evisa_application' => 'طلب تأشيرة إلكترونية',
+        'evisa_applications' => 'طلبات التأشيرة الإلكترونية',
+        'saudi_visa' => 'تأشيرة سعودية',
+        'saudi_visas' => 'التأشيرات السعودية',
+        'visa_country' => 'دولة تأشيرة',
+        'visa_countries' => 'دول التأشيرات',
+
+        // Custom Payments & Settings
+        'custom_payment_offer' => 'عرض دفع خاص',
+        'custom_payment_offers' => 'عروض الدفع الخاصة',
+        'app_setting' => 'إعداد تطبيق',
+        'app_settings' => 'إعدادات التطبيق',
+        'activity_log' => 'سجل النشاط',
+        'activity_logs' => 'سجل الأنشطة والتدقيق',
+        'recent_activity' => 'آخر الأنشطة والعمليات التحديثية',
         
         // Product
         'product' => 'منتج',
@@ -121,8 +172,8 @@ return [
         'settings' => 'الإعدادات',
         
         // Destination (generic)
-        'destination' => 'الوجهة',
-        'destinations' => 'الوجهات',
+        'destination' => 'داخل السعودية',
+        'destinations' => 'داخل السعودية',
     ],
 
     // Form Labels
@@ -130,6 +181,7 @@ return [
         // Common
         'id' => 'المعرف',
         'name' => 'الاسم',
+        'action' => 'العملية',
         'full_name' => 'الاسم الكامل',
         
         // Permission and Role specific
@@ -440,8 +492,9 @@ return [
     ],
 
     // Time
-    'time' => [
-        'days' => 'أيام',
+    'form' => [
+        'name' => 'الاسم',
+        'action' => 'العملية',
         'hours' => 'ساعات',
         'minutes' => 'دقائق',
         'seconds' => 'ثواني',

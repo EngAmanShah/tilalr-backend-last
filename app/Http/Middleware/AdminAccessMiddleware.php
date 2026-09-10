@@ -24,15 +24,10 @@ class AdminAccessMiddleware
 
         $user = Auth::user();
         
-        // Check if user has any of the allowed roles OR is_admin
-        $hasAccess = $user->is_admin || 
-                     $user->hasRole('super_admin') ||
-                     $user->hasRole('executive_manager') || 
-                     $user->hasRole('consultant') || 
-                     $user->hasRole('administration');
+        // Allow access if is_admin is true OR user has any assigned role
+        $hasAccess = $user->is_admin || $user->roles()->exists();
         
         if (!$hasAccess) {
-            // User is authenticated but not authorized
             abort(403, 'Access denied. You do not have permission to access this area.');
         }
 

@@ -40,22 +40,20 @@ class ContentSeeder extends Seeder
 
         // Create Cities
         $riyadh = City::create([
-            'name' => 'الرياض',
+            'name' => ['ar' => 'الرياض', 'en' => 'Riyadh'],
             'slug' => 'riyadh',
-            'description' => 'عاصمة المملكة العربية السعودية',
+            'description' => ['ar' => 'عاصمة المملكة العربية السعودية', 'en' => 'Capital of Saudi Arabia'],
             'country' => 'Saudi Arabia',
             'order' => 1,
-            'lang' => 'ar',
             'is_active' => true,
         ]);
 
         $jeddah = City::create([
-            'name' => 'جدة',
+            'name' => ['ar' => 'جدة', 'en' => 'Jeddah'],
             'slug' => 'jeddah',
-            'description' => 'عروس البحر الأحمر',
+            'description' => ['ar' => 'عروس البحر الأحمر', 'en' => 'Bride of the Red Sea'],
             'country' => 'Saudi Arabia',
             'order' => 2,
-            'lang' => 'ar',
             'is_active' => true,
         ]);
 

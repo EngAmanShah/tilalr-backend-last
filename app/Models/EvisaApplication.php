@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EvisaApplication extends Model
 {
+    use \App\Traits\LogsActivity;
     protected $fillable = [
         'country_name',
         'country_slug',

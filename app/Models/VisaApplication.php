@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class VisaApplication extends Model
 {
-    use HasFactory;
+    use HasFactory, \App\Traits\LogsActivity;
 
     protected $table = 'visa_applications';
 

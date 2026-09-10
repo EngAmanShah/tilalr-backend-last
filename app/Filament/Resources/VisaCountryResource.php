@@ -12,13 +12,19 @@ use Filament\Tables\Table;
 
 class VisaCountryResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+    use Concerns\HasTranslations;
+
     protected static ?string $model = VisaCountry::class;
+    protected static ?string $permissionKey = 'visa_countries';
+
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $navigationIcon = 'heroicon-o-flag';
 
     protected static ?string $navigationLabel = 'Visa Countries';
 
-    protected static ?string $navigationGroup = 'International Destinations';
+    protected static ?string $navigationGroup = 'visas';
 
     protected static ?int $navigationSort = 9;
 

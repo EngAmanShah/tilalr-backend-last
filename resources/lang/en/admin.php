@@ -10,6 +10,10 @@ return [
     // Panel
     'panel_name' => 'Admin Panel',
     'dashboard' => 'Dashboard',
+    'your_role' => 'Your Role',
+    'no_role_info' => 'No role information available',
+    'no_role_assigned' => 'No Role Assigned',
+    'recent_activity' => 'Recent System Activity',
     'logout' => 'Logout',
     'profile' => 'Profile',
     'switch_language' => 'Switch Language',
@@ -19,6 +23,12 @@ return [
 
     // Navigation Groups
     'nav' => [
+        'dashboard' => 'Dashboard',
+        'tourism' => 'Tourism',
+        'jamoula' => 'Jamoula',
+        'visas' => 'visas',
+        'international_services' => 'International Services',
+        'bookings' => 'Bookings',
         'administration' => 'Administration',
         'users' => 'Users',
         'content' => 'Content',
@@ -29,6 +39,8 @@ return [
         'communication' => 'Communication',
         'settings' => 'Settings',
         'website' => 'Website',
+        'cities' => 'cities',
+        'destinations' => 'cities',
     ],
 
     // Resources
@@ -68,7 +80,46 @@ return [
 
         // Contact
         'contact' => 'Contact',
-        'contacts' => 'Contacts',
+        'contacts' => 'Contacts & Inquiries',
+
+        // Media & Banners
+        'banner' => 'Banner',
+        'banners' => 'Banners',
+        'header_banner' => 'Header Banner',
+        'header_banners' => 'Header Banners',
+        'partner' => 'Partner',
+        'partners' => 'Partner Logos',
+
+        // Offers & Destinations
+        'jamoula_offer' => 'Jamoula Offer',
+        'jamoula_offers' => 'Jamoula Offers',
+        'saudi_offer' => 'Saudi Offer',
+        'saudi_offers' => 'Saudi Offers',
+
+        // Services & Requests
+        'internet_package_request' => 'Internet Package Request',
+        'internet_package_requests' => 'Internet Package Requests',
+        'private_jet_request' => 'Private Jet Request',
+        'private_jet_requests' => 'Private Jet Requests',
+
+        // Visas
+        'schengen_application' => 'Schengen Application',
+        'schengen_applications' => 'Applications',
+        'evisa_application' => 'E-Visa Application',
+        'evisa_applications' => 'E-Visa Applications',
+        'saudi_visa' => 'Saudi Visa',
+        'saudi_visas' => 'Saudi Visas',
+        'visa_country' => 'Visa Country',
+        'visa_countries' => 'Visa Countries',
+
+        // Custom Payments & Settings
+        'custom_payment_offer' => 'Custom Payment Offer',
+        'custom_payment_offers' => 'Custom Payment Offers',
+        'app_setting' => 'App Setting',
+        'app_settings' => 'App Settings',
+        'activity_log' => 'Activity Log',
+        'activity_logs' => 'Activity & Audit Logs',
+        'recent_activity' => 'Recent System Activity',
 
         // Product
         'product' => 'Product',
@@ -121,8 +172,8 @@ return [
         'settings' => 'Settings',
 
         // Destination (generic)
-        'destination' => 'Destination',
-        'destinations' => 'Destinations',
+        'destination' => 'Inside Saudi',
+        'destinations' => 'Inside Saudi',
     ],
 
     // Form Labels
@@ -130,6 +181,7 @@ return [
         // Common
         'id' => 'ID',
         'name' => 'Name',
+        'action' => 'Action',
         'full_name' => 'Full Name',
         'email' => 'Email',
         'email_address' => 'Email Address',
@@ -209,8 +261,8 @@ return [
         'highlights_en' => 'Highlights (English)',
         'highlights_ar' => 'Highlights (Arabic)',
         'features' => 'Features',
-        'features_en' => 'Features (English)',
-        'features_ar' => 'Features (Arabic)',
+        'features_en' => 'Package Includes (English)',
+        'features_ar' => 'Package Includes (Arabic)',
         'group_size' => 'Group Size',
         'group_size_en' => 'Group Size (English)',
         'group_size_ar' => 'Group Size (Arabic)',

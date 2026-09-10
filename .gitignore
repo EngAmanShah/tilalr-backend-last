@@ -1,4 +1,5 @@
 *.log
+*.zip
 .DS_Store
 .env
 .env.backup
@@ -19,6 +20,10 @@
 /storage/*.key
 /storage/pail
 /vendor
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore
+/tilalr-update.code-workspace
+/
 Homestead.json
 Homestead.yaml
 Thumbs.db

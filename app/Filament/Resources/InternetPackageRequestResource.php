@@ -13,7 +13,11 @@ use Filament\Tables\Table;
 
 class InternetPackageRequestResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+    use Concerns\HasTranslations;
+
     protected static ?string $model = InternetPackageRequest::class;
+    protected static ?string $permissionKey = 'internet_package_requests';
 
     protected static ?string $navigationIcon = 'heroicon-o-wifi';
 
@@ -23,12 +27,17 @@ class InternetPackageRequestResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Internet Package Request';
+        return __('admin.resources.internet_package_request');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Internet Package Requests';
+        return __('admin.resources.internet_package_requests');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('admin.resources.internet_package_requests');
     }
 
     public static function form(Form $form): Form

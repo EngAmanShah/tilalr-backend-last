@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 
 class RoleResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+
     protected static ?string $model = Role::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
@@ -37,12 +39,6 @@ class RoleResource extends Resource
     public static function getNavigationLabel(): string
     {
         return __('admin.resources.roles');
-    }
-
-    public static function canAccess(): bool
-    {
-        $user = auth()->user();
-        return $user && $user->hasRole('super_admin');
     }
 
     public static function form(Form $form): Form
@@ -79,18 +75,29 @@ class RoleResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Permissions')
-                    ->description('Select the permissions for this role. Super Admin has all permissions automatically.')
+                Forms\Components\Section::make('Permissions Assignment')
+                    ->description('Select permissions for this role grouped by navigation section. Super Admin automatically has full access.')
                     ->schema([
-                        Forms\Components\CheckboxList::make('permissions')
-                            ->relationship('permissions', 'display_name')
-                            ->columns(3)
-                            ->searchable()
-                            ->bulkToggleable()
-                            ->gridDirection('row')
-                            ->descriptions(
-                                Permission::pluck('description', 'id')->filter()->toArray()
-                            ),
+                        Forms\Components\Tabs::make('PermissionsCategories')
+                            ->tabs(
+                                array_map(function ($key, $config) {
+                                    return Forms\Components\Tabs\Tab::make($config['tab_name'])
+                                        ->icon($config['icon'])
+                                        ->schema([
+                                            Forms\Components\CheckboxList::make("perm_{$key}")
+                                                ->label($config['tab_name'] . ' Permissions')
+                                                ->options(
+                                                    Permission::whereIn('group', $config['groups'])
+                                                        ->pluck('display_name', 'id')
+                                                        ->toArray()
+                                                )
+                                                ->columns(3)
+                                                ->bulkToggleable()
+                                                ->dehydrated(false),
+                                        ]);
+                                }, array_keys(\App\Providers\Filament\AdminPanelProvider::getNavigationMap()), \App\Providers\Filament\AdminPanelProvider::getNavigationMap())
+                            )
+                            ->columnSpanFull(),
                     ]),
             ]);
     }
@@ -115,27 +122,32 @@ class RoleResource extends Resource
                 Tables\Columns\TextColumn::make('display_name')
                     ->label(fn () => __('admin.form.display_name'))
                     ->getStateUsing(function ($record) {
-                        // Use the role name (key) to look up the translation
+                        if (!empty($record->display_name) && !str_starts_with($record->display_name, 'roles.')) {
+                            return $record->display_name;
+                        }
                         $key = $record->name;
-                        return __("roles.{$key}", ['default' => $record->display_name]);
+                        if (\Illuminate\Support\Facades\Lang::has("roles.{$key}")) {
+                            return __("roles.{$key}");
+                        }
+                        return ucwords(str_replace(['_', '-'], ' ', $key));
                     })
                     ->searchable('display_name')
                     ->sortable('display_name'),
 
                 Tables\Columns\TextColumn::make('permissions_count')
-                    ->label('Permissions')
+                    ->label(fn () => __('admin.resources.permissions'))
                     ->counts('permissions')
                     ->badge()
                     ->color('success'),
 
                 Tables\Columns\TextColumn::make('users_count')
-                    ->label('Users')
+                    ->label(fn () => __('admin.resources.users'))
                     ->counts('users')
                     ->badge()
                     ->color('info'),
 
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label(fn () => __('admin.form.is_active') ?? 'Active')
                     ->boolean(),
 
                 Tables\Columns\TextColumn::make('created_at')
@@ -148,14 +160,10 @@ class RoleResource extends Resource
                     ->label('Active'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hidden(fn (Role $record) => $record->name === 'super_admin'),
                 Tables\Actions\DeleteAction::make()
-                    ->before(function (Role $record) {
-                        // Prevent deleting super_admin role
-                        if ($record->name === 'super_admin') {
-                            throw new \Exception('Cannot delete the Super Admin role.');
-                        }
-                    }),
+                    ->hidden(fn (Role $record) => $record->name === 'super_admin'),
             ])
             ->bulkActions([
                 // Disabled to prevent checkbox display issues
@@ -166,6 +174,32 @@ class RoleResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return static::isSuperAdmin(auth()->user());
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::isSuperAdmin(auth()->user());
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        if ($record->name === 'super_admin') {
+            return false;
+        }
+        return static::isSuperAdmin(auth()->user());
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        if ($record->name === 'super_admin') {
+            return false;
+        }
+        return static::isSuperAdmin(auth()->user());
     }
 
     public static function getPages(): array

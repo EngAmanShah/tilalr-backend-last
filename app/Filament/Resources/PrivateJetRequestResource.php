@@ -12,7 +12,11 @@ use Filament\Tables\Table;
 
 class PrivateJetRequestResource extends Resource
 {
+    use Concerns\HasResourcePermissions;
+    use Concerns\HasTranslations;
+
     protected static ?string $model = PrivateJetRequest::class;
+    protected static ?string $permissionKey = 'private_jet_requests';
 
     protected static ?string $navigationIcon = 'heroicon-o-rocket-launch';
 
@@ -22,12 +26,17 @@ class PrivateJetRequestResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Private Jet Request';
+        return __('admin.resources.private_jet_request');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Private Jet Requests';
+        return __('admin.resources.private_jet_requests');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('admin.resources.private_jet_requests');
     }
 
     public static function form(Form $form): Form

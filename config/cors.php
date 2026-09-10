@@ -15,20 +15,22 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'storage/*'],
 
     'allowed_methods' => ['*'],
 
- 'allowed_origins' => [
-    env('FRONTEND_URL', 'http://localhost:3000'),
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://127.0.0.1:3000',
-    'http://127.0.0.1:3001',
-    'https://tilalr.com',
-    'https://www.tilalr.com',
-    'https://admin.tilalr.com',  // Add this if API is called from admin
-],
+    'allowed_origins' => [
+        env('FRONTEND_URL', 'http://localhost:3000'),
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:3001',
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+        'https://tilalr.com',
+        'https://www.tilalr.com',
+        'https://admin.tilalr.com',  // Add this if API is called from admin
+    ],
 
     'allowed_origins_patterns' => [],
 
